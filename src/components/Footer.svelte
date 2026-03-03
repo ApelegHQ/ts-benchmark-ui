@@ -41,8 +41,9 @@
 <footer>
 	<div>
 		<aside aria-label={STRING__ARIA_LABEL_ATTRIBUTION_}>
-			{STRING__MADE_WITH_LOVE_BY_[0]}<a href="https://apeleg.com/"><Logo
-			/></a>{STRING__MADE_WITH_LOVE_BY_[1]}
+			{STRING__MADE_WITH_LOVE_BY_[0]}<a href="https://apeleg.com/"
+				><Logo /></a
+			>{STRING__MADE_WITH_LOVE_BY_[1]}
 		</aside>
 		<p>
 			{STRING__COPYRIGHT_YEAR_ALL_RIGHTS_RESERVED_[0]}<time
@@ -91,7 +92,10 @@
 </footer>
 
 <style lang="postcss">
-	a, a:visited, a:hover, a:active {
+	a,
+	a:visited,
+	a:hover,
+	a:active {
 		color: currentColor;
 	}
 

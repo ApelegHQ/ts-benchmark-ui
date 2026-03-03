@@ -170,7 +170,7 @@
 
 	<div class="legend">
 		<span class="legend-item">
-			<span class="legend-swatch" style="background: #5c6478;">╷</span>
+			<span class="legend-swatch whiskers">╷</span>
 			<span class="text-dim"
 				>whiskers <abbr title="5th perentile">p5</abbr>/<abbr
 					title="95th perentile">p95</abbr
@@ -178,8 +178,8 @@
 			>
 		</span>
 		<span class="legend-item">
-			<span class="legend-swatch" style="background: #36d4c7;"></span>
-			<span class="legend-swatch" style="background: #5b8def;"></span>
+			<span class="legend-swatch iqr25"></span>
+			<span class="legend-swatch iqr75"></span>
 			<span class="text-dim">
 				<abbr title="Interquartile Range">IQR</abbr>
 				{' '}
@@ -189,15 +189,11 @@
 			</span>
 		</span>
 		<span class="legend-item">
-			<span class="legend-swatch" style="background: #fff; width: 2px;"
-			></span>
+			<span class="legend-swatch median"></span>
 			<span class="text-dim">median</span>
 		</span>
 		<span class="legend-item">
-			<span
-				class="legend-dot"
-				style="background: rgba(54, 212, 199, 0.6);"
-			></span>
+			<span class="legend-dot samples"></span>
 			<span class="text-dim">samples</span>
 		</span>
 	</div>
@@ -239,5 +235,26 @@
 		width: 7px;
 		height: 7px;
 		border-radius: 50%;
+	}
+
+	.whiskers {
+		background: #5c6478;
+	}
+
+	.iqr25 {
+		background: #36d4c7;
+	}
+
+	.iqr75 {
+		background: #5b8def;
+	}
+
+	.median {
+		background: #fff;
+		width: 2px;
+	}
+
+	.samples {
+		background: rgba(54, 212, 199, 0.6);
 	}
 </style>

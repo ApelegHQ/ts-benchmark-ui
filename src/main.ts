@@ -19,8 +19,52 @@ import { mount } from 'svelte';
 import './app.css';
 import App from './App.svelte';
 
-const app_ = mount(App, {
-	target: document.getElementById('app')!,
-});
+const onLoad = (handler: { (): void }) => {
+	if (
+		typeof document === 'undefined' ||
+		typeof Document !== 'function' ||
+		!(document instanceof Document) ||
+		typeof self !== 'object' ||
+		typeof top !== 'object' ||
+		typeof window !== 'object' ||
+		typeof Window !== 'function' ||
+		!(window instanceof Window)
+	) {
+		throw new Error('Not executing in a browser context');
+	}
 
-export default app_;
+	if (self !== top) {
+		throw new Error('Not executing in a top-level window');
+	}
+
+	if (['interactive', 'complete'].indexOf(document.readyState) !== -1) {
+		setTimeout(handler, 0);
+	} else if (document.addEventListener) {
+		const eventListener = () => {
+			document.removeEventListener(
+				'DOMContentLoaded',
+				eventListener,
+				false,
+			);
+			handler();
+		};
+		document.addEventListener('DOMContentLoaded', eventListener, false);
+	} else {
+		throw new Error('Unsupported browser');
+	}
+};
+
+onLoad(() => {
+	const rootId = 'app';
+
+	const target$ = document.getElementById(rootId);
+
+	// Now, create the App. This needs to be done after replacing body because
+	// the sandbox attaches elements to the body that shouldn't be removed.
+	// Otherwise, this would come before replacing body.
+	mount(App, {
+		['target']: target$,
+	});
+
+	window.onerror = null;
+});

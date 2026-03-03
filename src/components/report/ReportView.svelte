@@ -66,7 +66,7 @@
 			<Baseline {baseline} fastest={fns[0]} />
 		{/if}
 	{:else}
-		<p class="text-dim" style="margin-top: 1rem;">
+		<p class="text-dim no-fns">
 			No benchmark functions found in the report.
 		</p>
 	{/if}
@@ -86,6 +86,10 @@
 </section>
 
 <style>
+	.no-fns {
+		margin-top: 1rem;
+	}
+
 	.report {
 		margin-top: 1rem;
 	}

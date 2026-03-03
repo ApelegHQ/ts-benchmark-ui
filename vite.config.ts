@@ -72,6 +72,7 @@ function customMetaPlugin(): Plugin {
 // https://vite.dev/config/
 export default defineConfig({
 	build: {
+		manifest: true,
 		rollupOptions: {
 			input: {
 				runner: fileURLToPath(

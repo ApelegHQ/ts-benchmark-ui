@@ -17,6 +17,7 @@
 <script lang="ts">
 	import type { ISuiteReport } from '@apeleghq/benchmark/types';
 	import type { ISuiteState } from '../state.js';
+	import getRandomSecret from '../lib/getRandomSecret.js';
 	import { marshalSuiteState_ as marshalSuiteState } from '../lib/marshal.js';
 	import {
 		unmarshalRunProgress_ as unmarshalRunProgress,
@@ -34,8 +35,8 @@
 		['error']: { message: string; cause?: unknown };
 	}>();
 
-	const initMessageKeyA = crypto.randomUUID();
-	const initMessageKeyB = crypto.randomUUID();
+	const initMessageKeyA = getRandomSecret();
+	const initMessageKeyB = getRandomSecret();
 	const iframeSrc = `/resources/runner#${initMessageKeyA}/${initMessageKeyB}`;
 
 	let globalSetup = false;

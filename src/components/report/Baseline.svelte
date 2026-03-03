@@ -37,12 +37,12 @@
 		<strong>{formatTime(blMean)}</strong><span class="text-dim">/iter</span>
 		&nbsp; σ = {formatTime(blStdDev)}
 	</p>
-	<p class="text-dim" style="margin-top: 0.35rem;">
+	<p class="text-dim overhead">
 		All reported times have this overhead subtracted.
 	</p>
 
 	{#if fastest.mean > 0}
-		<p style="margin-top: 0.5rem;">
+		<p class="fastest">
 			{#if isHigh}
 				<span class="text-yellow">⚠</span>
 				<span class="text-yellow">
@@ -50,7 +50,7 @@
 					fastest function.
 				</span>
 				<br />
-				<span class="text-dim" style="margin-left: 1.25rem;">
+				<span class="text-dim high-overhead">
 					Consider increasing work per iteration for more accurate
 					results.
 				</span>
@@ -66,6 +66,18 @@
 </div>
 
 <style>
+	.high-overhead {
+		margin-left: 1.25rem;
+	}
+
+	.fastest {
+		margin-top: 0.5rem;
+	}
+
+	.overhead {
+		margin-top: 0.35rem;
+	}
+
 	.baseline-card {
 		font-size: 0.8125rem;
 		line-height: 1.7;

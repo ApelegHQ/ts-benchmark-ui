@@ -50,6 +50,7 @@ const assertBoolean: (v: unknown, name?: string) => asserts v is boolean = (
 ): asserts v is boolean => {
 	if (typeof v !== 'boolean') throw new Error(`${name} must be a boolean`);
 };
+/*
 const assertObject: (v: unknown, name?: string) => asserts v is object = (
 	v: unknown,
 	name = 'value',
@@ -57,6 +58,7 @@ const assertObject: (v: unknown, name?: string) => asserts v is object = (
 	if (v === null || typeof v !== 'object' || Array.isArray(v))
 		throw new Error(`${name} must be an object`);
 };
+*/
 
 const unmarshalBenchmarkEntry = (data: unknown): IBenchmarkEntry => {
 	assertArray(data, 'BenchmarkEntry');

@@ -1,0 +1,22 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Contact: https://apeleg.com/contact-us
+Contact: mailto:securitytxt-4O9jXJmP@apeleg.com
+Expires: 2025-02-01T00:00:00.000+0000
+Encryption: https://apeleg.com/openpgp-key.txt
+Canonical: https://apeleg.com/.well-known/security.txt
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEk6zozBIRNSTjsLAuqKc49Meb5ZwFAmaq0AEACgkQqKc49Meb
+5Zyo9wv+IgaG+nmbD0WrJWNbS5X96B0noQq007uI+NnslXllN9P1uJ6e1ZXQb6Dj
+Pgi/7XYcaT7J7WyFM8MIsvWKpBhiOeBpQdeYzr03yQAEUWsd6nCqgAtVRdi8byAG
+lt/brUaZuGgDPgjgEZhXIzOzN8qkOP3A9vQzgB4Hw/z69Ab8hhDAYXa1DfY2uNJx
+JHHDbkww5xu8yVlWjQFhLObLdeYeMIV6FN0o6zon7APPn4001MsH5z4Ml9aaWaJu
+u1CdaqqK/hva/J23lE3CUF4GZuQ2fnl8Hnu9YRViCWnxRkdkzX9YNswtdpg0COko
+I7aASOH7Yp8vUFjVgaTq3a9o+Ze4PlXwJq8Mx2Y/zstXa2wTlHLgeJZzwwsFotvB
+g758fwGJAFPnx8iVkWgkwpvqaUiu+7AstvWm7qWaPXZZhjpP5rSmo7wx6dIpCTu3
+IoEV9N11GXnvhoqNpnLxd7G7rK5grLbFFtF5MtmtaVerPkw/HiShtnPmyrLNt/tz
+KXLNiNKB
+=q66w
+-----END PGP SIGNATURE-----

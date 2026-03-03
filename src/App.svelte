@@ -144,13 +144,17 @@
 		</p>
 	</header>
 	<main>
-
 		<Header />
 
 		<FunctionList />
 
 		<div class="controls-bar">
-			<RunButton ready={!!runSuite} {running} {progress} on:run={handleRun} />
+			<RunButton
+				ready={!!runSuite}
+				{running}
+				{progress}
+				on:run={handleRun}
+			/>
 
 			<button
 				class="share-btn"

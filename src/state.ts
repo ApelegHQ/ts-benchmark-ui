@@ -16,6 +16,7 @@
  */
 
 import { type Writable, writable } from 'svelte/store';
+import getRandomSecret from './lib/getRandomSecret.js';
 
 /**
  * Represents a single user-defined benchmark function.
@@ -39,10 +40,6 @@ export interface ISuiteState {
 	['functions']: IBenchmarkEntry[];
 }
 
-function generateId(): string {
-	return (0, Math.random)().toString(36).slice(2, 10);
-}
-
 function defaultState(): ISuiteState {
 	return {
 		name: 'My Benchmark',
@@ -52,12 +49,12 @@ function defaultState(): ISuiteState {
 		setupCode: '',
 		functions: [
 			{
-				id: generateId(),
+				id: getRandomSecret(),
 				name: 'Example A',
 				code: 'const arr = [3,1,2];\narr.sort();',
 			},
 			{
-				id: generateId(),
+				id: getRandomSecret(),
 				name: 'Example B',
 				code: 'const arr = [3,1,2];\narr.reverse();',
 			},
@@ -141,7 +138,7 @@ export function addFunction_(): void {
 		functions: [
 			...s.functions,
 			{
-				id: generateId(),
+				id: getRandomSecret(),
 				name: `Function ${s.functions.length + 1}`,
 				code: '// Your code here',
 			},
