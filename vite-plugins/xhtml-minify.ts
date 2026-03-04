@@ -90,6 +90,8 @@ export default function xhtmlMinifyPlugin_(
 			removeOptionalTags: false,
 			decodeEntities: false,
 			processScripts: ['application/ld+json'],
+
+			maxLineLength: 500,
 		});
 
 		// ── XHTML polyglot fixups ──────────────────────────────────
