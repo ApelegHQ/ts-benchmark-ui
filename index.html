@@ -15,23 +15,196 @@
 -->
 
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<html
+	lang="en"
+	dir="ltr"
+	prefix="schema: https://schema.org/"
+	typeof="schema:WebApplication"
+	xml:lang="en"
+>
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/assets/icon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Benchmark Studio</title>
+
+		<title>
+			Benchmark Studio — Interactive JavaScript Performance Benchmarking
+			Tool
+		</title>
+		<meta
+			name="description"
+			content="Compare JavaScript function performance with statistically rigorous benchmarks. Features paired t-tests, confidence intervals, baseline correction, and exportable results."
+		/>
+
+		<!-- Canonical -->
+		<link
+			rel="canonical"
+			href="https://benchmarkstudio.net/"
+			property="schema:url"
+		/>
+
+		<!-- Favicons -->
+		<link rel="icon" type="image/svg+xml" href="/assets/icon.svg" />
+		<link
+			rel="icon"
+			type="image/png"
+			sizes="32x32"
+			href="/assets/icon-32.png"
+		/>
+		<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
+
+		<!-- Theme -->
+		<meta name="theme-color" content="#0f1117" />
+		<meta name="color-scheme" content="dark" />
+
+		<!-- OpenGraph -->
+		<meta property="og:type" content="website" />
+		<meta
+			property="og:title"
+			content="Benchmark Studio — JavaScript Performance Benchmarking"
+		/>
+		<meta
+			property="og:description"
+			content="Compare JavaScript function performance with statistically rigorous benchmarks. Paired t-tests, confidence intervals, and exportable results."
+		/>
+		<meta property="og:url" content="https://benchmarkstudio.net/" />
+		<meta
+			property="og:image"
+			content="https://benchmarkstudio.net/assets/og-image.png"
+		/>
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta
+			property="og:image:alt"
+			content="Benchmark Studio interface showing performance comparison results"
+		/>
+		<meta property="og:site_name" content="Benchmark Studio" />
+		<meta property="og:locale" content="en" />
+
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta
+			name="twitter:title"
+			content="Benchmark Studio — JavaScript Performance Benchmarking"
+		/>
+		<meta
+			name="twitter:description"
+			content="Compare JavaScript function performance with statistically rigorous benchmarks."
+		/>
+		<meta
+			name="twitter:image"
+			content="https://benchmarkstudio.net/assets/og-image.png"
+		/>
+
+		<!-- Assets -->
 		<script
 			crossorigin="anonymous"
+			integrity=""
 			src="/src/main.ts"
 			type="module"
 		></script>
-		<meta
-			name="description"
-			content="Interactive and statistically rigorous benchmarking suite with paired t-tests, baseline correction and confidence intervals"
-		/>
 	</head>
 	<body>
-		<div id="app"></div>
+		<div id="app">
+			<!--
+				Static landmark content: visible before JS hydrates,
+				replaced once Svelte mounts. Gives crawlers real content
+				and users a meaningful first paint.
+
+				RDFa type declared on <html>: schema:WebApplication
+			-->
+			<header>
+				<h1 property="schema:name">Benchmark Studio</h1>
+				<p>
+					Interactive JavaScript performance benchmarking in your
+					browser
+				</p>
+			</header>
+
+			<main>
+				<section aria-label="Overview">
+					<h2>Statistically Rigorous Performance Comparison</h2>
+					<p property="schema:description">
+						Write JavaScript functions, run them head-to-head, and
+						get results you can trust. Benchmark Studio uses
+						<strong>paired t-tests</strong>,
+						<strong>confidence intervals</strong>, and
+						<strong>baseline-corrected timing</strong> to tell you
+						whether one implementation is genuinely faster than
+						another — not just lucky on one run.
+					</p>
+
+					<h3>Features</h3>
+					<ul>
+						<li>
+							Side-by-side JavaScript function benchmarking with
+							syntax-highlighted editors
+						</li>
+						<li>
+							Configurable trial count, iterations per trial, and
+							warmup runs
+						</li>
+						<li>
+							Paired two-sample t-tests with configurable
+							significance levels
+						</li>
+						<li>95% confidence intervals on mean execution time</li>
+						<li>
+							Baseline overhead correction for accurate
+							sub-microsecond measurement
+						</li>
+						<li>Suite setup code shared across all functions</li>
+						<li>Exportable results and shareable benchmark URLs</li>
+					</ul>
+
+					<!-- RDFa-only metadata (not visible, but part of the content graph) -->
+					<meta
+						property="schema:applicationCategory"
+						content="DeveloperApplication"
+					/>
+					<meta property="schema:operatingSystem" content="Any" />
+					<meta
+						property="schema:browserRequirements"
+						content="Requires a modern browser with JavaScript enabled"
+					/>
+
+					<span property="schema:offers" typeof="schema:Offer">
+						<meta property="schema:price" content="0" />
+						<meta property="schema:priceCurrency" content="GBP" />
+					</span>
+
+					<span
+						property="schema:license"
+						content="https://www.gnu.org/licenses/agpl-3.0.html"
+					></span>
+				</section>
+
+				<noscript>
+					<section aria-label="JavaScript required">
+						<h2>JavaScript Required</h2>
+						<p>
+							Benchmark Studio is an interactive client-side
+							application. Please enable JavaScript to use the
+							benchmarking tool.
+						</p>
+					</section>
+				</noscript>
+			</main>
+
+			<footer>
+				<p>
+					©&#160;2026
+					<span property="schema:author" typeof="schema:Organization">
+						<a property="schema:url" href="https://apeleg.com/"
+							><span property="schema:name"
+								>Apeleg Limited</span
+							></a
+						> </span
+					>. Licensed under the
+					<a href="https://www.gnu.org/licenses/agpl-3.0.html"
+						>GNU AGPL v3</a
+					>.
+				</p>
+			</footer>
+		</div>
 	</body>
 </html>
