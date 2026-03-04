@@ -128,6 +128,7 @@
 				type="number"
 				min="1"
 				max="500"
+				pattern="[0-9]*"
 				value={$suiteState.trials}
 				on:input={(e) => handleInput('trials', e)}
 			/>
@@ -140,6 +141,7 @@
 				type="number"
 				min="1"
 				max="1000000"
+				pattern="[0-9]*"
 				value={$suiteState.iterationsPerTrial}
 				on:input={(e) => handleInput('iterationsPerTrial', e)}
 			/>
@@ -152,6 +154,7 @@
 				type="number"
 				min="0"
 				max="10000"
+				pattern="[0-9]*"
 				value={$suiteState.warmupIterations}
 				on:input={(e) => handleInput('warmupIterations', e)}
 			/>
