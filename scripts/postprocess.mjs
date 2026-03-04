@@ -276,5 +276,3 @@ const htmlFiles = (await readdir(distPath('.'), { recursive: true })).filter(
 await Promise.all(htmlFiles.map((f) => minifyHTML(distPath(f))));
 
 await rm(distPath('.vite'), { recursive: true });
-
-await rm(distPath('.vite'), { recursive: true });

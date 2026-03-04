@@ -58,6 +58,14 @@ onLoad(() => {
 	const rootId = 'app';
 
 	const target$ = document.getElementById(rootId);
+	if (!target$) {
+		throw new Error('Root element not found');
+	}
+
+	const children$$ = target$.children;
+	for (let i = children$$.length - 1; i >= 0; i--) {
+		target$.removeChild(children$$[i]);
+	}
 
 	// Now, create the App. This needs to be done after replacing body because
 	// the sandbox attaches elements to the body that shouldn't be removed.
