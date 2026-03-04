@@ -1,6 +1,0 @@
-name ="e71a734d-db3e-446e-83c7-0611bef21f43"
-compatibility_date = "2026-03-03"
-
-[assets]
-directory = "./dist"
-not_found_handling = "404-page"

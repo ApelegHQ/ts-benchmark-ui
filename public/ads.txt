@@ -1,2 +1,0 @@
-# empty ads.txt file
-placeholder.example.com, placeholder, DIRECT, placeholder

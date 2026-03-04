@@ -16,58 +16,11 @@
  */
 
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import childProcess from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { defineConfig, type Plugin } from 'vite';
+import { defineConfig } from 'vite';
 import { sri } from 'vite-plugin-sri3';
-import packageJson from './package.json' with { type: 'json' };
-
-const gitCommitHash = (() => {
-	try {
-		const result = childProcess.spawnSync('git', ['rev-parse', 'HEAD']);
-		if (result.status === 0 && result.stdout.byteLength) {
-			return Buffer.from(result.stdout).toString().trim();
-		}
-	} catch {
-		/* empty */
-	}
-})();
-
-function customMetaPlugin(): Plugin {
-	return {
-		['name']: 'custom-meta',
-		['transform'](code, _id) {
-			void _id;
-
-			const map = {
-				'import.meta.pkg.repository':
-					JSON.stringify(Reflect.get(packageJson, 'repository')) ||
-					'undefined',
-				'import.meta.pkg.name':
-					JSON.stringify(Reflect.get(packageJson, 'name')) ||
-					'undefined',
-				'import.meta.pkg.version':
-					JSON.stringify(Reflect.get(packageJson, 'version')) ||
-					'undefined',
-				'import.meta.pkg.gitCommitHash':
-					JSON.stringify(gitCommitHash) || 'undefined',
-				'import.meta.pkg.homepage':
-					JSON.stringify(Reflect.get(packageJson, 'homepage')) ||
-					'undefined',
-			};
-			const modifiedCode = Object.entries(map).reduce(
-				(acc, [identifier, value]) => {
-					return acc.replaceAll(identifier, value);
-				},
-				code,
-			);
-			return {
-				code: modifiedCode,
-				map: null, // Provide source map if needed
-			};
-		},
-	};
-}
+import customMetaPlugin from './vite-plugins/custom-meta.js';
+import xhtmlMinifyPlugin from './vite-plugins/xhtml-minify.js';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -82,7 +35,7 @@ export default defineConfig({
 			},
 		},
 	},
-	plugins: [svelte(), customMetaPlugin(), sri()],
+	plugins: [svelte(), customMetaPlugin(), xhtmlMinifyPlugin(), sri()],
 	preview: {
 		headers: {
 			'access-control-allow-origin': '*',
