@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { readFile, rmdir, writeFile } from 'node:fs/promises';
+import { readFile, rm, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const distURL = (path) => new URL(`../dist/${path}`, import.meta.url);
@@ -53,15 +53,15 @@ const preloadHeaders = (jsPaths, cssPaths) => [
 	...cssPaths.map((p) => `link: <${p}>; rel=preload; as=style`),
 ];
 
-const buildCSP = (jsDigests, cssDigests) =>
+const buildCSP = (jsDigests) =>
 	[
 		`default-src 'self'`,
 		`script-src ${jsDigests.join(' ')} 'self' 'strict-dynamic'`,
 		`script-src-attr 'none'`,
 		`script-src-elem ${jsDigests.join(' ')} 'self' 'strict-dynamic'`,
-		`style-src ${cssDigests.join(' ')} 'self'`,
+		`style-src 'self' 'unsafe-inline'`,
 		`style-src-attr 'self'`,
-		`style-src-elem ${cssDigests.join(' ')} 'self'`,
+		`style-src-elem 'self' 'unsafe-inline'`,
 		`frame-ancestors 'none'`,
 		`upgrade-insecure-requests`,
 	].join('; ');
@@ -143,4 +143,4 @@ await writeFile(
 	sections.map((s) => s.join('\n')).join('\n\n') + '\n',
 );
 
-await rmdir(distPath('.vite'), { recursive: true });
+await rm(distPath('.vite'), { recursive: true });

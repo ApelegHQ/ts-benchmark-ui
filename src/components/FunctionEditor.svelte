@@ -15,13 +15,26 @@
 -->
 
 <script lang="ts">
+	import { onMount, onDestroy, tick } from 'svelte';
+	import {
+		createEditor_ as createEditor,
+		syncToEditor_ as syncToEditor,
+	} from './codemirror.js';
+	import type { EditorView } from '@codemirror/view';
 	import {
 		type IBenchmarkEntry,
 		removeFunction_ as removeFunction,
 		updateFunction_ as updateFunction,
 	} from '../state.js';
+	import './codemirror.css';
 
 	export let entry: IBenchmarkEntry;
+
+	let textareaEl: HTMLTextAreaElement;
+	let editorContainer: HTMLDivElement;
+	let view: EditorView | null = null;
+	let cmReady = false;
+	const suppressFlag = { value_: false };
 
 	function handleNameChange(e: Event) {
 		updateFunction(entry.id, {
@@ -29,30 +42,46 @@
 		});
 	}
 
-	function handleCodeChange(e: Event) {
-		updateFunction(entry.id, {
-			code: (e.target as HTMLTextAreaElement).value,
-		});
+	function handleCodeInput(e: Event) {
+		if (!cmReady) {
+			updateFunction(entry.id, {
+				code: (e.target as HTMLTextAreaElement).value,
+			});
+		}
 	}
 
 	function handleRemove() {
 		removeFunction(entry.id);
 	}
 
-	function handleKeyDown(e: KeyboardEvent) {
-		// Tab inserts two spaces instead of moving focus
-		if (e.key === 'Tab') {
-			e.preventDefault();
-			const textarea = e.target as HTMLTextAreaElement;
-			const start = textarea.selectionStart;
-			const end = textarea.selectionEnd;
-			const value = textarea.value;
-			textarea.value =
-				value.substring(0, start) + '  ' + value.substring(end);
-			textarea.selectionStart = textarea.selectionEnd = start + 2;
-			// Trigger Svelte reactivity
-			textarea.dispatchEvent(new Event('input', { bubbles: true }));
+	onMount(async () => {
+		await tick();
+		const editorView = await createEditor({
+			parent_: editorContainer,
+			doc_: textareaEl.value,
+			placeholder_: textareaEl.placeholder,
+			onUpdate_(code) {
+				updateFunction(entry.id, { code });
+				textareaEl.value = code;
+			},
+		});
+		if (editorView) {
+			view = editorView;
+			cmReady = true;
 		}
+	});
+
+	onDestroy(() => {
+		view?.destroy();
+		view = null;
+	});
+
+	$: if (view && cmReady) {
+		syncToEditor(view, entry.code, suppressFlag);
+	}
+
+	$: if (!cmReady && textareaEl) {
+		textareaEl.value = entry.code;
 	}
 </script>
 
@@ -83,15 +112,24 @@
 		<label for="fn-code-{entry.id}">Code</label>
 		<textarea
 			id="fn-code-{entry.id}"
-			rows="5"
+			bind:this={textareaEl}
 			value={entry.code}
-			on:input={handleCodeChange}
-			on:keydown={handleKeyDown}
+			on:input={handleCodeInput}
 			placeholder="// JavaScript code to benchmark"
+			rows="4"
 			spellcheck="false"
 			autocapitalize="off"
 			autocomplete="off"
+			class:cm-visually-hidden={cmReady}
+			aria-hidden={cmReady ? 'true' : undefined}
+			tabindex={cmReady ? -1 : undefined}
 		></textarea>
+		<div
+			class="cm-wrapper"
+			class:cm-active={cmReady}
+			bind:this={editorContainer}
+			aria-hidden="true"
+		></div>
 	</div>
 </article>
 
@@ -123,11 +161,15 @@
 		margin-bottom: 1px;
 	}
 
+	.fn-code-field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
+	}
+
 	.fn-code-field textarea {
 		width: 100%;
 		resize: vertical;
 		min-height: 4rem;
-		tab-size: 2;
-		line-height: 1.5;
 	}
 </style>

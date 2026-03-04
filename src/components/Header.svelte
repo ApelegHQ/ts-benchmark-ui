@@ -15,10 +15,27 @@
 -->
 
 <script lang="ts">
+	import { onMount, onDestroy, tick } from 'svelte';
+	import {
+		createEditor_ as createEditor,
+		syncToEditor_ as syncToEditor,
+	} from './codemirror.js';
+	import type { EditorView } from '@codemirror/view';
 	import {
 		suiteState_ as suiteState,
 		updateConfig_ as updateConfig,
 	} from '../state.js';
+	import './codemirror.css';
+
+	let textareaEl: HTMLTextAreaElement;
+	let editorContainer: HTMLDivElement;
+	let view: EditorView | null = null;
+	let cmReady = false;
+	const suppressFlag = { value_: false };
+
+	// Tracks whether <details> is open so we only mount CM once visible
+	let detailsOpen = false;
+	let cmMountAttempted = false;
 
 	function handleInput(field: string, e: Event) {
 		const target = e.target as HTMLInputElement;
@@ -30,6 +47,65 @@
 				updateConfig({ [field]: val });
 			}
 		}
+	}
+
+	function handleSetupCodeInput(e: Event) {
+		if (!cmReady) {
+			updateConfig({
+				setupCode: (e.target as HTMLTextAreaElement).value,
+			});
+		}
+	}
+
+	async function mountEditor() {
+		if (cmMountAttempted) return;
+		cmMountAttempted = true;
+
+		await tick();
+
+		const editorView = await createEditor({
+			parent_: editorContainer,
+			doc_: textareaEl.value,
+			placeholder_: textareaEl.placeholder,
+			onUpdate_(code) {
+				updateConfig({ setupCode: code });
+				textareaEl.value = code;
+			},
+		});
+
+		if (editorView) {
+			view = editorView;
+			cmReady = true;
+		}
+	}
+
+	function handleToggle(e: Event) {
+		detailsOpen = (e.target as HTMLDetailsElement).open;
+		if (detailsOpen) {
+			mountEditor();
+		}
+	}
+
+	// If the details starts open (e.g. there's existing setup code),
+	// mount CM immediately
+	onMount(() => {
+		if (detailsOpen) {
+			mountEditor();
+		}
+	});
+
+	onDestroy(() => {
+		view?.destroy();
+		view = null;
+	});
+
+	// Sync external state → CM
+	$: if (view && cmReady) {
+		syncToEditor(view, $suiteState.setupCode, suppressFlag);
+	}
+
+	$: if (!cmReady && textareaEl) {
+		textareaEl.value = $suiteState.setupCode;
 	}
 </script>
 
@@ -82,23 +158,40 @@
 		</div>
 	</div>
 
-	<details class="setup-details">
+	<details
+		class="setup-details"
+		bind:open={detailsOpen}
+		on:toggle={handleToggle}
+	>
 		<summary>
 			<span class="summary-text">Suite Setup Code</span>
 			<span class="text-dim">(optional — runs before each function)</span>
 		</summary>
+
 		<div class="setup-editor">
 			<label for="setup-code" class="sr-only">Setup function body</label>
 			<textarea
 				id="setup-code"
+				bind:this={textareaEl}
 				rows="4"
 				placeholder="// e.g. this.data = Array.from({{
 					length: 1000,
 				}}, () => Math.random());"
 				value={$suiteState.setupCode}
-				on:input={(e) => handleInput('setupCode', e)}
+				on:input={handleSetupCodeInput}
 				spellcheck="false"
+				autocapitalize="off"
+				autocomplete="off"
+				class:cm-visually-hidden={cmReady}
+				aria-hidden={cmReady ? 'true' : undefined}
+				tabindex={cmReady ? -1 : undefined}
 			></textarea>
+			<div
+				class="cm-wrapper"
+				class:cm-active={cmReady}
+				bind:this={editorContainer}
+				aria-hidden="true"
+			></div>
 		</div>
 	</details>
 </section>
