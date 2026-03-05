@@ -15,20 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import childProcess from 'node:child_process';
 import { type Plugin } from 'vite';
 import packageJson from '../package.json' with { type: 'json' };
-
-const gitCommitHash = (() => {
-	try {
-		const result = childProcess.spawnSync('git', ['rev-parse', 'HEAD']);
-		if (result.status === 0 && result.stdout.byteLength) {
-			return Buffer.from(result.stdout).toString().trim();
-		}
-	} catch {
-		/* empty */
-	}
-})();
+import gitCommitHash_ from './git-commit-hash.js';
 
 export default function customMetaPlugin_(): Plugin {
 	return {
@@ -37,6 +26,7 @@ export default function customMetaPlugin_(): Plugin {
 			void _id;
 
 			const map = {
+				'import.meta.serviceWorkerPath': '"/service-worker.js"',
 				'import.meta.pkg.repository':
 					JSON.stringify(Reflect.get(packageJson, 'repository')) ||
 					'undefined',
@@ -47,7 +37,7 @@ export default function customMetaPlugin_(): Plugin {
 					JSON.stringify(Reflect.get(packageJson, 'version')) ||
 					'undefined',
 				'import.meta.pkg.gitCommitHash':
-					JSON.stringify(gitCommitHash) || 'undefined',
+					JSON.stringify(gitCommitHash_) || 'undefined',
 				'import.meta.pkg.homepage':
 					JSON.stringify(Reflect.get(packageJson, 'homepage')) ||
 					'undefined',

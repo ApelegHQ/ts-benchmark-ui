@@ -1,11 +1,10 @@
 {
 	"compilerOptions": {
 		"composite": true,
-		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-		"target": "ES2023",
-		"lib": ["ES2023"],
+		"tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker.tsbuildinfo",
+		"target": "ES2022",
+		"lib": ["webworker", "ES2022"],
 		"module": "ESNext",
-		"types": ["node"],
 		"skipLibCheck": false,
 
 		/* Bundler mode */
@@ -23,5 +22,5 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["vite.config.ts", "vite-plugins/**/*.ts"]
+	"include": ["service-worker/**/*.ts", "service-worker/**/*.js"]
 }

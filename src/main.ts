@@ -18,6 +18,7 @@
 import { mount } from 'svelte';
 import './app.css';
 import App from './App.svelte';
+import registerServiceWorker_ from './lib/register-service-worker.js';
 
 const onLoad = (handler: { (): void }) => {
 	if (
@@ -75,4 +76,8 @@ onLoad(() => {
 	});
 
 	window.onerror = null;
+});
+
+registerServiceWorker_(import.meta.serviceWorkerPath).catch(function (error) {
+	console.error('Service worker registration failed', error);
 });

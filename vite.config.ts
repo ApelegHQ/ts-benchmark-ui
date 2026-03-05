@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { sri } from 'vite-plugin-sri3';
 import customMetaPlugin from './vite-plugins/custom-meta.js';
+import serviceWorkerPlugin from './vite-plugins/service-worker.js';
 import xhtmlMinifyPlugin from './vite-plugins/xhtml-minify.js';
 
 // https://vite.dev/config/
@@ -35,7 +36,13 @@ export default defineConfig({
 			},
 		},
 	},
-	plugins: [svelte(), customMetaPlugin(), xhtmlMinifyPlugin(), sri()],
+	plugins: [
+		svelte(),
+		customMetaPlugin(),
+		serviceWorkerPlugin(),
+		sri(),
+		xhtmlMinifyPlugin(),
+	],
 	preview: {
 		headers: {
 			'access-control-allow-origin': '*',
