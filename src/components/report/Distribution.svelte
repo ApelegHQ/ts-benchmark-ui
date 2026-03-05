@@ -228,6 +228,7 @@
 		width: 12px;
 		height: 10px;
 		border-radius: 2px;
+		forced-color-adjust: none;
 	}
 
 	.legend-dot {
@@ -235,6 +236,7 @@
 		width: 7px;
 		height: 7px;
 		border-radius: 50%;
+		forced-color-adjust: none;
 	}
 
 	.whiskers {
