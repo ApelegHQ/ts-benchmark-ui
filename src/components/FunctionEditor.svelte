@@ -60,6 +60,7 @@
 			parent_: editorContainer,
 			doc_: textareaEl.value,
 			placeholder_: textareaEl.placeholder,
+			labels_: textareaEl.labels,
 			onUpdate_(code) {
 				updateFunction(entry.id, { code });
 				textareaEl.value = code;
@@ -91,10 +92,12 @@
 			<label for="fn-name-{entry.id}">Name</label>
 			<input
 				id="fn-name-{entry.id}"
-				type="text"
-				value={entry.name}
+				name="fn-name-{entry.id}"
 				on:input={handleNameChange}
 				placeholder="Function name"
+				required
+				type="text"
+				value={entry.name}
 			/>
 		</div>
 		<button
@@ -109,26 +112,28 @@
 	</div>
 
 	<div class="fn-code-field">
-		<label for="fn-code-{entry.id}">Code</label>
+		<label id="fn-label-code-{entry.id}" for="fn-code-{entry.id}"
+			>Code</label
+		>
 		<textarea
-			id="fn-code-{entry.id}"
+			autocapitalize="off"
+			autocomplete="off"
 			bind:this={textareaEl}
-			value={entry.code}
+			class:cm-visually-hidden={cmReady}
+			id="fn-code-{entry.id}"
+			name="fn-code-{entry.id}"
 			on:input={handleCodeInput}
 			placeholder="// JavaScript code to benchmark"
 			rows="4"
 			spellcheck="false"
-			autocapitalize="off"
-			autocomplete="off"
-			class:cm-visually-hidden={cmReady}
-			aria-hidden={cmReady ? 'true' : undefined}
 			tabindex={cmReady ? -1 : undefined}
+			value={entry.code}
+			aria-hidden={cmReady ? 'true' : undefined}
 		></textarea>
 		<div
 			class="cm-wrapper"
 			class:cm-active={cmReady}
 			bind:this={editorContainer}
-			aria-hidden="true"
 		></div>
 	</div>
 </article>

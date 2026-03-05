@@ -15,7 +15,6 @@
 -->
 
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import {
 		type IRunProgress,
 		NULL_FUNCTION_NAME,
@@ -25,24 +24,17 @@
 	export let running: boolean;
 	export let progress: IRunProgress | null;
 
-	const dispatch = createEventDispatcher();
-
 	$: displayFn =
 		progress?.currentFunction === NULL_FUNCTION_NAME
 			? 'baseline'
 			: (progress?.currentFunction ?? '');
-
-	$: progressPct = progress
-		? ((progress.trial - 1) / progress.totalTrials) * 100
-		: 0;
 </script>
 
 <div class="run-container">
 	<button
 		class="primary run-btn"
 		disabled={!ready || running}
-		on:click={() => dispatch('run')}
-		type="button"
+		type="submit"
 		aria-label={running ? 'Benchmark is running' : 'Run benchmark'}
 	>
 		{#if running}
@@ -55,12 +47,8 @@
 
 	{#if running && progress}
 		<div class="progress-info" role="status" aria-live="polite">
-			<div class="progress-bar-track">
-				<div
-					class="progress-bar-fill"
-					style="width: {progressPct}%"
-				></div>
-			</div>
+			<progress max={progress.totalTrials} value={progress.trial - 1}
+			></progress>
 			<span class="progress-text">
 				Trial {progress.trial}/{progress.totalTrials}
 				<span class="text-dim">· {displayFn}</span>
@@ -110,18 +98,29 @@
 		min-width: 0;
 	}
 
-	.progress-bar-track {
+	progress[value] {
+		appearance: none;
 		height: 4px;
+		border: 0 none transparent;
 		background: var(--c-surface-2);
 		border-radius: 2px;
-		overflow: hidden;
 	}
 
-	.progress-bar-fill {
+	progress[value]::-webkit-progress-bar {
+		background: var(--c-surface-2);
+		border-radius: 2px;
+	}
+
+	progress[value]::-webkit-progress-value {
 		height: 100%;
 		background: var(--c-accent);
 		border-radius: 2px;
-		transition: width 0.2s ease;
+	}
+
+	progress[value]::-moz-progress-bar {
+		height: 100%;
+		background: var(--c-accent);
+		border-radius: 2px;
 	}
 
 	.progress-text {

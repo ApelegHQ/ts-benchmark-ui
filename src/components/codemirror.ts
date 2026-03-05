@@ -27,6 +27,8 @@ export interface ICreateEditorOptions {
 	onUpdate_: (code: string) => void;
 	/** Placeholder shown when the editor is empty. */
 	placeholder_?: string;
+	/** Label elements */
+	labels_?: readonly NodeList;
 	/** Additional extensions (e.g. extra keymaps). */
 	extensions_?: Extension[];
 }
@@ -385,6 +387,16 @@ export async function createEditor_(
 	});
 
 	const view = new EditorView({ state, parent: opts.parent_ });
+
+	if (opts.labels_) {
+		view.contentDOM.setAttribute(
+			'aria-labelledby',
+			Array.from(opts.labels_)
+				.map((el) => el instanceof Element && el.id)
+				.filter((el) => !!el)
+				.join(' '),
+		);
+	}
 
 	return view;
 }

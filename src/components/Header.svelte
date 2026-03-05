@@ -67,6 +67,7 @@
 			parent_: editorContainer,
 			doc_: textareaEl.value,
 			placeholder_: textareaEl.placeholder,
+			labels_: textareaEl.labels,
 			onUpdate_(code) {
 				updateConfig({ setupCode: code });
 				textareaEl.value = code;
@@ -109,7 +110,9 @@
 	}
 </script>
 
-<section class="card config-section" aria-label="Suite configuration">
+<fieldset class="card config-section" aria-label="Suite configuration">
+	<legend class="sr-only">Suite configuration</legend>
+
 	<div class="config-grid">
 		<div class="field field-name">
 			<label for="suite-name">Suite Name</label>
@@ -172,14 +175,14 @@
 		</summary>
 
 		<div class="setup-editor">
-			<label for="setup-code" class="sr-only">Setup function body</label>
+			<label for="setup-code" class="sr-only" id="label-setup-code"
+				>Setup function body</label
+			>
 			<textarea
 				id="setup-code"
 				bind:this={textareaEl}
 				rows="4"
-				placeholder="// e.g. this.data = Array.from({{
-					length: 1000,
-				}}, () => Math.random());"
+				placeholder="// e.g. this.data = Array.from({'{ length: 1000 }'}, () => Math.random());"
 				value={$suiteState.setupCode}
 				on:input={handleSetupCodeInput}
 				spellcheck="false"
@@ -193,11 +196,10 @@
 				class="cm-wrapper"
 				class:cm-active={cmReady}
 				bind:this={editorContainer}
-				aria-hidden="true"
 			></div>
 		</div>
 	</details>
-</section>
+</fieldset>
 
 <style>
 	.config-section {
@@ -266,17 +268,5 @@
 		width: 100%;
 		resize: vertical;
 		min-height: 4rem;
-	}
-
-	.sr-only {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
 	}
 </style>

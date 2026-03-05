@@ -37,7 +37,7 @@
 
 	const initMessageKeyA = getRandomSecret();
 	const initMessageKeyB = getRandomSecret();
-	const iframeSrc = `/resources/runner#${initMessageKeyA}/${initMessageKeyB}`;
+	const iframeSrc = `${import.meta.runnerUrl}#${initMessageKeyA}/${initMessageKeyB}`;
 
 	let globalSetup = false;
 	let instanceSetup = false;

@@ -27,6 +27,7 @@ export default function customMetaPlugin_(): Plugin {
 
 			const map = {
 				'import.meta.serviceWorkerPath': '"/service-worker.js"',
+				'import.meta.runnerUrl': '"/resources/runner"',
 				'import.meta.pkg.repository':
 					JSON.stringify(Reflect.get(packageJson, 'repository')) ||
 					'undefined',

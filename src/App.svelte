@@ -56,7 +56,9 @@
 		event.preventDefault();
 	}
 
-	async function handleRun() {
+	async function handleRun(event: SubmitEvent) {
+		event.preventDefault();
+
 		if (!runSuite) return;
 
 		running = true;
@@ -144,39 +146,38 @@
 		</p>
 	</header>
 	<main>
-		<Header />
+		<form on:submit={handleRun}>
+			<Header />
 
-		<FunctionList />
+			<FunctionList />
 
-		<div class="controls-bar">
-			<RunButton
-				ready={!!runSuite}
-				{running}
-				{progress}
-				on:run={handleRun}
-			/>
+			<fieldset class="controls-bar">
+				<legend class="sr-only">Controls</legend>
 
-			<button
-				class="share-btn"
-				on:click={handleShare}
-				title="Copy shareable URL to clipboard"
-				type="button"
-				aria-label="Share benchmark configuration"
-			>
-				{#if shareMessage}
-					{shareMessage}
-				{:else}
-					Share
-				{/if}
-			</button>
-		</div>
+				<RunButton ready={!!runSuite} {running} {progress} />
 
-		{#if error !== empty}
-			<div class="error-banner card" role="alert">
-				<strong>Error:</strong>
-				{error}
-			</div>
-		{/if}
+				<button
+					class="share-btn"
+					on:click={handleShare}
+					title="Copy shareable URL to clipboard"
+					type="button"
+					aria-label="Share benchmark configuration"
+				>
+					{#if shareMessage}
+						{shareMessage}
+					{:else}
+						Share
+					{/if}
+				</button>
+			</fieldset>
+
+			{#if error !== empty}
+				<div class="error-banner card" role="alert">
+					<strong>Error:</strong>
+					{error}
+				</div>
+			{/if}
+		</form>
 
 		{#if report}
 			<ReportView {report} />
@@ -216,6 +217,10 @@
 
 	.logo {
 		margin-right: 0.35em;
+	}
+
+	form fieldset {
+		border: 0 none transparent;
 	}
 
 	.subtitle {

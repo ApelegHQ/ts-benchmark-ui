@@ -64,7 +64,7 @@
 				<tr>
 					<td>
 						{#if i < 3}
-							<span aria-label="Rank {i + 1}">{MEDALS[i]}</span>
+							<span title="Rank {i + 1}">{MEDALS[i]}</span>
 						{:else}
 							<span class="text-muted">#{i + 1}</span>
 						{/if}

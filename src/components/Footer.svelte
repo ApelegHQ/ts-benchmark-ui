@@ -72,7 +72,7 @@
 						<a
 							href={import.meta.pkg.homepage}
 							rel="me external noopener noreferrer"
-							target="_blank">{STRING__FOOTER_HOME_LINK_}</a
+							>{STRING__FOOTER_HOME_LINK_}</a
 						>
 					</li>
 				{/if}
@@ -81,7 +81,6 @@
 						<a
 							href={repository}
 							rel="me external noopener noreferrer"
-							target="_blank"
 							>{STRING__FOOTER_SOURCE_CODE_LINK_}</a
 						>
 					</li>

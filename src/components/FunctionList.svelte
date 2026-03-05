@@ -22,8 +22,8 @@
 	import FunctionEditor from './FunctionEditor.svelte';
 </script>
 
-<section aria-label="Benchmark functions">
-	<div class="section-title">Functions</div>
+<fieldset aria-label="Benchmark functions">
+	<legend class="section-title">Functions</legend>
 
 	{#each $suiteState.functions as entry (entry.id)}
 		<FunctionEditor {entry} />
@@ -33,13 +33,17 @@
 		class="add-btn"
 		on:click={addFunction}
 		type="button"
-		aria-label="Add a function"
+		aria-label="Add Function"
 	>
 		+ Add Function
 	</button>
-</section>
+</fieldset>
 
 <style>
+	fieldset {
+		border: 0 none transparent;
+	}
+
 	.add-btn {
 		width: 100%;
 		padding: 0.75em;
