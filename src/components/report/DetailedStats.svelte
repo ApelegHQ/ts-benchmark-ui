@@ -25,7 +25,7 @@
 	export let fns: IFunctionStatistics[];
 </script>
 
-<div class="section-title">Detailed Statistics</div>
+<h3 class="section-title">Detailed Statistics</h3>
 
 <div class="card stats-card">
 	<div class="table-scroll">

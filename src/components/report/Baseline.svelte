@@ -28,7 +28,7 @@
 	$: isHigh = overheadRatio > 0.1;
 </script>
 
-<div class="section-title">Measurement Overhead</div>
+<h3 class="section-title">Measurement Overhead</h3>
 
 <div class="card baseline-card">
 	<p>

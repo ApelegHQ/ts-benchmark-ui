@@ -37,7 +37,7 @@
 	}
 </script>
 
-<div class="section-title">Speed Matrix</div>
+<h3 class="section-title">Speed Matrix</h3>
 
 <div class="card matrix-card">
 	<p class="matrix-caption text-dim">

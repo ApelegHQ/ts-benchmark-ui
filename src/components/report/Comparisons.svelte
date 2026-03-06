@@ -35,7 +35,7 @@
 	}
 </script>
 
-<div class="section-title">Pairwise Comparisons (paired t-test)</div>
+<h3 class="section-title">Pairwise Comparisons (paired t-test)</h3>
 
 <div class="comparisons-list">
 	{#each comps as c}

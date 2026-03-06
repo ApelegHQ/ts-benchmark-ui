@@ -159,7 +159,7 @@
 
 <svelte:window on:resize={handleResize} />
 
-<div class="section-title">Distribution</div>
+<h3 class="section-title">Distribution</h3>
 
 <div class="card distribution-card">
 	<canvas

@@ -43,7 +43,7 @@
 	}
 </script>
 
-<div class="section-title">Leaderboard</div>
+<h3 class="section-title">Leaderboard</h3>
 
 <div class="card leaderboard-card">
 	<table class="data-table" aria-label="Benchmark leaderboard">
