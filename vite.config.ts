@@ -35,6 +35,7 @@ export default defineConfig({
 				index: fileURLToPath(new URL('./index.html', import.meta.url)),
 			},
 		},
+		target: 'es2018',
 	},
 	plugins: [
 		svelte(),
