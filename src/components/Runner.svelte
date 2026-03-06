@@ -272,6 +272,7 @@
 </script>
 
 <iframe
+	allow="cross-origin-isolated"
 	bind:this={iframeEl}
 	credentialless=""
 	sandbox="allow-scripts"
