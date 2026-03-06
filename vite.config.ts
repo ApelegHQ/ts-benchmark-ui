@@ -18,7 +18,7 @@
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import { sri } from 'vite-plugin-sri3';
+import sri from 'vite-plugin-sri-gen';
 import customMetaPlugin from './vite-plugins/custom-meta.js';
 import serviceWorkerPlugin from './vite-plugins/service-worker.js';
 import xhtmlMinifyPlugin from './vite-plugins/xhtml-minify.js';
@@ -40,7 +40,14 @@ export default defineConfig({
 		svelte(),
 		customMetaPlugin(),
 		serviceWorkerPlugin(),
-		sri(),
+		sri({
+			algorithm: 'sha384',
+			crossorigin: 'anonymous',
+			fetchCache: true,
+			fetchTimeoutMs: 5000,
+			skipResources: [],
+			verboseLogging: true,
+		}),
 		xhtmlMinifyPlugin(),
 	],
 	preview: {
