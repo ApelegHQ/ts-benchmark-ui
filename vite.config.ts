@@ -47,6 +47,8 @@ export default defineConfig({
 			fetchTimeoutMs: 5000,
 			skipResources: [],
 			verboseLogging: true,
+			preloadDynamicChunks: false,
+			runtimePatchDynamicLinks: false,
 		}),
 		xhtmlMinifyPlugin(),
 	],
