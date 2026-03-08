@@ -99,10 +99,11 @@ export const unmarshalSuiteState_ = (data: unknown): ISuiteState => {
 	assertNumber(warmupIterations, 'SuiteState.warmupIterations');
 
 	assertArray(setupCodeArr, 'SuiteState.setupCode');
-	if (setupCodeArr.length !== 1) {
-		throw new Error('SuiteState.setupCode expected single-item array');
+	if (setupCodeArr.length !== 2) {
+		throw new Error('SuiteState.setupCode expected two-item array');
 	}
 	assertString(setupCodeArr[0], 'SuiteState.setupCode[0]');
+	assertString(setupCodeArr[1], 'SuiteState.setupCode[1]');
 
 	assertArray(functionsArr, 'SuiteState.functions');
 	const functions: IBenchmarkEntry[] = functionsArr.map((f: unknown) =>
@@ -115,6 +116,7 @@ export const unmarshalSuiteState_ = (data: unknown): ISuiteState => {
 		iterationsPerTrial,
 		warmupIterations,
 		setupCode: setupCodeArr[0],
+		teardownCode: setupCodeArr[1],
 		functions,
 	};
 };

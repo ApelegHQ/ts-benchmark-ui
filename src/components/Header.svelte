@@ -15,27 +15,18 @@
 -->
 
 <script lang="ts">
-	import { onMount, onDestroy, tick } from 'svelte';
-	import {
-		createEditor_ as createEditor,
-		syncToEditor_ as syncToEditor,
-	} from './codemirror.js';
-	import type { EditorView } from '@codemirror/view';
+	import { onMount } from 'svelte';
+	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 	import {
 		suiteState_ as suiteState,
 		updateConfig_ as updateConfig,
 	} from '../state.js';
-	import './codemirror.css';
-
-	let textareaEl: HTMLTextAreaElement;
-	let editorContainer: HTMLDivElement;
-	let view: EditorView | null = null;
-	let cmReady = false;
-	const suppressFlag = { value_: false };
 
 	// Tracks whether <details> is open so we only mount CM once visible
-	let detailsOpen = false;
-	let cmMountAttempted = false;
+	let setupDetailsOpen = false;
+	let teardownDetailsOpen = false;
+	let setupCodeEl: typeof CodeMirrorWrapper | null = null;
+	let teardownCodeEl: typeof CodeMirrorWrapper | null = null;
 
 	function handleInput(field: string, e: Event) {
 		const target = e.target as HTMLInputElement;
@@ -50,64 +41,41 @@
 	}
 
 	function handleSetupCodeInput(e: Event) {
-		if (!cmReady) {
-			updateConfig({
-				setupCode: (e.target as HTMLTextAreaElement).value,
-			});
-		}
-	}
-
-	async function mountEditor() {
-		if (cmMountAttempted) return;
-		cmMountAttempted = true;
-
-		await tick();
-
-		const editorView = await createEditor({
-			parent_: editorContainer,
-			doc_: textareaEl.value,
-			placeholder_: textareaEl.placeholder,
-			labels_: textareaEl.labels,
-			onUpdate_(code) {
-				updateConfig({ setupCode: code });
-				textareaEl.value = code;
-			},
+		updateConfig({
+			setupCode: (e.target as HTMLTextAreaElement).value,
 		});
+	}
 
-		if (editorView) {
-			view = editorView;
-			cmReady = true;
+	function handleTeardownCodeInput(e: Event) {
+		updateConfig({
+			teardownCode: (e.target as HTMLTextAreaElement).value,
+		});
+	}
+
+	function handleSetupToggle(e: Event) {
+		setupDetailsOpen = (e.target as HTMLDetailsElement).open;
+		if (setupDetailsOpen && setupCodeEl?.requestMount) {
+			setupCodeEl.requestMount();
 		}
 	}
 
-	function handleToggle(e: Event) {
-		detailsOpen = (e.target as HTMLDetailsElement).open;
-		if (detailsOpen) {
-			mountEditor();
+	function handleTeardownToggle(e: Event) {
+		teardownDetailsOpen = (e.target as HTMLDetailsElement).open;
+		if (teardownDetailsOpen && teardownCodeEl?.requestMount) {
+			teardownCodeEl.requestMount();
 		}
 	}
 
 	// If the details starts open (e.g. there's existing setup code),
 	// mount CM immediately
 	onMount(() => {
-		if (detailsOpen) {
-			mountEditor();
+		if (setupDetailsOpen && setupCodeEl?.requestMount) {
+			setupCodeEl.requestMount();
+		}
+		if (teardownDetailsOpen && teardownCodeEl?.requestMount) {
+			teardownCodeEl.requestMount();
 		}
 	});
-
-	onDestroy(() => {
-		view?.destroy();
-		view = null;
-	});
-
-	// Sync external state → CM
-	$: if (view && cmReady) {
-		syncToEditor(view, $suiteState.setupCode, suppressFlag);
-	}
-
-	$: if (!cmReady && textareaEl) {
-		textareaEl.value = $suiteState.setupCode;
-	}
 </script>
 
 <fieldset class="card config-section" aria-label="Suite configuration">
@@ -166,8 +134,8 @@
 
 	<details
 		class="setup-details"
-		bind:open={detailsOpen}
-		on:toggle={handleToggle}
+		bind:open={setupDetailsOpen}
+		on:toggle={handleSetupToggle}
 	>
 		<summary>
 			<span class="summary-text">Suite Setup Code</span>
@@ -178,25 +146,39 @@
 			<label for="setup-code" class="sr-only" id="label-setup-code"
 				>Setup function body</label
 			>
-			<textarea
+			<CodeMirrorWrapper
+				bind:this={setupCodeEl}
+				delayed={true}
 				id="setup-code"
-				bind:this={textareaEl}
-				rows="4"
-				placeholder="// e.g. this.data = Array.from({'{ length: 1000 }'}, () => Math.random());"
 				value={$suiteState.setupCode}
+				placeholder="// e.g. this.data = Array.from({'{ length: 1000 }'}, () => Math.random());"
 				on:input={handleSetupCodeInput}
-				spellcheck="false"
-				autocapitalize="off"
-				autocomplete="off"
-				class:cm-visually-hidden={cmReady}
-				aria-hidden={cmReady ? 'true' : undefined}
-				tabindex={cmReady ? -1 : undefined}
-			></textarea>
-			<div
-				class="cm-wrapper"
-				class:cm-active={cmReady}
-				bind:this={editorContainer}
-			></div>
+			/>
+		</div>
+	</details>
+
+	<details
+		class="setup-details"
+		bind:open={teardownDetailsOpen}
+		on:toggle={handleTeardownToggle}
+	>
+		<summary>
+			<span class="summary-text">Suite Teardown Code</span>
+			<span class="text-dim">(optional — runs after each function)</span>
+		</summary>
+
+		<div class="setup-editor">
+			<label for="teardown-code" class="sr-only" id="label-teardown-code"
+				>Teardown function body</label
+			>
+			<CodeMirrorWrapper
+				bind:this={teardownCodeEl}
+				delayed={true}
+				id="teardown-code"
+				value={$suiteState.teardownCode}
+				placeholder="// e.g. delete this.data;"
+				on:input={handleTeardownCodeInput}
+			/>
 		</div>
 	</details>
 </fieldset>
@@ -264,7 +246,7 @@
 		margin-top: 0.75rem;
 	}
 
-	.setup-editor textarea {
+	.setup-editor :global(textarea) {
 		width: 100%;
 		resize: vertical;
 		min-height: 4rem;

@@ -70,11 +70,24 @@ export async function runBenchmarks_(
 		}
 	}
 
+	let teardownFn: (() => void) | undefined;
+	if (state.teardownCode.trim()) {
+		try {
+			teardownFn = compileFunction(state.teardownCode);
+		} catch (err) {
+			throw new Error(
+				`Syntax error in teardown code: ${(err as Error).message}`,
+				{ cause: err },
+			);
+		}
+	}
+
 	const { trials: nTrials, iterationsPerTrial, warmupIterations } = state;
 
 	const report = runSuite({
 		name: state.name,
 		setup: setupFn,
+		teardown: teardownFn,
 		warmupIterations,
 		iterationsPerTrial,
 		trials: nTrials,

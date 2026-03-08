@@ -33,7 +33,7 @@ export const marshalSuiteState_ = (state: ISuiteState) => {
 	return [
 		state.name,
 		[state.trials, state.iterationsPerTrial, state.warmupIterations],
-		[state.setupCode],
+		[state.setupCode, state.teardownCode],
 		state.functions.map((fn) => marshalBenkmarkEntry(fn)),
 	];
 };

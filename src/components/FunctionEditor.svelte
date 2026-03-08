@@ -15,26 +15,14 @@
 -->
 
 <script lang="ts">
-	import { onMount, onDestroy, tick } from 'svelte';
-	import {
-		createEditor_ as createEditor,
-		syncToEditor_ as syncToEditor,
-	} from './codemirror.js';
-	import type { EditorView } from '@codemirror/view';
+	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 	import {
 		type IBenchmarkEntry,
 		removeFunction_ as removeFunction,
 		updateFunction_ as updateFunction,
 	} from '../state.js';
-	import './codemirror.css';
 
 	export let entry: IBenchmarkEntry;
-
-	let textareaEl: HTMLTextAreaElement;
-	let editorContainer: HTMLDivElement;
-	let view: EditorView | null = null;
-	let cmReady = false;
-	const suppressFlag = { value_: false };
 
 	function handleNameChange(e: Event) {
 		updateFunction(entry.id, {
@@ -43,46 +31,13 @@
 	}
 
 	function handleCodeInput(e: Event) {
-		if (!cmReady) {
-			updateFunction(entry.id, {
-				code: (e.target as HTMLTextAreaElement).value,
-			});
-		}
+		updateFunction(entry.id, {
+			code: (e.target as HTMLTextAreaElement).value,
+		});
 	}
 
 	function handleRemove() {
 		removeFunction(entry.id);
-	}
-
-	onMount(async () => {
-		await tick();
-		const editorView = await createEditor({
-			parent_: editorContainer,
-			doc_: textareaEl.value,
-			placeholder_: textareaEl.placeholder,
-			labels_: textareaEl.labels,
-			onUpdate_(code) {
-				updateFunction(entry.id, { code });
-				textareaEl.value = code;
-			},
-		});
-		if (editorView) {
-			view = editorView;
-			cmReady = true;
-		}
-	});
-
-	onDestroy(() => {
-		view?.destroy();
-		view = null;
-	});
-
-	$: if (view && cmReady) {
-		syncToEditor(view, entry.code, suppressFlag);
-	}
-
-	$: if (!cmReady && textareaEl) {
-		textareaEl.value = entry.code;
 	}
 </script>
 
@@ -115,26 +70,13 @@
 		<label id="fn-label-code-{entry.id}" for="fn-code-{entry.id}"
 			>Code</label
 		>
-		<textarea
-			autocapitalize="off"
-			autocomplete="off"
-			bind:this={textareaEl}
-			class:cm-visually-hidden={cmReady}
+		<CodeMirrorWrapper
 			id="fn-code-{entry.id}"
 			name="fn-code-{entry.id}"
-			on:input={handleCodeInput}
-			placeholder="// JavaScript code to benchmark"
-			rows="4"
-			spellcheck="false"
-			tabindex={cmReady ? -1 : undefined}
 			value={entry.code}
-			aria-hidden={cmReady ? 'true' : undefined}
-		></textarea>
-		<div
-			class="cm-wrapper"
-			class:cm-active={cmReady}
-			bind:this={editorContainer}
-		></div>
+			placeholder="// JavaScript code to benchmark"
+			on:input={handleCodeInput}
+		/>
 	</div>
 </article>
 
@@ -172,7 +114,7 @@
 		gap: 0.35em;
 	}
 
-	.fn-code-field textarea {
+	.fn-code-field :global(textarea) {
 		width: 100%;
 		resize: vertical;
 		min-height: 4rem;

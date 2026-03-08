@@ -39,6 +39,7 @@ export interface ISuiteState {
 	['warmupIterations']: number;
 	/** Optional setup code (function body with `this` context). */
 	['setupCode']: string;
+	['teardownCode']: string;
 	['functions']: IBenchmarkEntry[];
 }
 
@@ -94,6 +95,10 @@ function sanitiseState(obj: ISuiteState | null): ISuiteState {
 			typeof obj?.setupCode === 'string'
 				? obj.setupCode
 				: defaults.setupCode,
+		teardownCode:
+			typeof obj?.teardownCode === 'string'
+				? obj.teardownCode
+				: defaults.teardownCode,
 		functions: Array.isArray(obj?.functions)
 			? obj.functions.map(sanitiseBenchmarkEntry)
 			: defaults.functions,
@@ -108,6 +113,7 @@ function defaultState(): ISuiteState {
 		iterationsPerTrial: 1000,
 		warmupIterations: 10,
 		setupCode: '',
+		teardownCode: '',
 		functions: [
 			{
 				id: getRandomSecret(),
@@ -136,7 +142,7 @@ export function encodeState_(state: ISuiteState): string {
 	const envelopeJson = JSON.stringify(header);
 	return [
 		toUrlSafeBase64(new TextEncoder().encode(envelopeJson)),
-		toUrlSafeBase64(new TextEncoder().encode(payloadJson))
+		toUrlSafeBase64(new TextEncoder().encode(payloadJson)),
 	].join('.');
 }
 
