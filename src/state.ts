@@ -17,6 +17,8 @@
 
 import { type Writable, writable } from 'svelte/store';
 import getRandomSecret from './lib/getRandomSecret.js';
+import { marshalSuiteState_ } from './lib/marshal.js';
+import { unmarshalSuiteState_ } from './lib/unmarshal.js';
 
 /**
  * Represents a single user-defined benchmark function.
@@ -38,6 +40,65 @@ export interface ISuiteState {
 	/** Optional setup code (function body with `this` context). */
 	['setupCode']: string;
 	['functions']: IBenchmarkEntry[];
+}
+
+/** Envelope placed around serialised payload for versioning and flags. */
+interface IStateHeader {
+	['v']: number; // version
+	['fmt']?: 'json'; // format marker (future-proof)
+}
+
+const toUrlSafeBase64 = (bytes: Uint8Array): string => {
+	const binary = String.fromCharCode(...Array.from(bytes));
+	const b64 = btoa(binary);
+	// URL-safe, remove padding
+	return b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
+const fromUrlSafeBase64 = (b64url: string): Uint8Array => {
+	// restore padding
+	let b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+	const pad = b64.length % 4;
+	if (pad) b64 += '='.repeat(4 - pad);
+	const binary = atob(b64);
+	const bytes = new Uint8Array(binary.length);
+	for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+	return bytes;
+};
+
+const sanitiseBenchmarkEntry = (
+	item: IBenchmarkEntry | null,
+	index: number,
+): IBenchmarkEntry => {
+	return {
+		id: typeof item?.id === 'string' ? item.id : getRandomSecret(),
+		name: typeof item?.name === 'string' ? item.name : `Untitled ${index}`,
+		code: typeof item?.code === 'string' ? item.code : '',
+	} as IBenchmarkEntry;
+};
+
+function sanitiseState(obj: ISuiteState | null): ISuiteState {
+	const defaults = defaultState();
+	const out: ISuiteState = {
+		name: typeof obj?.name === 'string' ? obj.name : defaults.name,
+		trials: Number.isFinite(obj?.trials)
+			? Math.max(1, Math.floor(obj!.trials))
+			: defaults.trials,
+		iterationsPerTrial: Number.isFinite(obj?.iterationsPerTrial)
+			? Math.max(1, Math.floor(obj!.iterationsPerTrial))
+			: defaults.iterationsPerTrial,
+		warmupIterations: Number.isFinite(obj?.warmupIterations)
+			? Math.max(0, Math.floor(obj!.warmupIterations))
+			: defaults.warmupIterations,
+		setupCode:
+			typeof obj?.setupCode === 'string'
+				? obj.setupCode
+				: defaults.setupCode,
+		functions: Array.isArray(obj?.functions)
+			? obj.functions.map(sanitiseBenchmarkEntry)
+			: defaults.functions,
+	};
+	return out;
 }
 
 function defaultState(): ISuiteState {
@@ -66,39 +127,49 @@ function defaultState(): ISuiteState {
  * Encode state into a URL-safe Base64 string stored in the hash.
  */
 export function encodeState_(state: ISuiteState): string {
-	const json = JSON.stringify(state);
-	// TextEncoder → Uint8Array → compress-ish via base64
-	const bytes = new TextEncoder().encode(json);
-	let binary = '';
-	for (let i = 0; i < bytes.length; i++) {
-		binary += String.fromCharCode(bytes[i]);
-	}
-	return btoa(binary);
+	// Produce minimal payload JSON
+	const payloadJson = JSON.stringify(marshalSuiteState_(state));
+	const header: IStateHeader = Object.fromEntries([
+		['v', 1],
+		['fmt', 'json'],
+	]);
+	const envelopeJson = JSON.stringify(header);
+	return [
+		toUrlSafeBase64(new TextEncoder().encode(envelopeJson)),
+		toUrlSafeBase64(new TextEncoder().encode(payloadJson))
+	].join('.');
 }
 
 /**
  * Decode state from a Base64 hash string.
  */
-export function decodeState_(hash: string): ISuiteState | null {
+export function decodeState_(raw: string): ISuiteState | null {
 	try {
-		const binary = atob(hash);
-		const bytes = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) {
-			bytes[i] = binary.charCodeAt(i);
-		}
-		const json = new TextDecoder().decode(bytes);
-		const parsed = JSON.parse(json);
-		// Basic validation
+		if (!raw) return null;
+
+		const [headerRaw, payloadRaw] = raw.split('.');
+		const headerBytes = fromUrlSafeBase64(headerRaw);
+		const headerJson = new TextDecoder().decode(headerBytes);
+		const header = JSON.parse(headerJson) as IStateHeader;
+
+		let stateObj: ISuiteState | null = null;
 		if (
-			typeof parsed.name === 'string' &&
-			Array.isArray(parsed.functions)
+			typeof header.v === 'number' &&
+			header.v === 1 &&
+			(!header.fmt || header.fmt === 'json')
 		) {
-			return parsed as ISuiteState;
+			// Supported envelope
+			const payloadBytes = fromUrlSafeBase64(payloadRaw);
+			const json = new TextDecoder().decode(payloadBytes);
+			stateObj = unmarshalSuiteState_(JSON.parse(json));
 		}
+
+		// Sanitise and return
+		const sanitised = sanitiseState(stateObj);
+		return sanitised;
 	} catch {
-		// Ignore malformed hashes
+		return null;
 	}
-	return null;
 }
 
 /**
