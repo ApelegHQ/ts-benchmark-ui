@@ -15,7 +15,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import compileFunction from './compile-function.js';
+
+const __import__ = (() => {
+	try {
+		return compileFunction(['$'], 'return import($)') as (
+			specifierExpression: string,
+		) => Promise<unknown>;
+	} catch (e) {
+		return async () => {
+			throw new SyntaxError('Dynamic imports not supported', {
+				cause: e,
+			});
+		};
+	}
+})();
+
+const __import_with_options__ = (() => {
+	try {
+		return compileFunction(['$', '_'], 'return import($,_)') as (
+			specifierExpression: string,
+			optionsExpression: { ['with']: Record<string, string> },
+		) => Promise<unknown>;
+	} catch (e) {
+		return async () => {
+			throw new SyntaxError('Dynamic imports not supported', {
+				cause: e,
+			});
+		};
+	}
+})();
+
 export default (
 	m: string,
-	_with_?: Record<string, string>,
-): Promise<unknown> => (_with_ ? import(m, { with: _with_ }) : import(m));
+	_with_?: Record<string, string> | null,
+): Promise<unknown> =>
+	_with_ ? __import_with_options__(m, { with: _with_ }) : __import__(m);

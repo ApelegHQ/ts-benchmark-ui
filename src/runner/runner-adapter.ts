@@ -18,6 +18,7 @@
 import { type ISuiteReport, runSuite } from '@apeleghq/benchmark';
 import type { ISuiteState } from '../state.js';
 import moduleResolver from './basic-resolver.js';
+import compileFunction from './compile-function.js';
 
 type ModuleDesc = [
 	attributes: Record<string, string> | null,
@@ -25,30 +26,6 @@ type ModuleDesc = [
 	imports: [imported: string, local: string][] | null,
 ];
 export type Modules = Record<string, ModuleDesc>;
-
-/**
- * Build a function from user-supplied code string.
- * The code is wrapped in `new Function(...)` and bound via `this`.
- *
- * Security note: this runs arbitrary user code in the user's own browser —
- * no different from the browser console. There is no server.
- */
-const compileFunction = (() => {
-	const FunctionCtor = (() => {}).constructor;
-	const AsyncFunctionCtor = (async () => {}).constructor;
-
-	return (params: string[], code: string): (() => void | Promise<void>) => {
-		try {
-			return FunctionCtor(...params, code);
-		} catch (e) {
-			if (e instanceof SyntaxError && code.includes('await')) {
-				return AsyncFunctionCtor(...params, code);
-			}
-
-			throw e;
-		}
-	};
-})();
 
 /**
  * Run benchmarks from the application state.
