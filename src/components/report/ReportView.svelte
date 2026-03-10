@@ -41,15 +41,17 @@
 <section class="report" aria-label="Benchmark Results">
 	<!-- Header box -->
 	<div class="report-header card">
+		<div class="report-header-main">
+			<h2 class="report-title">{report.name}</h2>
+			<p class="report-meta">
+				{formatNumber(report.config.trials)} trials ·
+				{formatNumber(report.config.iterationsPerTrial)} iter/trial ·
+				{formatNumber(report.config.warmupIterations)} warmup
+			</p>
+		</div>
 		<div class="report-actions">
 			<DownloadReport {report} />
 		</div>
-		<h2 class="report-title">{report.name}</h2>
-		<p class="report-meta">
-			{formatNumber(report.config.trials)} trials ·
-			{formatNumber(report.config.iterationsPerTrial)} iter/trial ·
-			{formatNumber(report.config.warmupIterations)} warmup
-		</p>
 	</div>
 
 	{#if fns.length > 0}
@@ -99,16 +101,23 @@
 	}
 
 	.report-header {
-		position: relative;
-		text-align: center;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-start;
+		gap: 0.75rem 1rem;
 		border-left: 3px solid var(--c-accent);
 		padding: 1.25rem 1.5rem;
 	}
 
+	.report-header-main {
+		flex: 1 1 16rem;
+		min-width: 0;
+		text-align: center;
+	}
+
 	.report-actions {
-		position: absolute;
-		top: 1rem;
-		right: 1rem;
+		flex: 0 0 auto;
+		margin-left: auto;
 	}
 
 	.report-title {
