@@ -16,11 +16,11 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 	import {
 		suiteState_ as suiteState,
 		updateConfig_ as updateConfig,
 	} from '../state.js';
+	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 
 	// Tracks whether <details> is open so we only mount CM once visible
 	let importsDetailsOpen = false;

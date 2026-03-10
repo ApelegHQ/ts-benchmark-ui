@@ -22,6 +22,7 @@
 	import Comparisons from './Comparisons.svelte';
 	import DetailedStats from './DetailedStats.svelte';
 	import Distribution from './Distribution.svelte';
+	import DownloadReport from './DownloadReport.svelte';
 	import Leaderboard from './Leaderboard.svelte';
 	import SpeedMatrix from './SpeedMatrix.svelte';
 	import Winner from './Winner.svelte';
@@ -40,6 +41,9 @@
 <section class="report" aria-label="Benchmark Results">
 	<!-- Header box -->
 	<div class="report-header card">
+		<div class="report-actions">
+			<DownloadReport {report} />
+		</div>
 		<h2 class="report-title">{report.name}</h2>
 		<p class="report-meta">
 			{formatNumber(report.config.trials)} trials ·
@@ -95,9 +99,16 @@
 	}
 
 	.report-header {
+		position: relative;
 		text-align: center;
 		border-left: 3px solid var(--c-accent);
 		padding: 1.25rem 1.5rem;
+	}
+
+	.report-actions {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
 	}
 
 	.report-title {

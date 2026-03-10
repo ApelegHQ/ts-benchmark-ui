@@ -15,8 +15,8 @@
 -->
 
 <script lang="ts">
-	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import { mean, stdDev } from '@apeleghq/benchmark/stats';
+	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import { formatTime_ as formatTime } from '../../format.js';
 
 	export let baseline: IFunctionStatistics;

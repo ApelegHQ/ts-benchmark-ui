@@ -17,9 +17,9 @@
 <script lang="ts">
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import {
-		formatTime_ as formatTime,
-		formatOps_ as formatOps,
 		formatMultiplier_ as formatMultiplier,
+		formatOps_ as formatOps,
+		formatTime_ as formatTime,
 	} from '../../format.js';
 
 	export let fns: IFunctionStatistics[];

@@ -16,8 +16,8 @@
 
 <script lang="ts">
 	import {
-		suiteState_ as suiteState,
 		addFunction_ as addFunction,
+		suiteState_ as suiteState,
 	} from '../state.js';
 	import FunctionEditor from './FunctionEditor.svelte';
 </script>

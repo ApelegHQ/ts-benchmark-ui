@@ -15,13 +15,13 @@
 -->
 
 <script lang="ts">
-	import { onMount, onDestroy, tick } from 'svelte';
 	import type { EditorView } from '@codemirror/view';
+	import { onDestroy, onMount, tick } from 'svelte';
+	import './codemirror.css';
 	import {
 		createEditor_ as createEditor,
 		syncToEditor_ as syncToEditor,
 	} from './codemirror.js';
-	import './codemirror.css';
 
 	export let id: string | undefined;
 	export let name: string | undefined;

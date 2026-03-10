@@ -15,12 +15,12 @@
 -->
 
 <script lang="ts">
-	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 	import {
 		type IBenchmarkEntry,
 		removeFunction_ as removeFunction,
 		updateFunction_ as updateFunction,
 	} from '../state.js';
+	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 
 	export let entry: IBenchmarkEntry;
 
