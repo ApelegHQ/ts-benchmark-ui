@@ -23,6 +23,7 @@
 		"noUncheckedSideEffectImports": true
 	},
 	"include": [
+		"@types/import-meta.d.ts",
 		"service-worker/**/*.ts",
 		"service-worker/**/*.js",
 		"worker/**/*.ts",
