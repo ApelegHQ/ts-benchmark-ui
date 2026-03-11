@@ -128,7 +128,7 @@
 
 	.sig-yes {
 		color: var(--c-yellow);
-		background: rgba(240, 192, 80, 0.12);
+		background: color-mix(in srgb, var(--c-yellow) 14%, transparent);
 	}
 
 	.sig-no {

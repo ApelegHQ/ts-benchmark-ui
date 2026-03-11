@@ -150,7 +150,7 @@
 			class="download-toggle"
 			aria-haspopup="menu"
 			aria-expanded={open}
-			aria-controls={menuId}
+			aria-controls={open ? menuId : undefined}
 			aria-label="Export"
 			title="Download report"
 			on:click|stopPropagation={toggleMenu}
@@ -317,7 +317,7 @@
 	}
 
 	.download-status-error {
-		color: var(--c-danger, #ff7b72);
+		color: var(--c-red);
 	}
 
 	.spinner {

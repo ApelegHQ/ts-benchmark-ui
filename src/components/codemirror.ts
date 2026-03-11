@@ -28,7 +28,7 @@ export interface ICreateEditorOptions {
 	/** Placeholder shown when the editor is empty. */
 	placeholder_?: string;
 	/** Label elements */
-	labels_?: readonly NodeList;
+	labels_?: Readonly<NodeList>;
 	/** Additional extensions (e.g. extra keymaps). */
 	extensions_?: Extension[];
 }
@@ -89,7 +89,7 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 		{
 			'&': {
 				fontSize: '0.875rem',
-				backgroundColor: 'var(--c-bg)',
+				backgroundColor: 'var(--c-surface)',
 				color: 'var(--c-text)',
 				border: '1px solid var(--c-border)',
 				borderRadius: 'var(--radius-sm)',
@@ -97,7 +97,7 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 			'&.cm-focused': {
 				outline: 'none',
 				borderColor: 'var(--c-border-focus)',
-				boxShadow: '0 0 0 3px rgba(91, 141, 239, 0.15)',
+				boxShadow: '0 0 0 3px var(--c-selection)',
 			},
 			'.cm-scroller': {
 				overflow: 'auto',
@@ -115,23 +115,23 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 				borderLeftWidth: '2px',
 			},
 			'.cm-selectionBackground': {
-				backgroundColor: 'rgba(91, 141, 239, 0.25) !important',
+				backgroundColor: 'var(--c-selection) !important',
 			},
 			'&.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground':
 				{
-					backgroundColor: 'rgba(91, 141, 239, 0.30) !important',
+					backgroundColor: 'var(--c-selection-strong) !important',
 				},
 			'.cm-activeLine': {
-				backgroundColor: 'rgba(255, 255, 255, 0.03)',
+				backgroundColor: 'var(--c-active-line)',
 			},
 			'.cm-gutters': {
-				backgroundColor: 'var(--c-surface)',
+				backgroundColor: 'var(--c-surface-2)',
 				color: 'var(--c-text-muted)',
 				border: 'none',
 				borderRight: '1px solid var(--c-border)',
 			},
 			'.cm-activeLineGutter': {
-				backgroundColor: 'rgba(255, 255, 255, 0.03)',
+				backgroundColor: 'var(--c-active-line)',
 				color: 'var(--c-text-dim)',
 			},
 			'.cm-lineNumbers .cm-gutterElement': {
@@ -152,9 +152,9 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 				margin: '0 0.2em',
 			},
 			'.cm-matchingBracket': {
-				backgroundColor: 'rgba(91, 141, 239, 0.2)',
+				backgroundColor: 'var(--c-selection)',
 				color: 'var(--c-accent) !important',
-				outline: '1px solid rgba(91, 141, 239, 0.4)',
+				outline: '1px solid var(--c-border-focus)',
 			},
 			'.cm-nonmatchingBracket': {
 				color: 'var(--c-red) !important',
@@ -189,7 +189,7 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 				fontSize: '0.8rem',
 			},
 			'.cm-textfield': {
-				backgroundColor: 'var(--c-bg)',
+				backgroundColor: 'var(--c-surface)',
 				color: 'var(--c-text)',
 				border: '1px solid var(--c-border)',
 				borderRadius: 'var(--radius-sm)',
@@ -221,7 +221,7 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 				background: 'var(--c-text-muted)',
 			},
 		},
-		{ dark: true },
+		{ dark: false },
 	);
 }
 
@@ -338,7 +338,7 @@ export function buildBaseExtensions_(modules: ICodeMirrorModules): Extension[] {
 }
 
 /**
- * Create a fully configured CM6 editor with the app's dark theme.
+ * Create a fully configured CM6 editor with the app theme.
  *
  * Returns the EditorView instance, or null if the parent element
  * has been removed from the DOM (component destroyed during load).

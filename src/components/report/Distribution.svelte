@@ -51,6 +51,17 @@
 		const plotRight = width - PADDING_RIGHT;
 		const plotWidth = plotRight - plotLeft;
 		const range = globalMax - globalMin;
+		const styles = getComputedStyle(document.documentElement);
+		const chartAxis = styles.getPropertyValue('--c-chart-axis').trim();
+		const chartLine = styles.getPropertyValue('--c-chart-line').trim();
+		const chartLabelStrong = styles
+			.getPropertyValue('--c-chart-label-strong')
+			.trim();
+		const chartLabel = styles.getPropertyValue('--c-chart-label').trim();
+		const chartSample = styles.getPropertyValue('--c-chart-sample').trim();
+		const accentCyan = styles.getPropertyValue('--c-cyan').trim();
+		const accentBlue = styles.getPropertyValue('--c-blue').trim();
+		const textPrimary = styles.getPropertyValue('--c-text').trim();
 
 		function xPos(value: number): number {
 			if (range <= 0) return plotLeft + plotWidth / 2;
@@ -58,7 +69,7 @@
 		}
 
 		// Axis labels
-		ctx.fillStyle = '#5c6478';
+		ctx.fillStyle = chartAxis;
 		ctx.font = '11px JetBrains Mono, Fira Code, monospace';
 		ctx.textAlign = 'left';
 		ctx.fillText(formatTime(globalMin), plotLeft, 14);
@@ -66,7 +77,7 @@
 		ctx.fillText(formatTime(globalMax), plotRight, 14);
 
 		// Axis line
-		ctx.strokeStyle = '#2e3244';
+		ctx.strokeStyle = chartLine;
 		ctx.lineWidth = 1;
 		ctx.beginPath();
 		ctx.moveTo(plotLeft, PADDING_TOP - 6);
@@ -78,7 +89,7 @@
 			const cy = PADDING_TOP + i * ROW_HEIGHT + ROW_HEIGHT / 2;
 
 			// Function name
-			ctx.fillStyle = i === 0 ? '#3dd68c' : '#e0e6f0';
+			ctx.fillStyle = i === 0 ? chartLabelStrong : chartLabel;
 			ctx.font = `${i === 0 ? 'bold ' : ''}12px Inter, -apple-system, sans-serif`;
 			ctx.textAlign = 'right';
 			ctx.fillText(
@@ -94,7 +105,7 @@
 			const x95 = xPos(f.p95);
 
 			// Whiskers (p5 → p25, p75 → p95)
-			ctx.strokeStyle = '#5c6478';
+			ctx.strokeStyle = chartAxis;
 			ctx.lineWidth = 1;
 			// Left whisker
 			ctx.beginPath();
@@ -119,14 +130,14 @@
 			// IQR box
 			const boxH = 14;
 			// Left half of IQR (cyan)
-			ctx.fillStyle = '#36d4c7';
+			ctx.fillStyle = accentCyan;
 			ctx.fillRect(x25, cy - boxH / 2, xMed - x25, boxH);
 			// Right half of IQR (blue)
-			ctx.fillStyle = '#5b8def';
+			ctx.fillStyle = accentBlue;
 			ctx.fillRect(xMed, cy - boxH / 2, x75 - xMed, boxH);
 
 			// Median line
-			ctx.strokeStyle = '#ffffff';
+			ctx.strokeStyle = textPrimary;
 			ctx.lineWidth = 2;
 			ctx.beginPath();
 			ctx.moveTo(xMed, cy - boxH / 2 - 1);
@@ -135,7 +146,7 @@
 
 			// Sparkline (density) — small dots for each sample
 			if (f.samples.length > 1) {
-				ctx.fillStyle = 'rgba(54, 212, 199, 0.3)';
+				ctx.fillStyle = chartSample;
 				for (const sample of f.samples) {
 					const sx = xPos(
 						Math.max(globalMin, Math.min(globalMax, sample)),
@@ -240,23 +251,23 @@
 	}
 
 	.whiskers {
-		background: #5c6478;
+		background: var(--c-chart-axis);
 	}
 
 	.iqr25 {
-		background: #36d4c7;
+		background: var(--c-cyan);
 	}
 
 	.iqr75 {
-		background: #5b8def;
+		background: var(--c-blue);
 	}
 
 	.median {
-		background: #fff;
+		background: var(--c-text);
 		width: 2px;
 	}
 
 	.samples {
-		background: rgba(54, 212, 199, 0.6);
+		background: var(--c-chart-sample);
 	}
 </style>

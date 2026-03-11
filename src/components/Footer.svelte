@@ -91,13 +91,6 @@
 </footer>
 
 <style lang="postcss">
-	a,
-	a:visited,
-	a:hover,
-	a:active {
-		color: currentColor;
-	}
-
 	footer {
 		width: 100%;
 		height: auto;

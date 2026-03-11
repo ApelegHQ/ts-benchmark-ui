@@ -241,7 +241,7 @@
 	}
 
 	.error-banner {
-		background: rgba(239, 91, 91, 0.1);
+		background: var(--c-danger-soft);
 		border-color: var(--c-red);
 		color: var(--c-red);
 		padding: 0.75rem 1rem;
@@ -257,13 +257,13 @@
 		padding: 0;
 		max-width: 28rem;
 		width: 90vw;
-		background: var(--c-surface, #1e1e2e);
-		color: var(--c-text, #cdd6f4);
-		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+		background: var(--c-surface);
+		color: var(--c-text);
+		box-shadow: 0 8px 32px var(--c-overlay-strong);
 	}
 
 	.status-dialog::backdrop {
-		background: rgba(0, 0, 0, 0.6);
+		background: var(--c-overlay-strong);
 		backdrop-filter: blur(4px);
 	}
 
@@ -284,7 +284,7 @@
 
 	.dialog-content p {
 		font-size: 0.875rem;
-		color: var(--c-text-dim, #a6adc8);
+		color: var(--c-text-dim);
 		margin: 0;
 		line-height: 1.5;
 	}
@@ -294,8 +294,8 @@
 	.spinner {
 		width: 2.5rem;
 		height: 2.5rem;
-		border: 3px solid var(--c-border, #45475a);
-		border-top-color: var(--c-accent, #89b4fa);
+		border: 3px solid var(--c-border);
+		border-top-color: var(--c-accent);
 		border-radius: 50%;
 		animation: spin 0.8s linear infinite;
 		margin-bottom: 0.5rem;
@@ -310,7 +310,7 @@
 	/* Error dialog */
 
 	.status-dialog.error {
-		border: 1px solid var(--c-red, #f38ba8);
+		border: 1px solid var(--c-red);
 	}
 
 	.error-icon {

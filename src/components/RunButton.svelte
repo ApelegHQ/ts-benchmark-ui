@@ -78,7 +78,7 @@
 		display: inline-block;
 		width: 0.875em;
 		height: 0.875em;
-		border: 2px solid rgba(255, 255, 255, 0.3);
+		border: 2px solid color-mix(in srgb, #fff 35%, transparent);
 		border-top-color: #fff;
 		border-radius: 50%;
 		animation: spin 0.6s linear infinite;

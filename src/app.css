@@ -16,30 +16,77 @@
  */
 
 :root {
-	--c-bg: #0f1117;
-	--c-surface: #181a24;
-	--c-surface-2: #212430;
-	--c-border: #2e3244;
-	--c-border-focus: #5b8def;
-	--c-text: #f2f2ff;
-	--c-text-dim: #b8c1cc;
-	--c-text-muted: #868ba2;
-	--c-accent: #3370eb;
-	--c-accent-hover: #2566e9;
-	--c-green: #3dd68c;
-	--c-yellow: #f0c050;
-	--c-red: #ef5b5b;
-	--c-cyan: #36d4c7;
-	--c-blue: #5b8def;
-	--c-magenta: #c084fc;
-	--c-orange: #f09040;
+	color-scheme: light;
+	--c-bg: #f6f7fb;
+	--c-surface: #ffffff;
+	--c-surface-2: #eef1f7;
+	--c-border: #c8cfdd;
+	--c-border-focus: #1d4ed8;
+	--c-text: #111827;
+	--c-text-dim: #243041;
+	--c-text-muted: #425066;
+	--c-accent: #1d4ed8;
+	--c-accent-hover: #1e40af;
+	--c-green: #065f46;
+	--c-yellow: #92400e;
+	--c-red: #b91c1c;
+	--c-cyan: #0f766e;
+	--c-blue: #1d4ed8;
+	--c-magenta: #7c3aed;
+	--c-orange: #b45309;
+	--c-chart-axis: #5b6474;
+	--c-chart-line: #94a3b8;
+	--c-chart-label-strong: #065f46;
+	--c-chart-label: #243041;
+	--c-chart-sample: rgba(15, 118, 110, 0.28);
+	--c-overlay: rgba(15, 23, 42, 0.18);
+	--c-overlay-strong: rgba(15, 23, 42, 0.72);
+	--c-selection: rgba(29, 78, 216, 0.18);
+	--c-selection-strong: rgba(29, 78, 216, 0.26);
+	--c-active-line: rgba(17, 24, 39, 0.035);
+	--c-danger-soft: rgba(185, 28, 28, 0.1);
+	--shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
 	--font-mono:
 		'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
 	--font-sans:
 		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	--radius: 8px;
 	--radius-sm: 4px;
-	--shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		color-scheme: dark;
+		--c-bg: #0f1117;
+		--c-surface: #181a24;
+		--c-surface-2: #212430;
+		--c-border: #2e3244;
+		--c-border-focus: #8fb3ff;
+		--c-text: #f2f2ff;
+		--c-text-dim: #b8c1cc;
+		--c-text-muted: #868ba2;
+		--c-accent: #5b8def;
+		--c-accent-hover: #78a2f5;
+		--c-green: #3dd68c;
+		--c-yellow: #f0c050;
+		--c-red: #ef5b5b;
+		--c-cyan: #36d4c7;
+		--c-blue: #5b8def;
+		--c-magenta: #c084fc;
+		--c-orange: #f09040;
+		--c-chart-axis: #5c6478;
+		--c-chart-line: #2e3244;
+		--c-chart-label-strong: #3dd68c;
+		--c-chart-label: #e0e6f0;
+		--c-chart-sample: rgba(54, 212, 199, 0.3);
+		--c-overlay: rgba(255, 255, 255, 0.05);
+		--c-overlay-strong: rgba(0, 0, 0, 0.6);
+		--c-selection: rgba(91, 141, 239, 0.25);
+		--c-selection-strong: rgba(91, 141, 239, 0.3);
+		--c-active-line: rgba(255, 255, 255, 0.03);
+		--c-danger-soft: rgba(239, 91, 91, 0.1);
+		--shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+	}
 }
 
 *,
@@ -128,7 +175,7 @@ button.danger {
 }
 
 button.danger:hover:not(:disabled) {
-	background: rgba(239, 91, 91, 0.1);
+	background: var(--c-danger-soft);
 }
 
 /* ── Inputs ────────────────────────────────────────── */
@@ -138,7 +185,7 @@ input[type='number'],
 textarea {
 	font-family: var(--font-mono);
 	font-size: 0.875rem;
-	background: var(--c-bg);
+	background: var(--c-surface);
 	color: var(--c-text);
 	border: 1px solid var(--c-border);
 	border-radius: var(--radius-sm);
@@ -151,7 +198,7 @@ textarea {
 input:focus,
 textarea:focus {
 	border-color: var(--c-border-focus);
-	box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+	box-shadow: 0 0 0 3px var(--c-selection);
 }
 
 /* ── Labels ────────────────────────────────────────── */
@@ -317,4 +364,11 @@ table.data-table tr:last-child td {
 	clip: rect(0, 0, 0, 0);
 	white-space: nowrap;
 	border: 0;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+	color: currentColor;
 }
