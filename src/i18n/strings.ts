@@ -27,6 +27,10 @@ export const STRING__APP_CONTROLS_ = 'Controls';
 export const STRING__APP_COPY_SHAREABLE_URL_TO_CLIPBOARD_ =
 	'Copy shareable URL to clipboard';
 export const STRING__APP_ERROR_ = 'Error:';
+export const STRING__APP_ERROR_BANNER_CAUSE_ = 'Cause';
+export const STRING__APP_ERROR_BANNER_DETAILS_ = 'Details';
+export const STRING__APP_ERROR_BANNER_NAME_ = 'Name';
+export const STRING__APP_ERROR_BANNER_STACK_TRACE_ = 'Stack Trace';
 export const STRING__APP_FAILED_TO_COPY_ = 'Failed to copy';
 export const STRING__APP_INITIALISATION_FAILED_ = 'Initialisation failed';
 export const STRING__APP_INITIALISING_BENCHMARK_STUDIO_ =

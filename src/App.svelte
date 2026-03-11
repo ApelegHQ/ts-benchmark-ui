@@ -22,6 +22,7 @@
 		suiteState_ as suiteState,
 	} from './state.js';
 
+	import ErrorBanner from './components/ErrorBanner.svelte';
 	import Footer from './components/Footer.svelte';
 	import FunctionList from './components/FunctionList.svelte';
 	import Header from './components/Header.svelte';
@@ -34,7 +35,7 @@
 	let report: ISuiteReport | null = null;
 	let running = false;
 	let progress: IRunProgress | null = null;
-	let error: string | typeof empty = empty;
+	let error: unknown | typeof empty = empty;
 	let shareMessage = '';
 
 	let runSuite:
@@ -86,10 +87,7 @@
 			});
 		} catch (e) {
 			console.error('Error running suite', e);
-			error =
-				typeof e === 'object' && e instanceof Error
-					? e.message
-					: String(e);
+			error = e;
 		} finally {
 			running = false;
 			progress = null;
@@ -188,10 +186,7 @@
 			</fieldset>
 
 			{#if error !== empty}
-				<div class="error-banner card" role="alert">
-					<strong>{STRING__APP_ERROR_}</strong>
-					{error}
-				</div>
+				<ErrorBanner {error} />
 			{/if}
 		</form>
 
@@ -284,23 +279,6 @@
 	@media not (writing-mode: tb-lr) {
 		.share-btn {
 			min-inline-size: 6rem;
-		}
-	}
-
-	.error-banner {
-		background: var(--c-danger-soft);
-		border-color: var(--c-red);
-		color: var(--c-red);
-		padding: 0.75rem 1rem;
-		font-size: 0.875rem;
-		margin-bottom: 1rem;
-	}
-
-	@media not (writing-mode: tb-lr) {
-		.error-banner {
-			padding-block: 0.75rem;
-			padding-inline: 1rem;
-			margin-block-end: 1rem;
 		}
 	}
 

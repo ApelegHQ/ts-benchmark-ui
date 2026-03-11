@@ -36,9 +36,10 @@
 
 	type XUnitReporter = (report: ISuiteReport) => string;
 
+	const empty = Symbol();
 	let open = false;
 	let exportingXUnit = false;
-	let xunitExportError = '';
+	let xunitExportError: string | typeof empty = empty;
 	let menuId = `download-report-menu-${getRandomSecret()}`;
 
 	let xunitReporterPromise: Promise<XUnitReporter> | undefined;
@@ -103,7 +104,7 @@
 	};
 
 	const clearXUnitExportError = () => {
-		xunitExportError = '';
+		xunitExportError = empty;
 	};
 
 	const closeMenuAndClearError = () => {
@@ -136,7 +137,7 @@
 		}
 
 		exportingXUnit = true;
-		xunitExportError = '';
+		xunitExportError = empty;
 
 		try {
 			await triggerXUnitDownload(report);
@@ -232,7 +233,7 @@
 					>{STRING__DOWNLOAD_REPORT_PREPARING_XUNIT_EXPORT_}</span
 				>
 			</div>
-		{:else if xunitExportError}
+		{:else if xunitExportError !== empty}
 			<div
 				class="download-status download-status-error"
 				role="status"
