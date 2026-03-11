@@ -16,6 +16,15 @@
 
 <script lang="ts">
 	import {
+		STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_PREFIX_,
+		STRING__FUNCTION_EDITOR_CODE_,
+		STRING__FUNCTION_EDITOR_FUNCTION_NAME_,
+		STRING__FUNCTION_EDITOR_JAVASCRIPT_CODE_TO_BENCHMARK_,
+		STRING__FUNCTION_EDITOR_NAME_,
+		STRING__FUNCTION_EDITOR_REMOVE_PREFIX_,
+		STRING__FUNCTION_EDITOR_REMOVE_THIS_FUNCTION_,
+	} from '../i18n/strings.js';
+	import {
 		type IBenchmarkEntry,
 		removeFunction_ as removeFunction,
 		updateFunction_ as updateFunction,
@@ -41,15 +50,20 @@
 	}
 </script>
 
-<article class="card fn-editor" aria-label="Benchmark function: {entry.name}">
+<article
+	class="card fn-editor"
+	aria-label={`${STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_PREFIX_}${entry.name}`}
+>
 	<div class="fn-header">
 		<div class="fn-name-field">
-			<label for="fn-name-{entry.id}">Name</label>
+			<label for="fn-name-{entry.id}"
+				>{STRING__FUNCTION_EDITOR_NAME_}</label
+			>
 			<input
 				id="fn-name-{entry.id}"
 				name="fn-name-{entry.id}"
 				on:input={handleNameChange}
-				placeholder="Function name"
+				placeholder={STRING__FUNCTION_EDITOR_FUNCTION_NAME_}
 				required
 				type="text"
 				value={entry.name}
@@ -58,9 +72,9 @@
 		<button
 			class="danger remove-btn"
 			on:click={handleRemove}
-			title="Remove this function"
+			title={STRING__FUNCTION_EDITOR_REMOVE_THIS_FUNCTION_}
 			type="button"
-			aria-label="Remove {entry.name}"
+			aria-label={`${STRING__FUNCTION_EDITOR_REMOVE_PREFIX_}${entry.name}`}
 		>
 			✕
 		</button>
@@ -68,13 +82,13 @@
 
 	<div class="fn-code-field">
 		<label id="fn-label-code-{entry.id}" for="fn-code-{entry.id}"
-			>Code</label
+			>{STRING__FUNCTION_EDITOR_CODE_}</label
 		>
 		<CodeMirrorWrapper
 			id="fn-code-{entry.id}"
 			name="fn-code-{entry.id}"
 			value={entry.code}
-			placeholder="// JavaScript code to benchmark"
+			placeholder={STRING__FUNCTION_EDITOR_JAVASCRIPT_CODE_TO_BENCHMARK_}
 			on:input={handleCodeInput}
 		/>
 	</div>
@@ -85,11 +99,25 @@
 		margin-bottom: 0.75rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.fn-editor {
+			margin-bottom: 0;
+			margin-block-end: 0.75rem;
+		}
+	}
+
 	.fn-header {
 		display: flex;
 		align-items: flex-end;
 		gap: 0.75rem;
 		margin-bottom: 0.75rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.fn-header {
+			margin-bottom: 0;
+			margin-block-end: 0.75rem;
+		}
 	}
 
 	.fn-name-field {
@@ -100,12 +128,28 @@
 		width: 100%;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.fn-name-field input {
+			width: auto;
+			inline-size: 100%;
+		}
+	}
+
 	.remove-btn {
 		padding: 0.4em 0.6em;
 		font-size: 1rem;
 		line-height: 1;
 		flex-shrink: 0;
 		margin-bottom: 1px;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.remove-btn {
+			margin-bottom: 0;
+			margin-block-end: 1px;
+			padding-block: 0.4em;
+			padding-inline: 0.6em;
+		}
 	}
 
 	.fn-code-field {
@@ -118,5 +162,13 @@
 		width: 100%;
 		resize: vertical;
 		min-height: 4rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.fn-code-field :global(textarea) {
+			width: auto;
+			inline-size: 100%;
+			min-block-size: 4rem;
+		}
 	}
 </style>

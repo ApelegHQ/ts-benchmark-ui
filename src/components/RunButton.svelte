@@ -19,6 +19,14 @@
 		type IRunProgress,
 		NULL_FUNCTION_NAME,
 	} from '@apeleghq/benchmark/types';
+	import {
+		STRING__RUN_BUTTON_BASELINE_,
+		STRING__RUN_BUTTON_BENCHMARK_IS_RUNNING_,
+		STRING__RUN_BUTTON_RUN_BENCHMARK_,
+		STRING__RUN_BUTTON_RUN_BENCHMARK_LABEL_,
+		STRING__RUN_BUTTON_RUNNING_,
+		STRING__RUN_BUTTON_TRIAL_PREFIX_,
+	} from '../i18n/strings.js';
 
 	export let ready: boolean = false;
 	export let running: boolean;
@@ -26,7 +34,7 @@
 
 	$: displayFn =
 		progress?.currentFunction === NULL_FUNCTION_NAME
-			? 'baseline'
+			? STRING__RUN_BUTTON_BASELINE_
 			: (progress?.currentFunction ?? '');
 </script>
 
@@ -35,13 +43,15 @@
 		class="primary run-btn"
 		disabled={!ready || running}
 		type="submit"
-		aria-label={running ? 'Benchmark is running' : 'Run benchmark'}
+		aria-label={running
+			? STRING__RUN_BUTTON_BENCHMARK_IS_RUNNING_
+			: STRING__RUN_BUTTON_RUN_BENCHMARK_}
 	>
 		{#if running}
 			<span class="spinner" aria-hidden="true"></span>
-			Running…
+			{STRING__RUN_BUTTON_RUNNING_}
 		{:else}
-			▶ Run Benchmark
+			{STRING__RUN_BUTTON_RUN_BENCHMARK_LABEL_}
 		{/if}
 	</button>
 
@@ -50,7 +60,7 @@
 			<progress max={progress.totalTrials} value={progress.trial - 1}
 			></progress>
 			<span class="progress-text">
-				Trial {progress.trial}/{progress.totalTrials}
+				{STRING__RUN_BUTTON_TRIAL_PREFIX_}{progress.trial}/{progress.totalTrials}
 				<span class="text-dim">· {displayFn}</span>
 			</span>
 		</div>
@@ -74,6 +84,13 @@
 		white-space: nowrap;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.run-btn {
+			padding-block: 0.625em;
+			padding-inline: 1.5em;
+		}
+	}
+
 	.spinner {
 		display: inline-block;
 		width: 0.875em;
@@ -82,6 +99,15 @@
 		border-top-color: #fff;
 		border-radius: 50%;
 		animation: spin 0.6s linear infinite;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.spinner {
+			border-top-color: color-mix(in srgb, #fff 35%, transparent);
+			inline-size: 0.875em;
+			block-size: 0.875em;
+			border-block-start-color: #fff;
+		}
 	}
 
 	@keyframes spin {
@@ -98,12 +124,26 @@
 		min-width: 0;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.progress-info {
+			min-width: auto;
+			min-inline-size: 0;
+		}
+	}
+
 	progress[value] {
 		appearance: none;
 		height: 4px;
 		border: 0 none transparent;
 		background: var(--c-surface-2);
 		border-radius: 2px;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		progress[value] {
+			height: auto;
+			block-size: 4px;
+		}
 	}
 
 	progress[value]::-webkit-progress-bar {
@@ -117,10 +157,24 @@
 		border-radius: 2px;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		progress[value]::-webkit-progress-value {
+			height: auto;
+			block-size: 100%;
+		}
+	}
+
 	progress[value]::-moz-progress-bar {
 		height: 100%;
 		background: var(--c-accent);
 		border-radius: 2px;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		progress[value]::-moz-progress-bar {
+			height: auto;
+			block-size: 100%;
+		}
 	}
 
 	.progress-text {

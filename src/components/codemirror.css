@@ -34,10 +34,24 @@
 	display: none;
 }
 
+@media not (writing-mode: tb-lr) {
+	.cm-wrapper {
+		width: auto;
+		inline-size: 100%;
+	}
+}
+
 .cm-wrapper.cm-active {
 	display: block;
 }
 
 .cm-wrapper .cm-editor {
 	width: 100%;
+}
+
+@media not (writing-mode: tb-lr) {
+	.cm-wrapper .cm-editor {
+		width: auto;
+		inline-size: 100%;
+	}
 }

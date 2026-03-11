@@ -23,6 +23,15 @@
 		formatMultiplier_ as formatMultiplier,
 		formatPValue_ as formatPValue,
 	} from '../../format.js';
+	import {
+		STRING__WINNER_AND_,
+		STRING__WINNER_ARE_,
+		STRING__WINNER_FASTER_THAN_,
+		STRING__WINNER_FASTEST_,
+		STRING__WINNER_IS_THE_,
+		STRING__WINNER_STATISTICALLY_TIED_,
+		STRING__WINNER_VS_,
+	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
 	export let comps: IPairedComparison[];
@@ -49,22 +58,21 @@
 		{#if isTied}
 			<span class="winner-icon" aria-hidden="true">≈</span>
 			<span>
-				<strong>{fastest.name}</strong> and
+				<strong>{fastest.name}</strong> {STRING__WINNER_AND_}
 				<strong>{second?.name}</strong>
-				are
-				<span class="text-yellow text-bold">statistically tied</span>
-				<span class="text-dim"
-					>({formatPValue(topComp?.pValue ?? 1)})</span
+				{STRING__WINNER_ARE_}
+				<span class="text-yellow text-bold"
+					>{STRING__WINNER_STATISTICALLY_TIED_}</span
 				>
+				<span class="text-dim">({formatPValue(topComp?.pValue ?? 1)})</span>
 			</span>
 		{:else}
 			<span class="winner-icon text-green" aria-hidden="true">⚡</span>
 			<span>
-				<strong class="text-green">{fastest.name}</strong> is the
-				fastest
+				<strong class="text-green">{fastest.name}</strong>{STRING__WINNER_IS_THE_}{STRING__WINNER_FASTEST_}
 				<span class="text-dim">
-					— {formatMultiplier(ratioVsSecond)} faster than {second?.name}{#if fns.length > 2},
-						{formatMultiplier(ratioVsSlowest)} vs {slowest.name}{/if}
+					— {formatMultiplier(ratioVsSecond)}{STRING__WINNER_FASTER_THAN_}{second?.name}{#if fns.length > 2},
+						{formatMultiplier(ratioVsSlowest)}{STRING__WINNER_VS_}{slowest.name}{/if}
 				</span>
 			</span>
 		{/if}
@@ -82,6 +90,15 @@
 		border: 1px solid var(--c-border);
 		border-radius: var(--radius);
 		font-size: 0.9375rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.winner-banner {
+			margin-top: 0;
+			padding-block: 0.875rem;
+			padding-inline: 1.25rem;
+			margin-block-start: 1rem;
+		}
 	}
 
 	.winner-icon {

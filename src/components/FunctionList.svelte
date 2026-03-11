@@ -16,14 +16,20 @@
 
 <script lang="ts">
 	import {
+		STRING__FUNCTION_LIST_ADD_FUNCTION_,
+		STRING__FUNCTION_LIST_BENCHMARK_FUNCTIONS_,
+		STRING__FUNCTION_LIST_FUNCTIONS_,
+		STRING__FUNCTION_LIST_PLUS_ADD_FUNCTION_,
+	} from '../i18n/strings.js';
+	import {
 		addFunction_ as addFunction,
 		suiteState_ as suiteState,
 	} from '../state.js';
 	import FunctionEditor from './FunctionEditor.svelte';
 </script>
 
-<fieldset aria-label="Benchmark functions">
-	<legend class="section-title">Functions</legend>
+<fieldset aria-label={STRING__FUNCTION_LIST_BENCHMARK_FUNCTIONS_}>
+	<legend class="section-title">{STRING__FUNCTION_LIST_FUNCTIONS_}</legend>
 
 	{#each $suiteState.functions as entry (entry.id)}
 		<FunctionEditor {entry} />
@@ -33,9 +39,9 @@
 		class="add-btn"
 		on:click={addFunction}
 		type="button"
-		aria-label="Add Function"
+		aria-label={STRING__FUNCTION_LIST_ADD_FUNCTION_}
 	>
-		+ Add Function
+		{STRING__FUNCTION_LIST_PLUS_ADD_FUNCTION_}
 	</button>
 </fieldset>
 
@@ -53,6 +59,13 @@
 		transition:
 			color 0.15s,
 			border-color 0.15s;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.add-btn {
+			width: auto;
+			inline-size: 100%;
+		}
 	}
 
 	.add-btn:hover {

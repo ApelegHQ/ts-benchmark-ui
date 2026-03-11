@@ -18,6 +18,23 @@
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import { afterUpdate, onMount } from 'svelte';
 	import { formatTime_ as formatTime } from '../../format.js';
+	import {
+		STRING__DISTRIBUTION_,
+		STRING__DISTRIBUTION_ARIA_LABEL_,
+		STRING__DISTRIBUTION_INTERQUARTILE_RANGE_,
+		STRING__DISTRIBUTION_IQR_,
+		STRING__DISTRIBUTION_MEDIAN_,
+		STRING__DISTRIBUTION_P25_,
+		STRING__DISTRIBUTION_P5_,
+		STRING__DISTRIBUTION_P75_,
+		STRING__DISTRIBUTION_P95_,
+		STRING__DISTRIBUTION_PERCENTILE_05_,
+		STRING__DISTRIBUTION_PERCENTILE_25_,
+		STRING__DISTRIBUTION_PERCENTILE_75_,
+		STRING__DISTRIBUTION_PERCENTILE_95_,
+		STRING__DISTRIBUTION_SAMPLES_,
+		STRING__DISTRIBUTION_WHISKERS_,
+	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
 
@@ -68,7 +85,6 @@
 			return plotLeft + ((value - globalMin) / range) * plotWidth;
 		}
 
-		// Axis labels
 		ctx.fillStyle = chartAxis;
 		ctx.font = '11px JetBrains Mono, Fira Code, monospace';
 		ctx.textAlign = 'left';
@@ -76,7 +92,6 @@
 		ctx.textAlign = 'right';
 		ctx.fillText(formatTime(globalMax), plotRight, 14);
 
-		// Axis line
 		ctx.strokeStyle = chartLine;
 		ctx.lineWidth = 1;
 		ctx.beginPath();
@@ -88,7 +103,6 @@
 			const f = fns[i];
 			const cy = PADDING_TOP + i * ROW_HEIGHT + ROW_HEIGHT / 2;
 
-			// Function name
 			ctx.fillStyle = i === 0 ? chartLabelStrong : chartLabel;
 			ctx.font = `${i === 0 ? 'bold ' : ''}12px Inter, -apple-system, sans-serif`;
 			ctx.textAlign = 'right';
@@ -104,20 +118,16 @@
 			const x75 = xPos(f.p75);
 			const x95 = xPos(f.p95);
 
-			// Whiskers (p5 → p25, p75 → p95)
 			ctx.strokeStyle = chartAxis;
 			ctx.lineWidth = 1;
-			// Left whisker
 			ctx.beginPath();
 			ctx.moveTo(x5, cy);
 			ctx.lineTo(x25, cy);
 			ctx.stroke();
-			// Right whisker
 			ctx.beginPath();
 			ctx.moveTo(x75, cy);
 			ctx.lineTo(x95, cy);
 			ctx.stroke();
-			// Whisker caps
 			ctx.beginPath();
 			ctx.moveTo(x5, cy - 5);
 			ctx.lineTo(x5, cy + 5);
@@ -127,16 +137,12 @@
 			ctx.lineTo(x95, cy + 5);
 			ctx.stroke();
 
-			// IQR box
 			const boxH = 14;
-			// Left half of IQR (cyan)
 			ctx.fillStyle = accentCyan;
 			ctx.fillRect(x25, cy - boxH / 2, xMed - x25, boxH);
-			// Right half of IQR (blue)
 			ctx.fillStyle = accentBlue;
 			ctx.fillRect(xMed, cy - boxH / 2, x75 - xMed, boxH);
 
-			// Median line
 			ctx.strokeStyle = textPrimary;
 			ctx.lineWidth = 2;
 			ctx.beginPath();
@@ -144,7 +150,6 @@
 			ctx.lineTo(xMed, cy + boxH / 2 + 1);
 			ctx.stroke();
 
-			// Sparkline (density) — small dots for each sample
 			if (f.samples.length > 1) {
 				ctx.fillStyle = chartSample;
 				for (const sample of f.samples) {
@@ -162,7 +167,6 @@
 	onMount(drawChart);
 	afterUpdate(drawChart);
 
-	// Redraw on resize
 	function handleResize() {
 		drawChart();
 	}
@@ -170,21 +174,24 @@
 
 <svelte:window on:resize={handleResize} />
 
-<h3 class="section-title">Distribution</h3>
+<h3 class="section-title">{STRING__DISTRIBUTION_}</h3>
 
 <div class="card distribution-card">
 	<canvas
 		bind:this={canvasEl}
-		style="width: 100%; height: {canvasHeight}px;"
-		aria-label="Box plot distribution chart showing percentile ranges for each function"
+		style={`width: 100%; height: ${canvasHeight}px;`}
+		aria-label={STRING__DISTRIBUTION_ARIA_LABEL_}
 	></canvas>
 
 	<div class="legend">
 		<span class="legend-item">
 			<span class="legend-swatch whiskers">╷</span>
 			<span class="text-dim"
-				>whiskers <abbr title="5th perentile">p5</abbr>/<abbr
-					title="95th perentile">p95</abbr
+				>{STRING__DISTRIBUTION_WHISKERS_}
+				<abbr title={STRING__DISTRIBUTION_PERCENTILE_05_}
+					>{STRING__DISTRIBUTION_P5_}</abbr
+				>/<abbr title={STRING__DISTRIBUTION_PERCENTILE_95_}
+					>{STRING__DISTRIBUTION_P95_}</abbr
 				></span
 			>
 		</span>
@@ -192,20 +199,24 @@
 			<span class="legend-swatch iqr25"></span>
 			<span class="legend-swatch iqr75"></span>
 			<span class="text-dim">
-				<abbr title="Interquartile Range">IQR</abbr>
+				<abbr title={STRING__DISTRIBUTION_INTERQUARTILE_RANGE_}
+					>{STRING__DISTRIBUTION_IQR_}</abbr
+				>
 				{' '}
-				(<abbr title="25th perentile">p25</abbr>–<abbr
-					title="75th percentile">p75</abbr
+				(<abbr title={STRING__DISTRIBUTION_PERCENTILE_25_}
+					>{STRING__DISTRIBUTION_P25_}</abbr
+				>–<abbr title={STRING__DISTRIBUTION_PERCENTILE_75_}
+					>{STRING__DISTRIBUTION_P75_}</abbr
 				>)
 			</span>
 		</span>
 		<span class="legend-item">
 			<span class="legend-swatch median"></span>
-			<span class="text-dim">median</span>
+			<span class="text-dim">{STRING__DISTRIBUTION_MEDIAN_}</span>
 		</span>
 		<span class="legend-item">
 			<span class="legend-dot samples"></span>
-			<span class="text-dim">samples</span>
+			<span class="text-dim">{STRING__DISTRIBUTION_SAMPLES_}</span>
 		</span>
 	</div>
 </div>
@@ -228,6 +239,13 @@
 		justify-content: center;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.legend {
+			margin-top: 0;
+			margin-block-start: 0.75rem;
+		}
+	}
+
 	.legend-item {
 		display: inline-flex;
 		align-items: center;
@@ -242,12 +260,26 @@
 		forced-color-adjust: none;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.legend-swatch {
+			inline-size: 12px;
+			block-size: 10px;
+		}
+	}
+
 	.legend-dot {
 		display: inline-block;
 		width: 7px;
 		height: 7px;
 		border-radius: 50%;
 		forced-color-adjust: none;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.legend-dot {
+			inline-size: 7px;
+			block-size: 7px;
+		}
 	}
 
 	.whiskers {
@@ -265,6 +297,13 @@
 	.median {
 		background: var(--c-text);
 		width: 2px;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.median {
+			width: auto;
+			inline-size: 2px;
+		}
 	}
 
 	.samples {

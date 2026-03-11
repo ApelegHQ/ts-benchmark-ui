@@ -15,25 +15,37 @@
 -->
 
 <script lang="ts">
-	import type { ISuiteReport } from '@apeleghq/benchmark/types';
-	import type { ISuiteState } from '../state.js';
+	import type { IRunProgress, ISuiteReport } from '@apeleghq/benchmark/types';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import {
+		STRING__RUNNER_FAILED_TO_DESERIALISE_INITIAL_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_,
+		STRING__RUNNER_FAILED_TO_DESERIALISE_INSTANCE_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_,
+		STRING__RUNNER_INVALID_DATA_,
+		STRING__RUNNER_MESSAGE_ERROR_,
+		STRING__RUNNER_TIMED_OUT_WAITING_FOR_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_,
+	} from '../i18n/strings.js';
 	import getRandomSecret from '../lib/get-random-secret.js';
-	import processImportsWorker from '../lib/process-imports-worker.js';
 	import { marshalSuiteState_ as marshalSuiteState } from '../lib/marshal.js';
+	import processImportsWorker from '../lib/process-imports-worker.js';
 	import {
 		unmarshalRunProgress_ as unmarshalRunProgress,
 		unmarshalSuiteReport_ as unmarshalSuiteReport,
 	} from '../lib/unmarshal.js';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import type { ISuiteState } from '../state.js';
+
+	type RunnerErrorData =
+		| [false, unknown]
+		| [false, Record<string, unknown>, string];
+	type RunnerResultData = [true, ISuiteReport] | RunnerErrorData;
 
 	const dispatch = createEventDispatcher<{
-		['ready']: {
+		ready: {
 			run_: (
 				suiteState: ISuiteState,
-				onProgress: (progress: unknown) => void,
+				onProgress: (progress: IRunProgress) => void,
 			) => Promise<ISuiteReport>;
 		};
-		['error']: { message: string; cause?: unknown };
+		error: { message: string; cause?: unknown };
 	}>();
 
 	const initMessageKeyA = getRandomSecret();
@@ -44,37 +56,42 @@
 	let instanceSetup = false;
 	let hasError = false;
 	let errorMessage: string | null = null;
+	let iframeEl: HTMLIFrameElement | null = null;
 
-	const instanceOnmessage = (event: MessageEvent<MessagePort>) => {
+	const instanceOnmessage = (event: Event) => {
+		const typedEvent = event as MessageEvent<MessagePort>;
+
 		if (
 			!globalSetup ||
 			hasError ||
 			instanceSetup ||
-			!event.target ||
-			!event.isTrusted ||
-			!(event.data instanceof MessagePort)
+			!typedEvent.target ||
+			!typedEvent.isTrusted ||
+			!(typedEvent.data instanceof MessagePort)
 		) {
 			return;
 		}
 
 		instanceSetup = true;
-		event.target.removeEventListener('message', instanceOnmessage, false);
-		event.target.removeEventListener(
+		typedEvent.target.removeEventListener(
+			'message',
+			instanceOnmessage,
+			false,
+		);
+		typedEvent.target.removeEventListener(
 			'messageerror',
 			instanceOnmessageerror,
 			false,
 		);
-		(event.target as MessagePort).close();
+		(typedEvent.target as MessagePort).close();
 
-		const instancePort = event.data;
+		const instancePort = typedEvent.data;
 
-		// Dispatch a 'ready' event with a `run` function that the parent
-		// Runner.svelte can use
 		const run = async (
 			suiteState: ISuiteState,
-			onProgress: (progress: unknown) => void,
+			onProgress: (progress: IRunProgress) => void,
 		): Promise<ISuiteReport> => {
-			let imports;
+			let imports: unknown;
 			if (suiteState.importsCode) {
 				imports = await processImportsWorker(suiteState.importsCode);
 			}
@@ -88,28 +105,31 @@
 
 				messageChannelResult.port1.addEventListener(
 					'message',
-					(
-						event: MessageEvent<
-							[true, ISuiteReport] | [false, unknown]
-						>,
-					) => {
+					(event: Event) => {
+						const typedEvent =
+							event as MessageEvent<RunnerResultData>;
+
 						if (
-							!event.isTrusted ||
-							!Array.isArray(event.data) ||
-							typeof event.data[0] !== 'boolean' ||
-							(event.data[0] && event.data.length !== 2) ||
-							(!event.data[0] &&
-								event.data.length !== 2 &&
-								event.data.length !== 3)
+							!typedEvent.isTrusted ||
+							!Array.isArray(typedEvent.data) ||
+							typeof typedEvent.data[0] !== 'boolean' ||
+							(typedEvent.data[0] &&
+								typedEvent.data.length !== 2) ||
+							(!typedEvent.data[0] &&
+								typedEvent.data.length !== 2 &&
+								typedEvent.data.length !== 3)
 						) {
-							reject(new TypeError('Invalid data'));
-						} else if (event.data[0]) {
-							resolve(unmarshalSuiteReport(event.data[1]));
+							reject(new TypeError(STRING__RUNNER_INVALID_DATA_));
+						} else if (typedEvent.data[0]) {
+							resolve(unmarshalSuiteReport(typedEvent.data[1]));
 						} else {
-							if (event.data.length === 3) {
-								event.data[1].name = event.data[2];
+							const errorData = [
+								...typedEvent.data,
+							] as RunnerErrorData;
+							if (errorData.length === 3) {
+								errorData[1].name = errorData[2];
 							}
-							reject(event.data[1]);
+							reject(errorData[1]);
 						}
 
 						messageChannelResult.port1.close();
@@ -121,7 +141,7 @@
 				messageChannelResult.port1.addEventListener(
 					'messageerror',
 					() => {
-						reject(new Error('Message error'));
+						reject(new Error(STRING__RUNNER_MESSAGE_ERROR_));
 						messageChannelResult.port1.close();
 						messageChannelProgress.port1.close();
 					},
@@ -130,17 +150,20 @@
 
 				messageChannelProgress.port1.addEventListener(
 					'message',
-					(event: MessageEvent) => {
+					(event: Event) => {
+						const typedEvent = event as MessageEvent<
+							[string, unknown]
+						>;
 						if (
-							!event.isTrusted ||
-							!Array.isArray(event.data) ||
-							event.data.length !== 2 ||
-							event.data[0] !== 'progress'
+							!typedEvent.isTrusted ||
+							!Array.isArray(typedEvent.data) ||
+							typedEvent.data.length !== 2 ||
+							typedEvent.data[0] !== 'progress'
 						) {
 							return;
 						}
 
-						onProgress(unmarshalRunProgress(event.data[1]));
+						onProgress(unmarshalRunProgress(typedEvent.data[1]));
 					},
 					false,
 				);
@@ -160,48 +183,53 @@
 		dispatch('ready', { run_: run });
 	};
 
-	const instanceOnmessageerror = (event: MessageEvent) => {
+	const instanceOnmessageerror = (event: Event) => {
+		const typedEvent = event as MessageEvent;
+
 		if (
 			!globalSetup ||
 			hasError ||
 			instanceSetup ||
-			!event.target ||
-			!event.isTrusted
+			!typedEvent.target ||
+			!typedEvent.isTrusted
 		) {
 			return;
 		}
 
 		instanceSetup = true;
-		event.target.removeEventListener('message', instanceOnmessage, false);
-		event.target.removeEventListener(
+		typedEvent.target.removeEventListener(
+			'message',
+			instanceOnmessage,
+			false,
+		);
+		typedEvent.target.removeEventListener(
 			'messageerror',
 			instanceOnmessageerror,
 			false,
 		);
-		(event.target as MessagePort).close();
+		(typedEvent.target as MessagePort).close();
 
-		// Set app error state
 		hasError = true;
 		errorMessage =
-			'Failed to deserialise instance handshake message from runner iframe.';
+			STRING__RUNNER_FAILED_TO_DESERIALISE_INSTANCE_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_;
 		dispatch('error', { message: errorMessage });
 	};
 
-	const onmessage = (
-		event: MessageEvent<
+	const onmessage = (event: Event) => {
+		const typedEvent = event as MessageEvent<
 			[initMessage: typeof initMessageKeyA, responsePort: MessagePort]
-		>,
-	) => {
+		>;
+
 		if (
 			globalSetup ||
 			hasError ||
 			!iframeEl ||
-			!event.isTrusted ||
-			event.source !== iframeEl.contentWindow ||
-			!Array.isArray(event.data) ||
-			event.data.length !== 2 ||
-			event.data[0] !== initMessageKeyA ||
-			!(event.data[1] instanceof MessagePort)
+			!typedEvent.isTrusted ||
+			typedEvent.source !== iframeEl.contentWindow ||
+			!Array.isArray(typedEvent.data) ||
+			typedEvent.data.length !== 2 ||
+			typedEvent.data[0] !== initMessageKeyA ||
+			!(typedEvent.data[1] instanceof MessagePort)
 		) {
 			return;
 		}
@@ -222,29 +250,30 @@
 			false,
 		);
 
-		event.data[1].postMessage(
+		typedEvent.data[1].postMessage(
 			[initMessageKeyB, messageChannel.port2],
 			[messageChannel.port2],
 		);
 	};
 
-	const onmessageerror = (event: MessageEvent) => {
+	const onmessageerror = (event: Event) => {
+		const typedEvent = event as MessageEvent;
+
 		if (
 			globalSetup ||
 			hasError ||
 			!iframeEl ||
-			!event.isTrusted ||
-			event.source !== iframeEl.contentWindow
+			!typedEvent.isTrusted ||
+			typedEvent.source !== iframeEl.contentWindow
 		) {
 			return;
 		}
 
 		clear();
 
-		// Set app error state
 		hasError = true;
 		errorMessage =
-			'Failed to deserialise initial handshake message from runner iframe.';
+			STRING__RUNNER_FAILED_TO_DESERIALISE_INITIAL_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_;
 		dispatch('error', { message: errorMessage });
 	};
 
@@ -265,23 +294,19 @@
 			if (globalSetup) return;
 			clear();
 
-			// Set app error state
 			hasError = true;
 			errorMessage =
-				'Timed out waiting for handshake message from runner iframe.';
+				STRING__RUNNER_TIMED_OUT_WAITING_FOR_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_;
 			dispatch('error', { message: errorMessage });
 		}, 5_000);
 
 		return clear;
 	});
-
-	let iframeEl: HTMLIFrameElement | null = null;
 </script>
 
 <iframe
 	allow="cross-origin-isolated"
 	bind:this={iframeEl}
-	credentialless=""
 	sandbox="allow-scripts"
 	src={iframeSrc}
 	title=""

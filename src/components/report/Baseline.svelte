@@ -18,6 +18,17 @@
 	import { mean, stdDev } from '@apeleghq/benchmark/stats';
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import { formatTime_ as formatTime } from '../../format.js';
+	import {
+		STRING__BASELINE_ALL_REPORTED_TIMES_HAVE_THIS_OVERHEAD_SUBTRACTED_,
+		STRING__BASELINE_BASELINE_,
+		STRING__BASELINE_CONSIDER_INCREASING_WORK_PER_ITERATION_FOR_MORE_ACCURATE_RESULTS_,
+		STRING__BASELINE_MEASUREMENT_OVERHEAD_,
+		STRING__BASELINE_NEGLIGIBLE_,
+		STRING__BASELINE_OF_THE_FASTEST_FUNCTION_,
+		STRING__BASELINE_OVERHEAD_IS_PREFIX_,
+		STRING__BASELINE_OVERHEAD_IS_SUFFIX_,
+		STRING__BASELINE_PER_ITERATION_SUFFIX_,
+	} from '../../i18n/strings.js';
 
 	export let baseline: IFunctionStatistics;
 	export let fastest: IFunctionStatistics;
@@ -28,17 +39,19 @@
 	$: isHigh = overheadRatio > 0.1;
 </script>
 
-<h3 class="section-title">Measurement Overhead</h3>
+<h3 class="section-title">{STRING__BASELINE_MEASUREMENT_OVERHEAD_}</h3>
 
 <div class="card baseline-card">
 	<p>
-		<span class="text-dim">Baseline</span>
+		<span class="text-dim">{STRING__BASELINE_BASELINE_}</span>
 		<span class="mono text-cyan">({baseline.name})</span>:
-		<strong>{formatTime(blMean)}</strong><span class="text-dim">/iter</span>
+		<strong>{formatTime(blMean)}</strong><span class="text-dim"
+			>{STRING__BASELINE_PER_ITERATION_SUFFIX_}</span
+		>
 		&nbsp; σ = {formatTime(blStdDev)}
 	</p>
 	<p class="text-dim overhead">
-		All reported times have this overhead subtracted.
+		{STRING__BASELINE_ALL_REPORTED_TIMES_HAVE_THIS_OVERHEAD_SUBTRACTED_}
 	</p>
 
 	{#if fastest.mean > 0}
@@ -46,20 +59,21 @@
 			{#if isHigh}
 				<span class="text-yellow">⚠</span>
 				<span class="text-yellow">
-					Overhead is {(overheadRatio * 100).toFixed(1)}% of the
-					fastest function.
+					{STRING__BASELINE_OVERHEAD_IS_PREFIX_}{(
+						overheadRatio * 100
+					).toFixed(1)}{STRING__BASELINE_OF_THE_FASTEST_FUNCTION_}
 				</span>
 				<br />
 				<span class="text-dim high-overhead">
-					Consider increasing work per iteration for more accurate
-					results.
+					{STRING__BASELINE_CONSIDER_INCREASING_WORK_PER_ITERATION_FOR_MORE_ACCURATE_RESULTS_}
 				</span>
 			{:else}
 				<span class="text-dim">
-					Overhead is {(overheadRatio * 100).toFixed(2)}% of the
-					fastest —
+					{STRING__BASELINE_OVERHEAD_IS_PREFIX_}{(
+						overheadRatio * 100
+					).toFixed(2)}{STRING__BASELINE_OVERHEAD_IS_SUFFIX_}
 				</span>
-				<span class="text-green">negligible</span>
+				<span class="text-green">{STRING__BASELINE_NEGLIGIBLE_}</span>
 			{/if}
 		</p>
 	{/if}
@@ -70,12 +84,33 @@
 		margin-left: 1.25rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.high-overhead {
+			margin-left: 0;
+			margin-inline-start: 1.25rem;
+		}
+	}
+
 	.fastest {
 		margin-top: 0.5rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.fastest {
+			margin-top: 0;
+			margin-block-start: 0.5rem;
+		}
+	}
+
 	.overhead {
 		margin-top: 0.35rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.overhead {
+			margin-top: 0;
+			margin-block-start: 0.35rem;
+		}
 	}
 
 	.baseline-card {

@@ -1,6 +1,22 @@
 <script lang="ts">
 	import type { IRunProgress, ISuiteReport } from '@apeleghq/benchmark/types';
 	import {
+		STRING__APP_CONTROLS_,
+		STRING__APP_COPY_SHAREABLE_URL_TO_CLIPBOARD_,
+		STRING__APP_ERROR_,
+		STRING__APP_FAILED_TO_COPY_,
+		STRING__APP_INITIALISATION_FAILED_,
+		STRING__APP_INITIALISING_BENCHMARK_STUDIO_,
+		STRING__APP_INTERACTIVE_JAVASCRIPT_BENCHMARKING_IN_YOUR_BROWSER_,
+		STRING__APP_LINK_COPIED_,
+		STRING__APP_PLEASE_RELOAD_THE_PAGE_TO_TRY_AGAIN_,
+		STRING__APP_RELOAD_PAGE_,
+		STRING__APP_SETTING_UP_THE_SANDBOXED_RUNNER_ENVIRONMENT_,
+		STRING__APP_SHARE_,
+		STRING__APP_SHARE_BENCHMARK_CONFIGURATION_,
+		STRING__APP_TITLE_,
+	} from './i18n/strings.js';
+	import {
 		type ISuiteState,
 		getShareUrl_ as getShareUrl,
 		suiteState_ as suiteState,
@@ -34,7 +50,6 @@
 
 	$: ready = runSuite !== null && runnerError === empty;
 
-	// Show/hide the loading dialog reactively
 	$: if (loadingDialogEl) {
 		if (!ready && runnerError === empty) {
 			if (!loadingDialogEl.open) loadingDialogEl.showModal();
@@ -43,7 +58,6 @@
 		}
 	}
 
-	// Show/hide the error dialog reactively
 	$: if (errorDialogEl) {
 		if (runnerError !== empty) {
 			if (!errorDialogEl.open) errorDialogEl.showModal();
@@ -87,13 +101,13 @@
 		navigator.clipboard
 			.writeText(url)
 			.then(() => {
-				shareMessage = 'Link copied!';
+				shareMessage = STRING__APP_LINK_COPIED_;
 				setTimeout(() => {
 					shareMessage = '';
 				}, 2000);
 			})
 			.catch(() => {
-				shareMessage = 'Failed to copy';
+				shareMessage = STRING__APP_FAILED_TO_COPY_;
 				setTimeout(() => {
 					shareMessage = '';
 				}, 2000);
@@ -109,8 +123,8 @@
 >
 	<div class="dialog-content">
 		<div class="spinner" aria-hidden="true"></div>
-		<h2 id="loading-title">Initialising Benchmark Studio</h2>
-		<p>Setting up the sandboxed runner environment&hellip;</p>
+		<h2 id="loading-title">{STRING__APP_INITIALISING_BENCHMARK_STUDIO_}</h2>
+		<p>{STRING__APP_SETTING_UP_THE_SANDBOXED_RUNNER_ENVIRONMENT_}</p>
 	</div>
 </dialog>
 
@@ -122,15 +136,17 @@
 >
 	<div class="dialog-content">
 		<div class="error-icon" aria-hidden="true">⚠</div>
-		<h2 id="error-title">Initialisation failed</h2>
+		<h2 id="error-title">{STRING__APP_INITIALISATION_FAILED_}</h2>
 		<p>{runnerError !== empty ? runnerError : ''}</p>
-		<p class="error-hint">Please reload the page to try again.</p>
+		<p class="error-hint">
+			{STRING__APP_PLEASE_RELOAD_THE_PAGE_TO_TRY_AGAIN_}
+		</p>
 		<button
 			class="primary"
 			on:click={() => location.reload()}
 			type="button"
 		>
-			Reload Page
+			{STRING__APP_RELOAD_PAGE_}
 		</button>
 	</div>
 </dialog>
@@ -139,10 +155,10 @@
 	<header>
 		<h1>
 			<span class="logo" aria-hidden="true">⚡</span>
-			Benchmark Studio
+			{STRING__APP_TITLE_}
 		</h1>
 		<p class="subtitle">
-			Interactive JavaScript benchmarking in your browser.
+			{STRING__APP_INTERACTIVE_JAVASCRIPT_BENCHMARKING_IN_YOUR_BROWSER_}
 		</p>
 	</header>
 	<main>
@@ -152,28 +168,28 @@
 			<FunctionList />
 
 			<fieldset class="controls-bar">
-				<legend class="sr-only">Controls</legend>
+				<legend class="sr-only">{STRING__APP_CONTROLS_}</legend>
 
 				<RunButton ready={!!runSuite} {running} {progress} />
 
 				<button
 					class="share-btn"
 					on:click={handleShare}
-					title="Copy shareable URL to clipboard"
+					title={STRING__APP_COPY_SHAREABLE_URL_TO_CLIPBOARD_}
 					type="button"
-					aria-label="Share benchmark configuration"
+					aria-label={STRING__APP_SHARE_BENCHMARK_CONFIGURATION_}
 				>
 					{#if shareMessage}
 						{shareMessage}
 					{:else}
-						Share
+						{STRING__APP_SHARE_}
 					{/if}
 				</button>
 			</fieldset>
 
 			{#if error !== empty}
 				<div class="error-banner card" role="alert">
-					<strong>Error:</strong>
+					<strong>{STRING__APP_ERROR_}</strong>
 					{error}
 				</div>
 			{/if}
@@ -208,6 +224,12 @@
 		margin-bottom: 2rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		header {
+			margin-block-end: 2rem;
+		}
+	}
+
 	header h1 {
 		font-size: 1.75rem;
 		font-weight: 700;
@@ -215,8 +237,20 @@
 		margin-bottom: 0.25rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		header h1 {
+			margin-block-end: 0.25rem;
+		}
+	}
+
 	.logo {
 		margin-right: 0.35em;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.logo {
+			margin-inline-end: 0.35em;
+		}
 	}
 
 	form fieldset {
@@ -235,9 +269,22 @@
 		margin: 1.5rem 0;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.controls-bar {
+			margin-block: 1.5rem;
+			margin-inline: 0;
+		}
+	}
+
 	.share-btn {
 		font-size: 0.8125rem;
 		min-width: 6rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.share-btn {
+			min-inline-size: 6rem;
+		}
 	}
 
 	.error-banner {
@@ -249,7 +296,13 @@
 		margin-bottom: 1rem;
 	}
 
-	/* Dialog styles */
+	@media not (writing-mode: tb-lr) {
+		.error-banner {
+			padding-block: 0.75rem;
+			padding-inline: 1rem;
+			margin-block-end: 1rem;
+		}
+	}
 
 	.status-dialog {
 		border: none;
@@ -260,6 +313,13 @@
 		background: var(--c-surface);
 		color: var(--c-text);
 		box-shadow: 0 8px 32px var(--c-overlay-strong);
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.status-dialog {
+			max-inline-size: 28rem;
+			inline-size: 90vw;
+		}
 	}
 
 	.status-dialog::backdrop {
@@ -276,6 +336,13 @@
 		gap: 0.75rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.dialog-content {
+			padding-block: 2.5rem;
+			padding-inline: 2rem;
+		}
+	}
+
 	.dialog-content h2 {
 		font-size: 1.25rem;
 		font-weight: 600;
@@ -289,8 +356,6 @@
 		line-height: 1.5;
 	}
 
-	/* Loading spinner */
-
 	.spinner {
 		width: 2.5rem;
 		height: 2.5rem;
@@ -301,13 +366,20 @@
 		margin-bottom: 0.5rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.spinner {
+			inline-size: 2.5rem;
+			block-size: 2.5rem;
+			border-block-start-color: var(--c-accent);
+			margin-block-end: 0.5rem;
+		}
+	}
+
 	@keyframes spin {
 		to {
 			transform: rotate(360deg);
 		}
 	}
-
-	/* Error dialog */
 
 	.status-dialog.error {
 		border: 1px solid var(--c-red);
@@ -316,6 +388,12 @@
 	.error-icon {
 		font-size: 2.5rem;
 		margin-bottom: 0.25rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.error-icon {
+			margin-block-end: 0.25rem;
+		}
 	}
 
 	.error-hint {

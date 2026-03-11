@@ -25,6 +25,19 @@
 		formatTime_ as formatTime,
 		significance_ as significance,
 	} from '../../format.js';
+	import {
+		STRING__COMPARISONS_95_PERCENT_CI_PREFIX_,
+		STRING__COMPARISONS_95_PERCENT_CI_SEPARATOR_,
+		STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_,
+		STRING__COMPARISONS_DELTA_PREFIX_,
+		STRING__COMPARISONS_DF_PREFIX_,
+		STRING__COMPARISONS_FASTER_,
+		STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_,
+		STRING__COMPARISONS_PAIRED_T_TEST_,
+		STRING__COMPARISONS_SE_DELTA_PREFIX_,
+		STRING__COMPARISONS_T_PREFIX_,
+		STRING__COMPARISONS_VS_,
+	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
 	export let comps: IPairedComparison[];
@@ -35,7 +48,7 @@
 	}
 </script>
 
-<h3 class="section-title">Pairwise Comparisons (paired t-test)</h3>
+<h3 class="section-title">{STRING__COMPARISONS_PAIRED_T_TEST_}</h3>
 
 <div class="comparisons-list">
 	{#each comps as c}
@@ -51,7 +64,7 @@
 			<div class="card comparison-card">
 				<div class="comp-header">
 					<strong>{c.a}</strong>
-					<span class="text-dim">vs</span>
+					<span class="text-dim">{STRING__COMPARISONS_VS_}</span>
 					<strong>{c.b}</strong>
 					<span
 						class="sig-badge {c.significant ? 'sig-yes' : 'sig-no'}"
@@ -68,7 +81,7 @@
 							<strong class="text-green"
 								>{formatMultiplier(ratio)}</strong
 							>
-							faster
+							{STRING__COMPARISONS_FASTER_}
 							<span class="text-dim"
 								>({formatPValue(c.pValue)})</span
 							>
@@ -76,7 +89,7 @@
 					{:else}
 						<p>
 							<span class="text-yellow">≈</span>
-							No significant difference
+							{STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_}
 							<span class="text-dim"
 								>({formatPValue(c.pValue)})</span
 							>
@@ -84,13 +97,21 @@
 					{/if}
 
 					<p class="comp-detail text-dim">
-						Δ = {formatTime(c.meanDifference)} &nbsp; 95% CI [{formatTime(
+						{STRING__COMPARISONS_DELTA_PREFIX_}{formatTime(
+							c.meanDifference,
+						)}
+						&nbsp; {STRING__COMPARISONS_95_PERCENT_CI_PREFIX_}{formatTime(
 							c.confidenceInterval[0],
-						)}, {formatTime(c.confidenceInterval[1])}]
+						)}{STRING__COMPARISONS_95_PERCENT_CI_SEPARATOR_}{formatTime(
+							c.confidenceInterval[1],
+						)}{STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_}
 					</p>
 					<p class="comp-detail text-dim">
-						t = {c.tStatistic.toFixed(3)} &nbsp; df = {c.degreesOfFreedom}
-						&nbsp; SE(Δ) = {formatTime(seD)}
+						{STRING__COMPARISONS_T_PREFIX_}{c.tStatistic.toFixed(3)} &nbsp;
+						{STRING__COMPARISONS_DF_PREFIX_}{c.degreesOfFreedom}
+						&nbsp; {STRING__COMPARISONS_SE_DELTA_PREFIX_}{formatTime(
+							seD,
+						)}
 					</p>
 				</div>
 			</div>
@@ -109,12 +130,26 @@
 		padding: 0.875rem 1rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.comparison-card {
+			padding-block: 0.875rem;
+			padding-inline: 1rem;
+		}
+	}
+
 	.comp-header {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		margin-bottom: 0.5rem;
 		font-size: 0.9rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.comp-header {
+			margin-bottom: 0;
+			margin-block-end: 0.5rem;
+		}
 	}
 
 	.sig-badge {
@@ -124,6 +159,15 @@
 		padding: 0.15em 0.5em;
 		border-radius: 3px;
 		margin-left: auto;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.sig-badge {
+			padding-block: 0.15em;
+			padding-inline: 0.5em;
+			margin-left: 0;
+			margin-inline-start: auto;
+		}
 	}
 
 	.sig-yes {
@@ -142,6 +186,13 @@
 
 	.comp-body p {
 		margin-bottom: 0.25rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.comp-body p {
+			margin-bottom: 0;
+			margin-block-end: 0.25rem;
+		}
 	}
 
 	.comp-detail {

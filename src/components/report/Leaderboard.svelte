@@ -21,6 +21,20 @@
 		formatOps_ as formatOps,
 		formatTime_ as formatTime,
 	} from '../../format.js';
+	import {
+		STRING__LEADERBOARD_ARIA_LABEL_,
+		STRING__LEADERBOARD_FASTEST_,
+		STRING__LEADERBOARD_FUNCTION_,
+		STRING__LEADERBOARD_LEADERBOARD_,
+		STRING__LEADERBOARD_MARGIN_OF_ERROR_,
+		STRING__LEADERBOARD_MEAN_,
+		STRING__LEADERBOARD_MOE_,
+		STRING__LEADERBOARD_OPS_PER_SECOND_,
+		STRING__LEADERBOARD_RANK_PREFIX_,
+		STRING__LEADERBOARD_RELATIVE_,
+		STRING__LEADERBOARD_RELATIVE_THROUGHPUT_SUFFIX_,
+		STRING__LEADERBOARD_SLOWER_SUFFIX_,
+	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
 
@@ -43,20 +57,26 @@
 	}
 </script>
 
-<h3 class="section-title">Leaderboard</h3>
+<h3 class="section-title">{STRING__LEADERBOARD_LEADERBOARD_}</h3>
 
 <div class="card leaderboard-card">
-	<table class="data-table" aria-label="Benchmark leaderboard">
+	<table class="data-table" aria-label={STRING__LEADERBOARD_ARIA_LABEL_}>
 		<thead>
 			<tr>
 				<th scope="col" class="marker-col">#</th>
-				<th scope="col">Function</th>
-				<th scope="col" class="num">Mean</th>
+				<th scope="col">{STRING__LEADERBOARD_FUNCTION_}</th>
+				<th scope="col" class="num">{STRING__LEADERBOARD_MEAN_}</th>
 				<th scope="col" class="num"
-					>± <abbr title="Margin of Error">MOE</abbr></th
+					>± <abbr title={STRING__LEADERBOARD_MARGIN_OF_ERROR_}
+						>{STRING__LEADERBOARD_MOE_}</abbr
+					></th
 				>
-				<th scope="col" class="num">ops/s</th>
-				<th scope="col" class="relative-col">Relative</th>
+				<th scope="col" class="num">
+					{STRING__LEADERBOARD_OPS_PER_SECOND_}
+				</th>
+				<th scope="col" class="relative-col">
+					{STRING__LEADERBOARD_RELATIVE_}
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -64,7 +84,10 @@
 				<tr>
 					<td>
 						{#if i < 3}
-							<span title="Rank {i + 1}">{MEDALS[i]}</span>
+							<span
+								title={`${STRING__LEADERBOARD_RANK_PREFIX_}${i + 1}`}
+								>{MEDALS[i]}</span
+							>
 						{:else}
 							<span class="text-muted">#{i + 1}</span>
 						{/if}
@@ -86,22 +109,22 @@
 						<div class="bar-cell">
 							<div
 								class="bar-fill"
-								style="width: {barWidth(
+								style={`width: ${barWidth(
 									f,
-								)}%; background: {barColor(i)};"
+								)}%; background: ${barColor(i)};`}
 								role="img"
-								aria-label="{barWidth(f).toFixed(
-									0,
-								)}% relative throughput"
+								aria-label={`${barWidth(f).toFixed(0)}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_SUFFIX_}`}
 							></div>
 							<span class="bar-label">
 								{#if i === 0}
-									<span class="text-green">fastest</span>
+									<span class="text-green"
+										>{STRING__LEADERBOARD_FASTEST_}</span
+									>
 								{:else if fastest.mean > 0}
 									<span class="text-dim"
 										>{formatMultiplier(
 											f.mean / fastest.mean,
-										)} slower</span
+										)}{STRING__LEADERBOARD_SLOWER_SUFFIX_}</span
 									>
 								{/if}
 							</span>
@@ -118,8 +141,22 @@
 		width: 3rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.marker-col {
+			width: auto;
+			inline-size: 3rem;
+		}
+	}
+
 	.relative-col {
 		min-width: 10rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.relative-col {
+			min-width: auto;
+			min-inline-size: 10rem;
+		}
 	}
 
 	.leaderboard-card {
@@ -138,6 +175,14 @@
 		border-radius: 2px;
 		min-width: 2px;
 		transition: width 0.3s ease;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.bar-fill {
+			min-width: auto;
+			block-size: 10px;
+			min-inline-size: 2px;
+		}
 	}
 
 	.bar-label {

@@ -20,6 +20,14 @@
 		IPairedComparison,
 	} from '@apeleghq/benchmark/types';
 	import { formatMultiplier_ as formatMultiplier } from '../../format.js';
+	import {
+		STRING__SPEED_MATRIX_,
+		STRING__SPEED_MATRIX_ARIA_LABEL_,
+		STRING__SPEED_MATRIX_CAPTION_,
+		STRING__SPEED_MATRIX_GREEN_GT_1_,
+		STRING__SPEED_MATRIX_RED_LT_1_,
+		STRING__SPEED_MATRIX_SIGNIFICANT_,
+	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
 	export let comps: IPairedComparison[];
@@ -37,18 +45,19 @@
 	}
 </script>
 
-<h3 class="section-title">Speed Matrix</h3>
+<h3 class="section-title">{STRING__SPEED_MATRIX_}</h3>
 
 <div class="card matrix-card">
 	<p class="matrix-caption text-dim">
-		Cell = column time ÷ row time ·
-		<span class="text-green">green</span> &gt; 1 (row is faster) ·
-		<span class="text-red">red</span> &lt; 1 (row is slower) ·
-		<span class="text-yellow">*</span> significant
+		{STRING__SPEED_MATRIX_CAPTION_}
+		<span class="text-green">{STRING__SPEED_MATRIX_GREEN_GT_1_}</span>
+		<span class="text-red">{STRING__SPEED_MATRIX_RED_LT_1_}</span>
+		<span class="text-yellow">*</span>
+		{STRING__SPEED_MATRIX_SIGNIFICANT_}
 	</p>
 
 	<div class="table-scroll">
-		<table class="data-table" aria-label="Speed comparison matrix">
+		<table class="data-table" aria-label={STRING__SPEED_MATRIX_ARIA_LABEL_}>
 			<thead>
 				<tr>
 					<th scope="col"></th>
@@ -100,6 +109,13 @@
 	.matrix-caption {
 		font-size: 0.7rem;
 		margin-bottom: 0.75rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.matrix-caption {
+			margin-bottom: 0;
+			margin-block-end: 0.75rem;
+		}
 	}
 
 	.table-scroll {

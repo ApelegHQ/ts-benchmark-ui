@@ -17,12 +17,34 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {
+		STRING__HEADER_IMPORTS_BODY_,
+		STRING__HEADER_ITERATIONS_PER_TRIAL_,
+		STRING__HEADER_PLACEHOLDER_IMPORTS_,
+		STRING__HEADER_PLACEHOLDER_SETUP_,
+		STRING__HEADER_PLACEHOLDER_TEARDOWN_,
+		STRING__HEADER_SETUP_FUNCTION_BODY_,
+		STRING__HEADER_SUITE_CONFIGURATION_,
+		STRING__HEADER_SUITE_IMPORTS_,
+		STRING__HEADER_SUITE_IMPORTS_OPTIONAL_,
+		STRING__HEADER_SUITE_NAME_,
+		STRING__HEADER_SUITE_SETUP_CODE_,
+		STRING__HEADER_SUITE_SETUP_OPTIONAL_,
+		STRING__HEADER_SUITE_TEARDOWN_CODE_,
+		STRING__HEADER_SUITE_TEARDOWN_OPTIONAL_,
+		STRING__HEADER_TEARDOWN_FUNCTION_BODY_,
+		STRING__HEADER_TRIALS_,
+		STRING__HEADER_WARMUP_ITERATIONS_,
+	} from '../i18n/strings.js';
+	import {
 		suiteState_ as suiteState,
 		updateConfig_ as updateConfig,
 	} from '../state.js';
 	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 
-	// Tracks whether <details> is open so we only mount CM once visible
+	type CodeMirrorWrapperInstance = {
+		requestMount?: () => Promise<void>;
+	};
+
 	let importsDetailsOpen = false;
 	let setupDetailsOpen = false;
 	let teardownDetailsOpen = false;
@@ -81,8 +103,6 @@
 		}
 	}
 
-	// If the details starts open (e.g. there's existing setup code),
-	// mount CM immediately
 	onMount(() => {
 		if (importsDetailsOpen && importsCodeEl?.requestMount) {
 			importsCodeEl.requestMount();
@@ -96,12 +116,15 @@
 	});
 </script>
 
-<fieldset class="card config-section" aria-label="Suite configuration">
-	<legend class="sr-only">Suite configuration</legend>
+<fieldset
+	class="card config-section"
+	aria-label={STRING__HEADER_SUITE_CONFIGURATION_}
+>
+	<legend class="sr-only">{STRING__HEADER_SUITE_CONFIGURATION_}</legend>
 
 	<div class="config-grid">
 		<div class="field field-name">
-			<label for="suite-name">Suite Name</label>
+			<label for="suite-name">{STRING__HEADER_SUITE_NAME_}</label>
 			<input
 				id="suite-name"
 				type="text"
@@ -111,7 +134,7 @@
 		</div>
 
 		<div class="field">
-			<label for="cfg-trials">Trials</label>
+			<label for="cfg-trials">{STRING__HEADER_TRIALS_}</label>
 			<input
 				id="cfg-trials"
 				type="number"
@@ -124,7 +147,8 @@
 		</div>
 
 		<div class="field">
-			<label for="cfg-iters">Iterations / Trial</label>
+			<label for="cfg-iters">{STRING__HEADER_ITERATIONS_PER_TRIAL_}</label
+			>
 			<input
 				id="cfg-iters"
 				type="number"
@@ -137,7 +161,7 @@
 		</div>
 
 		<div class="field">
-			<label for="cfg-warmup">Warmup Iterations</label>
+			<label for="cfg-warmup">{STRING__HEADER_WARMUP_ITERATIONS_}</label>
 			<input
 				id="cfg-warmup"
 				type="number"
@@ -156,21 +180,23 @@
 		on:toggle={handleImportsCodeToggle}
 	>
 		<summary>
-			<span class="summary-text">Suite Imports</span>
-			<span class="text-dim">(optional — available to each function)</span
+			<span class="summary-text">{STRING__HEADER_SUITE_IMPORTS_}</span>
+			<span class="text-dim"
+				>{STRING__HEADER_SUITE_IMPORTS_OPTIONAL_}</span
 			>
 		</summary>
 
 		<div class="setup-editor">
 			<label for="import-code" class="sr-only" id="label-import-code"
-				>Imports body</label
+				>{STRING__HEADER_IMPORTS_BODY_}</label
 			>
 			<CodeMirrorWrapper
 				bind:this={importsCodeEl}
 				delayed={true}
 				id="import-code"
+				name="import-code"
 				value={$suiteState.importsCode}
-				placeholder="// e.g. import semver from 'npm:semver';"
+				placeholder={STRING__HEADER_PLACEHOLDER_IMPORTS_}
 				on:input={handleImportsCodeInput}
 			/>
 		</div>
@@ -182,20 +208,21 @@
 		on:toggle={handleSetupToggle}
 	>
 		<summary>
-			<span class="summary-text">Suite Setup Code</span>
-			<span class="text-dim">(optional — runs before each function)</span>
+			<span class="summary-text">{STRING__HEADER_SUITE_SETUP_CODE_}</span>
+			<span class="text-dim">{STRING__HEADER_SUITE_SETUP_OPTIONAL_}</span>
 		</summary>
 
 		<div class="setup-editor">
 			<label for="setup-code" class="sr-only" id="label-setup-code"
-				>Setup function body</label
+				>{STRING__HEADER_SETUP_FUNCTION_BODY_}</label
 			>
 			<CodeMirrorWrapper
 				bind:this={setupCodeEl}
 				delayed={true}
 				id="setup-code"
+				name="setup-code"
 				value={$suiteState.setupCode}
-				placeholder="// e.g. this.data = Array.from({'{ length: 1000 }'}, () => Math.random());"
+				placeholder={STRING__HEADER_PLACEHOLDER_SETUP_}
 				on:input={handleSetupCodeInput}
 			/>
 		</div>
@@ -207,20 +234,25 @@
 		on:toggle={handleTeardownToggle}
 	>
 		<summary>
-			<span class="summary-text">Suite Teardown Code</span>
-			<span class="text-dim">(optional — runs after each function)</span>
+			<span class="summary-text"
+				>{STRING__HEADER_SUITE_TEARDOWN_CODE_}</span
+			>
+			<span class="text-dim"
+				>{STRING__HEADER_SUITE_TEARDOWN_OPTIONAL_}</span
+			>
 		</summary>
 
 		<div class="setup-editor">
 			<label for="teardown-code" class="sr-only" id="label-teardown-code"
-				>Teardown function body</label
+				>{STRING__HEADER_TEARDOWN_FUNCTION_BODY_}</label
 			>
 			<CodeMirrorWrapper
 				bind:this={teardownCodeEl}
 				delayed={true}
 				id="teardown-code"
+				name="teardown-code"
 				value={$suiteState.teardownCode}
-				placeholder="// e.g. delete this.data;"
+				placeholder={STRING__HEADER_PLACEHOLDER_TEARDOWN_}
 				on:input={handleTeardownCodeInput}
 			/>
 		</div>
@@ -230,6 +262,12 @@
 <style>
 	.config-section {
 		margin-bottom: 1rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.config-section {
+			margin-block-end: 1rem;
+		}
 	}
 
 	.config-grid {
@@ -253,8 +291,20 @@
 		width: 100%;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.field input {
+			inline-size: 100%;
+		}
+	}
+
 	.setup-details {
 		margin-top: 1rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.setup-details {
+			margin-block-start: 1rem;
+		}
 	}
 
 	.setup-details summary {
@@ -290,9 +340,22 @@
 		margin-top: 0.75rem;
 	}
 
+	@media not (writing-mode: tb-lr) {
+		.setup-editor {
+			margin-block-start: 0.75rem;
+		}
+	}
+
 	.setup-editor :global(textarea) {
 		width: 100%;
 		resize: vertical;
 		min-height: 4rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.setup-editor :global(textarea) {
+			inline-size: 100%;
+			min-block-size: 4rem;
+		}
 	}
 </style>

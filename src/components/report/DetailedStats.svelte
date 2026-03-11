@@ -21,34 +21,71 @@
 		cvPercent_ as cvPercent,
 		formatTime_ as formatTime,
 	} from '../../format.js';
+	import {
+		STRING__DETAILED_STATISTICS_,
+		STRING__DETAILED_STATISTICS_ARIA_LABEL_,
+		STRING__DETAILED_STATISTICS_COEFFICIENT_OF_VARIATION_,
+		STRING__DETAILED_STATISTICS_CV_,
+		STRING__DETAILED_STATISTICS_FUNCTION_,
+		STRING__DETAILED_STATISTICS_MAX_,
+		STRING__DETAILED_STATISTICS_MAXIMUM_,
+		STRING__DETAILED_STATISTICS_MEAN_,
+		STRING__DETAILED_STATISTICS_MEDIAN_,
+		STRING__DETAILED_STATISTICS_MIN_,
+		STRING__DETAILED_STATISTICS_MINIMUM_,
+		STRING__DETAILED_STATISTICS_SEM_,
+		STRING__DETAILED_STATISTICS_STANDARD_DEVIATION_,
+		STRING__DETAILED_STATISTICS_STANDARD_ERROR_OF_THE_MEAN_,
+		STRING__DETAILED_STATISTICS_STD_DEV_,
+	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
 </script>
 
-<h3 class="section-title">Detailed Statistics</h3>
+<h3 class="section-title">{STRING__DETAILED_STATISTICS_}</h3>
 
 <div class="card stats-card">
 	<div class="table-scroll">
-		<table class="data-table" aria-label="Detailed function statistics">
+		<table
+			class="data-table"
+			aria-label={STRING__DETAILED_STATISTICS_ARIA_LABEL_}
+		>
 			<thead>
 				<tr>
-					<th scope="col">Function</th>
-					<th scope="col" class="num">Mean</th>
-					<th scope="col" class="num">Median</th>
+					<th scope="col">{STRING__DETAILED_STATISTICS_FUNCTION_}</th>
 					<th scope="col" class="num">
-						<abbr title="Standard Deviation">Std Dev</abbr>
+						{STRING__DETAILED_STATISTICS_MEAN_}
 					</th>
 					<th scope="col" class="num">
-						<abbr title="Coefficient of Variation">CV</abbr>
+						{STRING__DETAILED_STATISTICS_MEDIAN_}
 					</th>
 					<th scope="col" class="num">
-						<abbr title="Minimum">Min</abbr>
+						<abbr
+							title={STRING__DETAILED_STATISTICS_STANDARD_DEVIATION_}
+							>{STRING__DETAILED_STATISTICS_STD_DEV_}</abbr
+						>
 					</th>
 					<th scope="col" class="num">
-						<abbr title="Maximum">Max</abbr>
+						<abbr
+							title={STRING__DETAILED_STATISTICS_COEFFICIENT_OF_VARIATION_}
+							>{STRING__DETAILED_STATISTICS_CV_}</abbr
+						>
 					</th>
 					<th scope="col" class="num">
-						<abbr title="Standard Error of the Mean">SEM</abbr>
+						<abbr title={STRING__DETAILED_STATISTICS_MINIMUM_}
+							>{STRING__DETAILED_STATISTICS_MIN_}</abbr
+						>
+					</th>
+					<th scope="col" class="num">
+						<abbr title={STRING__DETAILED_STATISTICS_MAXIMUM_}
+							>{STRING__DETAILED_STATISTICS_MAX_}</abbr
+						>
+					</th>
+					<th scope="col" class="num">
+						<abbr
+							title={STRING__DETAILED_STATISTICS_STANDARD_ERROR_OF_THE_MEAN_}
+							>{STRING__DETAILED_STATISTICS_SEM_}</abbr
+						>
 					</th>
 				</tr>
 			</thead>
