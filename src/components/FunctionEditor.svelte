@@ -16,12 +16,12 @@
 
 <script lang="ts">
 	import {
-		STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_PREFIX_,
+		STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_,
 		STRING__FUNCTION_EDITOR_CODE_,
 		STRING__FUNCTION_EDITOR_FUNCTION_NAME_,
 		STRING__FUNCTION_EDITOR_JAVASCRIPT_CODE_TO_BENCHMARK_,
 		STRING__FUNCTION_EDITOR_NAME_,
-		STRING__FUNCTION_EDITOR_REMOVE_PREFIX_,
+		STRING__FUNCTION_EDITOR_REMOVE_,
 		STRING__FUNCTION_EDITOR_REMOVE_THIS_FUNCTION_,
 	} from '../i18n/strings.js';
 	import {
@@ -52,7 +52,7 @@
 
 <article
 	class="card fn-editor"
-	aria-label={`${STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_PREFIX_}${entry.name}`}
+	aria-label={`${STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_[0]}${entry.name}${STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_[1]}`}
 >
 	<div class="fn-header">
 		<div class="fn-name-field">
@@ -74,7 +74,7 @@
 			on:click={handleRemove}
 			title={STRING__FUNCTION_EDITOR_REMOVE_THIS_FUNCTION_}
 			type="button"
-			aria-label={`${STRING__FUNCTION_EDITOR_REMOVE_PREFIX_}${entry.name}`}
+			aria-label={`${STRING__FUNCTION_EDITOR_REMOVE_[0]}${entry.name}${STRING__FUNCTION_EDITOR_REMOVE_[1]}`}
 		>
 			✕
 		</button>

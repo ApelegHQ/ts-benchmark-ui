@@ -25,7 +25,7 @@
 		STRING__RUN_BUTTON_RUN_BENCHMARK_,
 		STRING__RUN_BUTTON_RUN_BENCHMARK_LABEL_,
 		STRING__RUN_BUTTON_RUNNING_,
-		STRING__RUN_BUTTON_TRIAL_PREFIX_,
+		STRING__RUN_BUTTON_TRIAL_,
 	} from '../i18n/strings.js';
 
 	export let ready: boolean = false;
@@ -60,7 +60,7 @@
 			<progress max={progress.totalTrials} value={progress.trial - 1}
 			></progress>
 			<span class="progress-text">
-				{STRING__RUN_BUTTON_TRIAL_PREFIX_}{progress.trial}/{progress.totalTrials}
+				{STRING__RUN_BUTTON_TRIAL_[0]}{progress.trial}{STRING__RUN_BUTTON_TRIAL_[1]}{progress.totalTrials}{STRING__RUN_BUTTON_TRIAL_[2]}
 				<span class="text-dim">· {displayFn}</span>
 			</span>
 		</div>

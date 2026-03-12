@@ -26,9 +26,7 @@
 	export let error: unknown;
 	export let nested = false;
 
-	function isErrorLike(
-		value: unknown,
-	): value is {
+	function isErrorLike(value: unknown): value is {
 		name?: unknown;
 		message?: unknown;
 		stack?: unknown;
@@ -76,7 +74,12 @@
 	$: hasDetails = !!name || !!stack || cause !== undefined;
 </script>
 
-<div class:error-banner={!nested} class:error-cause={nested} class="card" role="alert">
+<div
+	class:error-banner={!nested}
+	class:error-cause={nested}
+	class="card"
+	role="alert"
+>
 	<div class="error-header">
 		<strong>{STRING__APP_ERROR_}</strong>
 		<span class="error-message">{message}</span>
@@ -89,21 +92,27 @@
 			<div class="error-meta">
 				{#if name}
 					<div class="meta-row">
-						<span class="meta-label">{STRING__APP_ERROR_BANNER_NAME_}</span>
+						<span class="meta-label"
+							>{STRING__APP_ERROR_BANNER_NAME_}</span
+						>
 						<code>{name}</code>
 					</div>
 				{/if}
 
 				{#if stack}
 					<div class="stack-block">
-						<div class="meta-label">{STRING__APP_ERROR_BANNER_STACK_TRACE_}</div>
+						<div class="meta-label">
+							{STRING__APP_ERROR_BANNER_STACK_TRACE_}
+						</div>
 						<pre>{stack}</pre>
 					</div>
 				{/if}
 
 				{#if cause !== undefined}
 					<div class="cause-block">
-						<div class="meta-label">{STRING__APP_ERROR_BANNER_CAUSE_}</div>
+						<div class="meta-label">
+							{STRING__APP_ERROR_BANNER_CAUSE_}
+						</div>
 						<svelte:self error={cause} nested={true} />
 					</div>
 				{/if}
@@ -135,7 +144,11 @@
 	}
 
 	.error-cause {
-		background: color-mix(in srgb, var(--c-danger-soft) 65%, var(--c-surface));
+		background: color-mix(
+			in srgb,
+			var(--c-danger-soft) 65%,
+			var(--c-surface)
+		);
 		box-shadow: none;
 		padding: 1rem;
 	}

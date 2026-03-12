@@ -41,16 +41,12 @@
 	} from '../state.js';
 	import CodeMirrorWrapper from './CodeMirrorWrapper.svelte';
 
-	type CodeMirrorWrapperInstance = {
-		requestMount?: () => Promise<void>;
-	};
-
 	let importsDetailsOpen = false;
 	let setupDetailsOpen = false;
 	let teardownDetailsOpen = false;
-	let importsCodeEl: typeof CodeMirrorWrapper | null = null;
-	let setupCodeEl: typeof CodeMirrorWrapper | null = null;
-	let teardownCodeEl: typeof CodeMirrorWrapper | null = null;
+	let importsCodeEl: InstanceType<typeof CodeMirrorWrapper> | null = null;
+	let setupCodeEl: InstanceType<typeof CodeMirrorWrapper> | null = null;
+	let teardownCodeEl: InstanceType<typeof CodeMirrorWrapper> | null = null;
 
 	function handleInput(field: string, e: Event) {
 		const target = e.target as HTMLInputElement;
@@ -141,6 +137,7 @@
 				min="1"
 				max="500"
 				pattern="[0-9]*"
+				required={true}
 				value={$suiteState.trials}
 				on:input={(e) => handleInput('trials', e)}
 			/>
@@ -155,6 +152,7 @@
 				min="1"
 				max="1000000"
 				pattern="[0-9]*"
+				required={true}
 				value={$suiteState.iterationsPerTrial}
 				on:input={(e) => handleInput('iterationsPerTrial', e)}
 			/>
@@ -168,6 +166,7 @@
 				min="0"
 				max="10000"
 				pattern="[0-9]*"
+				required={true}
 				value={$suiteState.warmupIterations}
 				on:input={(e) => handleInput('warmupIterations', e)}
 			/>

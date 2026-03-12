@@ -30,10 +30,10 @@
 		STRING__LEADERBOARD_MEAN_,
 		STRING__LEADERBOARD_MOE_,
 		STRING__LEADERBOARD_OPS_PER_SECOND_,
-		STRING__LEADERBOARD_RANK_PREFIX_,
+		STRING__LEADERBOARD_RANK_,
 		STRING__LEADERBOARD_RELATIVE_,
-		STRING__LEADERBOARD_RELATIVE_THROUGHPUT_SUFFIX_,
-		STRING__LEADERBOARD_SLOWER_SUFFIX_,
+		STRING__LEADERBOARD_RELATIVE_THROUGHPUT_,
+		STRING__LEADERBOARD_SLOWER_,
 	} from '../../i18n/strings.js';
 
 	export let fns: IFunctionStatistics[];
@@ -85,7 +85,7 @@
 					<td>
 						{#if i < 3}
 							<span
-								title={`${STRING__LEADERBOARD_RANK_PREFIX_}${i + 1}`}
+								title={`${STRING__LEADERBOARD_RANK_[0]}${i + 1}${STRING__LEADERBOARD_RANK_[1]}`}
 								>{MEDALS[i]}</span
 							>
 						{:else}
@@ -113,7 +113,7 @@
 									f,
 								)}%; background: ${barColor(i)};`}
 								role="img"
-								aria-label={`${barWidth(f).toFixed(0)}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_SUFFIX_}`}
+								aria-label={`${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[0]}${barWidth(f).toFixed(0)}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[1]}`}
 							></div>
 							<span class="bar-label">
 								{#if i === 0}
@@ -122,9 +122,9 @@
 									>
 								{:else if fastest.mean > 0}
 									<span class="text-dim"
-										>{formatMultiplier(
+										>{STRING__LEADERBOARD_SLOWER_[0]}{formatMultiplier(
 											f.mean / fastest.mean,
-										)}{STRING__LEADERBOARD_SLOWER_SUFFIX_}</span
+										)}{STRING__LEADERBOARD_SLOWER_[1]}</span
 									>
 								{/if}
 							</span>
@@ -175,6 +175,7 @@
 		border-radius: 2px;
 		min-width: 2px;
 		transition: width 0.3s ease;
+		forced-color-adjust: none;
 	}
 
 	@media not (writing-mode: tb-lr) {

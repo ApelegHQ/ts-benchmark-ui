@@ -25,9 +25,8 @@
 		STRING__BASELINE_MEASUREMENT_OVERHEAD_,
 		STRING__BASELINE_NEGLIGIBLE_,
 		STRING__BASELINE_OF_THE_FASTEST_FUNCTION_,
-		STRING__BASELINE_OVERHEAD_IS_PREFIX_,
-		STRING__BASELINE_OVERHEAD_IS_SUFFIX_,
-		STRING__BASELINE_PER_ITERATION_SUFFIX_,
+		STRING__BASELINE_OVERHEAD_IS_,
+		STRING__BASELINE_PER_ITERATION_,
 	} from '../../i18n/strings.js';
 
 	export let baseline: IFunctionStatistics;
@@ -45,9 +44,12 @@
 	<p>
 		<span class="text-dim">{STRING__BASELINE_BASELINE_}</span>
 		<span class="mono text-cyan">({baseline.name})</span>:
-		<strong>{formatTime(blMean)}</strong><span class="text-dim"
-			>{STRING__BASELINE_PER_ITERATION_SUFFIX_}</span
-		>
+		{#if STRING__BASELINE_PER_ITERATION_[0]}<span class="text-dim"
+				>{STRING__BASELINE_PER_ITERATION_[0]}</span
+			>{/if}<strong>{formatTime(blMean)}</strong
+		>{#if STRING__BASELINE_PER_ITERATION_[1]}<span class="text-dim"
+				>{STRING__BASELINE_PER_ITERATION_[1]}</span
+			>{/if}
 		&nbsp; σ = {formatTime(blStdDev)}
 	</p>
 	<p class="text-dim overhead">
@@ -59,7 +61,7 @@
 			{#if isHigh}
 				<span class="text-yellow">⚠</span>
 				<span class="text-yellow">
-					{STRING__BASELINE_OVERHEAD_IS_PREFIX_}{(
+					{STRING__BASELINE_OVERHEAD_IS_[0]}{(
 						overheadRatio * 100
 					).toFixed(1)}{STRING__BASELINE_OF_THE_FASTEST_FUNCTION_}
 				</span>
@@ -69,9 +71,9 @@
 				</span>
 			{:else}
 				<span class="text-dim">
-					{STRING__BASELINE_OVERHEAD_IS_PREFIX_}{(
+					{STRING__BASELINE_OVERHEAD_IS_[0]}{(
 						overheadRatio * 100
-					).toFixed(2)}{STRING__BASELINE_OVERHEAD_IS_SUFFIX_}
+					).toFixed(2)}{STRING__BASELINE_OVERHEAD_IS_[1]}
 				</span>
 				<span class="text-green">{STRING__BASELINE_NEGLIGIBLE_}</span>
 			{/if}

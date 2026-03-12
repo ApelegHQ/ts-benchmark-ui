@@ -40,7 +40,7 @@ export function formatOps_(ms: number): string {
 	if (ops >= 1e12) return `${(ops / 1e12).toFixed(2)}T op/s`;
 	if (ops >= 1e9) return `${(ops / 1e9).toFixed(2)}G op/s`;
 	if (ops >= 1e6) return `${(ops / 1e6).toFixed(2)}M op/s`;
-	if (ops >= 1e3) return `${(ops / 1e3).toFixed(2)}K op/s`;
+	if (ops >= 1e3) return `${(ops / 1e3).toFixed(2)}k op/s`;
 	return `${ops.toFixed(2)} op/s`;
 }
 

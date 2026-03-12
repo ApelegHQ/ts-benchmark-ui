@@ -63,9 +63,23 @@
 
 			<div class="card comparison-card">
 				<div class="comp-header">
+					{#if STRING__COMPARISONS_VS_[0]}
+						<span class="text-dim"
+							>{STRING__COMPARISONS_VS_[0]}</span
+						>
+					{/if}
 					<strong>{c.a}</strong>
-					<span class="text-dim">{STRING__COMPARISONS_VS_}</span>
+					{#if STRING__COMPARISONS_VS_[1]}
+						<span class="text-dim"
+							>{STRING__COMPARISONS_VS_[1]}</span
+						>
+					{/if}
 					<strong>{c.b}</strong>
+					{#if STRING__COMPARISONS_VS_[2]}
+						<span class="text-dim"
+							>{STRING__COMPARISONS_VS_[2]}</span
+						>
+					{/if}
 					<span
 						class="sig-badge {c.significant ? 'sig-yes' : 'sig-no'}"
 					>

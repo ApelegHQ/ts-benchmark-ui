@@ -57,10 +57,11 @@ export const STRING__BASELINE_MEASUREMENT_OVERHEAD_ = 'Measurement Overhead';
 export const STRING__BASELINE_NEGLIGIBLE_ = 'negligible';
 export const STRING__BASELINE_OF_THE_FASTEST_FUNCTION_ =
 	'% of the fastest function.';
-export const STRING__BASELINE_OVERHEAD_IS_ = 'Overhead is ';
-export const STRING__BASELINE_OVERHEAD_IS_PREFIX_ = 'Overhead is ';
-export const STRING__BASELINE_OVERHEAD_IS_SUFFIX_ = '% of the fastest —';
-export const STRING__BASELINE_PER_ITERATION_SUFFIX_ = '/iter';
+export const STRING__BASELINE_OVERHEAD_IS_ = [
+	'Overhead is ',
+	'% of the fastest —',
+];
+export const STRING__BASELINE_PER_ITERATION_ = ['', '/iter'];
 
 export const STRING__BUILD_INFORMATION_VERSION_ = [
 	'Build information: ',
@@ -81,7 +82,7 @@ export const STRING__COMPARISONS_PAIRED_T_TEST_ =
 	'Pairwise Comparisons (paired t-test)';
 export const STRING__COMPARISONS_SE_DELTA_PREFIX_ = 'SE(Δ) = ';
 export const STRING__COMPARISONS_T_PREFIX_ = 't = ';
-export const STRING__COMPARISONS_VS_ = 'vs';
+export const STRING__COMPARISONS_VS_ = ['', 'vs', ''];
 
 export const STRING__COPYRIGHT_YEAR_ALL_RIGHTS_RESERVED_ = [
 	'© ',
@@ -145,14 +146,16 @@ export const STRING__DOWNLOAD_REPORT_XUNIT_ = 'xUnit';
 export const STRING__FOOTER_HOME_LINK_ = 'Home';
 export const STRING__FOOTER_SOURCE_CODE_LINK_ = 'Source';
 
-export const STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_PREFIX_ =
-	'Benchmark function: ';
+export const STRING__FUNCTION_EDITOR_BENCHMARK_FUNCTION_ = [
+	'Benchmark function: ',
+	'',
+];
 export const STRING__FUNCTION_EDITOR_CODE_ = 'Code';
 export const STRING__FUNCTION_EDITOR_FUNCTION_NAME_ = 'Function name';
 export const STRING__FUNCTION_EDITOR_JAVASCRIPT_CODE_TO_BENCHMARK_ =
 	'// JavaScript code to benchmark';
 export const STRING__FUNCTION_EDITOR_NAME_ = 'Name';
-export const STRING__FUNCTION_EDITOR_REMOVE_PREFIX_ = 'Remove ';
+export const STRING__FUNCTION_EDITOR_REMOVE_ = ['Remove ', ''];
 export const STRING__FUNCTION_EDITOR_REMOVE_THIS_FUNCTION_ =
 	'Remove this function';
 
@@ -192,11 +195,13 @@ export const STRING__LEADERBOARD_MARGIN_OF_ERROR_ = 'Margin of Error';
 export const STRING__LEADERBOARD_MEAN_ = 'Mean';
 export const STRING__LEADERBOARD_MOE_ = 'MOE';
 export const STRING__LEADERBOARD_OPS_PER_SECOND_ = 'ops/s';
-export const STRING__LEADERBOARD_RANK_PREFIX_ = 'Rank ';
+export const STRING__LEADERBOARD_RANK_ = ['Rank #', ''];
 export const STRING__LEADERBOARD_RELATIVE_ = 'Relative';
-export const STRING__LEADERBOARD_RELATIVE_THROUGHPUT_SUFFIX_ =
-	'% relative throughput';
-export const STRING__LEADERBOARD_SLOWER_SUFFIX_ = ' slower';
+export const STRING__LEADERBOARD_RELATIVE_THROUGHPUT_ = [
+	'',
+	'% relative throughput',
+];
+export const STRING__LEADERBOARD_SLOWER_ = ['', ' slower'];
 
 export const STRING__MADE_WITH_LOVE_BY_ = ['Made with \u2764\ufe0f by ', ''];
 
@@ -216,7 +221,7 @@ export const STRING__RUN_BUTTON_BENCHMARK_IS_RUNNING_ = 'Benchmark is running';
 export const STRING__RUN_BUTTON_RUN_BENCHMARK_ = 'Run benchmark';
 export const STRING__RUN_BUTTON_RUNNING_ = 'Running…';
 export const STRING__RUN_BUTTON_RUN_BENCHMARK_LABEL_ = '▶ Run Benchmark';
-export const STRING__RUN_BUTTON_TRIAL_PREFIX_ = 'Trial ';
+export const STRING__RUN_BUTTON_TRIAL_ = ['Trial ', '/', ''];
 
 export const STRING__RUNNER_FAILED_TO_DESERIALISE_INITIAL_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_ =
 	'Failed to deserialise initial handshake message from runner iframe.';
