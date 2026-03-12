@@ -92,9 +92,21 @@ const instantiate_ = (): MessagePort => {
 						typeof e === 'object' && e instanceof Error
 							? e.name
 							: undefined;
-					resultPort.postMessage([false, e, name]);
-					resultPort.close();
-					progressPort.close();
+					try {
+						resultPort.postMessage([false, e, name]);
+					} catch (e) {
+						void e;
+
+						try {
+							resultPort.postMessage([false]);
+						} catch (e) {
+							// No further action
+							void e;
+						}
+					} finally {
+						resultPort.close();
+						progressPort.close();
+					}
 				},
 			);
 		},

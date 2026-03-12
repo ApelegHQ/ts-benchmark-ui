@@ -34,6 +34,7 @@
 	import type { ISuiteState } from '../state.js';
 
 	type RunnerErrorData =
+		| [false]
 		| [false, unknown]
 		| [false, Record<string, unknown>, string];
 	type RunnerResultData = [true, ISuiteReport] | RunnerErrorData;
@@ -116,6 +117,7 @@
 							(typedEvent.data[0] &&
 								typedEvent.data.length !== 2) ||
 							(!typedEvent.data[0] &&
+								typedEvent.data.length !== 1 &&
 								typedEvent.data.length !== 2 &&
 								typedEvent.data.length !== 3)
 						) {
@@ -123,9 +125,8 @@
 						} else if (typedEvent.data[0]) {
 							resolve(unmarshalSuiteReport(typedEvent.data[1]));
 						} else {
-							const errorData = [
-								...typedEvent.data,
-							] as RunnerErrorData;
+							const errorData =
+								typedEvent.data as RunnerErrorData;
 							if (errorData.length === 3) {
 								errorData[1].name = errorData[2];
 							}

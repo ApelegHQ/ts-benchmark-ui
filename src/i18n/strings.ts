@@ -227,6 +227,8 @@ export const STRING__RUNNER_FAILED_TO_DESERIALISE_INITIAL_HANDSHAKE_MESSAGE_FROM
 	'Failed to deserialise initial handshake message from runner iframe.';
 export const STRING__RUNNER_FAILED_TO_DESERIALISE_INSTANCE_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_ =
 	'Failed to deserialise instance handshake message from runner iframe.';
+export const STRING__RUNNER_ERROR_STARTING_WEB_WORKER_ =
+	'Error starting web worker';
 export const STRING__RUNNER_INVALID_DATA_ = 'Invalid data';
 export const STRING__RUNNER_MESSAGE_ERROR_ = 'Message error';
 export const STRING__RUNNER_TIMED_OUT_WAITING_FOR_HANDSHAKE_MESSAGE_FROM_RUNNER_IFRAME_ =

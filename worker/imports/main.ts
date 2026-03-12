@@ -31,8 +31,9 @@ self.addEventListener(
 			} catch {
 				try {
 					port.postMessage([false]);
-				} catch {
+				} catch (e) {
 					// No further action
+					void e;
 				}
 			}
 		} finally {

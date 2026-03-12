@@ -15,15 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { STRING__RUNNER_ERROR_STARTING_WEB_WORKER_ } from '../i18n/strings';
+
 const processImportsWorker_ = (() => {
 	let worker: Worker;
 
 	return async (text: string) => {
 		if (!worker) {
+			const success = Symbol();
+
 			worker = await new Promise<Worker>((resolve, reject) => {
 				const instance = new Worker(import.meta.importsWorkerPath);
 
-				const cleanup = (error?: unknown) => {
+				const cleanup = (error: typeof success | unknown) => {
 					instance.removeEventListener('error', errorHandler, false);
 					instance.removeEventListener(
 						'message',
@@ -36,27 +40,34 @@ const processImportsWorker_ = (() => {
 						false,
 					);
 					clearTimeout(timeoutId);
-					if (!error) {
+					if (error === success) {
 						resolve(instance);
 					} else {
 						reject(error);
 						try {
 							instance.terminate();
-						} catch {
+						} catch (e) {
 							// empty
+							void e;
 						}
 					}
 				};
 
 				const errorHandler = (event: ErrorEvent) => {
 					if (event.isTrusted) {
-						cleanup(event.error);
+						const error =
+							event.error !== undefined
+								? event.error
+								: new Error(
+										STRING__RUNNER_ERROR_STARTING_WEB_WORKER_,
+									);
+						cleanup(error);
 					}
 				};
 
 				const messageHandler = (event: MessageEvent) => {
 					if (event.isTrusted && event.data === 0) {
-						cleanup();
+						cleanup(success);
 					}
 				};
 
