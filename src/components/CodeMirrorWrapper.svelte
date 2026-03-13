@@ -22,10 +22,16 @@
 		createEditor_ as createEditor,
 		syncToEditor_ as syncToEditor,
 	} from './codemirror.js';
+	import {
+		STRING_CM_EDITOR_ESCAPE_HATCH_,
+		STRING_KBD_KEY_ESCAPE_,
+		STRING_KBD_KEY_SHIFT_TAB_,
+		STRING_KBD_KEY_TAB_,
+	} from '../i18n/strings.js';
 
 	export let id: string | undefined;
 	export let name: string | undefined;
-	export let value: string | undefined;
+	export let value: string = '';
 	export let placeholder: string | undefined;
 	export let delayed: boolean = false;
 
@@ -33,6 +39,7 @@
 	let editorContainer: HTMLDivElement;
 	let view: EditorView | null = null;
 	let cmReady = false;
+	let cmFocused = false;
 	let mountAttempted = false;
 	const suppressFlag = { value_: false };
 
@@ -52,6 +59,12 @@
 				textareaEl.value = code;
 				textareaEl.dispatchEvent(new InputEvent('input'));
 				textareaEl.dispatchEvent(new Event('change'));
+			},
+			onBlur_() {
+				cmFocused = false;
+			},
+			onFocus_() {
+				cmFocused = true;
 			},
 		});
 
@@ -106,3 +119,18 @@
 	class:cm-active={cmReady}
 	bind:this={editorContainer}
 ></div>
+{#if cmFocused}
+	<div class="note text-dim" role="alert">
+		{STRING_CM_EDITOR_ESCAPE_HATCH_[0]}<kbd>{STRING_KBD_KEY_ESCAPE_}</kbd
+		>{STRING_CM_EDITOR_ESCAPE_HATCH_[1]}<kbd>{STRING_KBD_KEY_TAB_}</kbd
+		>{STRING_CM_EDITOR_ESCAPE_HATCH_[2]}<kbd
+			>{STRING_KBD_KEY_SHIFT_TAB_}</kbd
+		>{STRING_CM_EDITOR_ESCAPE_HATCH_[3]}
+	</div>
+{/if}
+
+<style>
+	.note {
+		font-size: 0.8em;
+	}
+</style>

@@ -31,11 +31,6 @@
 	export let ready: boolean = false;
 	export let running: boolean;
 	export let progress: IRunProgress | null;
-
-	$: displayFn =
-		progress?.currentFunction === NULL_FUNCTION_NAME
-			? STRING__RUN_BUTTON_BASELINE_
-			: (progress?.currentFunction ?? '');
 </script>
 
 <div class="run-container">
@@ -59,10 +54,19 @@
 		<div class="progress-info" role="status" aria-live="polite">
 			<progress max={progress.totalTrials} value={progress.trial - 1}
 			></progress>
-			<span class="progress-text">
+			<div class="progress-text">
 				{STRING__RUN_BUTTON_TRIAL_[0]}{progress.trial}{STRING__RUN_BUTTON_TRIAL_[1]}{progress.totalTrials}{STRING__RUN_BUTTON_TRIAL_[2]}
-				<span class="text-dim">· {displayFn}</span>
-			</span>
+				<div class="text-dim">
+					{#if progress.currentFunction === NULL_FUNCTION_NAME}
+						{STRING__RUN_BUTTON_BASELINE_}
+						<span class="mono text-cyan"
+							>({NULL_FUNCTION_NAME})</span
+						>
+					{:else}
+						{progress.currentFunction}
+					{/if}
+				</div>
+			</div>
 		</div>
 	{/if}
 </div>
@@ -133,16 +137,18 @@
 
 	progress[value] {
 		appearance: none;
+		width: 100%;
 		height: 4px;
 		border: 0 none transparent;
 		background: var(--c-surface-2);
 		border-radius: 2px;
+		forced-color-adjust: none;
 	}
 
 	@media not (writing-mode: tb-lr) {
 		progress[value] {
-			height: auto;
 			block-size: 4px;
+			inline-size: 100%;
 		}
 	}
 
@@ -155,6 +161,7 @@
 		height: 100%;
 		background: var(--c-accent);
 		border-radius: 2px;
+		transition: width 0.2s ease;
 	}
 
 	@media not (writing-mode: tb-lr) {

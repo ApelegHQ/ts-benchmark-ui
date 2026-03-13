@@ -204,21 +204,19 @@ const unmarshalFunctionStatistics = (data: unknown): IFunctionStatistics => {
 	// [
 	//  name,
 	//  [ sampleSize, samples, rawSamples ],
-	//  mean,
-	//  median,
-	//  stdDev,
+	//  [ mean, median, stdDev ],
+	//  [ rawMean, rawMedian, rawStdDev ],
 	//  [ sem, min, max ],
 	//  [ p5, p25, p75, p95 ],
 	//  marginOfError95,
 	// ]
-	if (data.length !== 8)
+	if (data.length !== 7)
 		throw new Error('FunctionStatistics length mismatch');
 	const [
 		name,
 		sampleTriple,
-		mean,
-		median,
-		stdDev,
+		basicStatsTriple,
+		rawBasicStatsTriple,
 		semMinMax,
 		percentiles,
 		marginOfError95,
@@ -236,9 +234,13 @@ const unmarshalFunctionStatistics = (data: unknown): IFunctionStatistics => {
 	assertArray(rawSamples, 'FunctionStatistics.rawSamples');
 	rawSamples.every((v) => assertNumber(v));
 
-	assertNumber(mean, 'FunctionStatistics.mean');
-	assertNumber(median, 'FunctionStatistics.median');
-	assertNumber(stdDev, 'FunctionStatistics.stdDev');
+	assertArray(basicStatsTriple, 'FunctionStatistics.basicStatsTriple');
+	basicStatsTriple.every((v) => assertNumber(v));
+	const [mean, median, stdDev] = basicStatsTriple as number[];
+
+	assertArray(rawBasicStatsTriple, 'FunctionStatistics.rawBasicStatsTriple');
+	rawBasicStatsTriple.every((v) => assertNumber(v));
+	const [rawMean, rawMedian, rawStdDev] = rawBasicStatsTriple as number[];
 
 	assertArray(semMinMax, 'FunctionStatistics.semMinMax');
 	if (semMinMax.length !== 3)
@@ -273,6 +275,9 @@ const unmarshalFunctionStatistics = (data: unknown): IFunctionStatistics => {
 		p75,
 		p95,
 		samples: samples as number[],
+		rawMean,
+		rawMedian,
+		rawStdDev,
 		rawSamples: rawSamples as number[],
 		marginOfError95,
 	};

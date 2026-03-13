@@ -15,7 +15,6 @@
 -->
 
 <script lang="ts">
-	import { mean, stdDev } from '@apeleghq/benchmark/stats';
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import { formatTime_ as formatTime } from '../../format.js';
 	import {
@@ -32,9 +31,9 @@
 	export let baseline: IFunctionStatistics;
 	export let fastest: IFunctionStatistics;
 
-	$: blMean = mean(baseline.rawSamples);
-	$: blStdDev = stdDev(baseline.rawSamples);
-	$: overheadRatio = fastest.mean > 0 ? blMean / fastest.mean : 0;
+	$: blMean = baseline.rawMean;
+	$: blStdDev = baseline.rawStdDev;
+	$: overheadRatio = blMean / fastest.rawMean;
 	$: isHigh = overheadRatio > 0.1;
 </script>
 

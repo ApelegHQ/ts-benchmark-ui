@@ -38,6 +38,7 @@
 		STRING__COMPARISONS_T_PREFIX_,
 		STRING__COMPARISONS_VS_,
 	} from '../../i18n/strings.js';
+	import getRatio from '../../lib/get-ratio.js';
 
 	export let fns: IFunctionStatistics[];
 	export let comps: IPairedComparison[];
@@ -57,7 +58,9 @@
 		{#if fA && fB}
 			{@const aFaster = fA.mean <= fB.mean}
 			{@const fasterName = aFaster ? c.a : c.b}
-			{@const ratio = aFaster ? fB.mean / fA.mean : fA.mean / fB.mean}
+			{@const ratio = aFaster
+				? getRatio(fns[0], fB, fA)
+				: getRatio(fns[0], fA, fB)}
 			{@const seD =
 				c.stdDevDifference / Math.sqrt(c.degreesOfFreedom + 1)}
 
@@ -67,20 +70,13 @@
 						<span class="text-dim"
 							>{STRING__COMPARISONS_VS_[0]}</span
 						>
-					{/if}
-					<strong>{c.a}</strong>
-					{#if STRING__COMPARISONS_VS_[1]}
-						<span class="text-dim"
+					{/if}<strong>{c.a}</strong
+					>{#if STRING__COMPARISONS_VS_[1]}<span class="text-dim"
 							>{STRING__COMPARISONS_VS_[1]}</span
-						>
-					{/if}
-					<strong>{c.b}</strong>
-					{#if STRING__COMPARISONS_VS_[2]}
-						<span class="text-dim"
+						>{/if}<strong>{c.b}</strong
+					>{#if STRING__COMPARISONS_VS_[2]}<span class="text-dim"
 							>{STRING__COMPARISONS_VS_[2]}</span
-						>
-					{/if}
-					<span
+						>{/if}<span
 						class="sig-badge {c.significant ? 'sig-yes' : 'sig-no'}"
 					>
 						{significance(c.pValue)}
@@ -91,12 +87,14 @@
 					{#if c.significant}
 						<p>
 							<span class="text-green">✓</span>
-							<strong class="text-green">{fasterName}</strong> is
-							<strong class="text-green"
-								>{formatMultiplier(ratio)}</strong
+							{STRING__COMPARISONS_FASTER_[0]}<strong
+								class="text-green">{fasterName}</strong
 							>
-							{STRING__COMPARISONS_FASTER_}
-							<span class="text-dim"
+							{STRING__COMPARISONS_FASTER_[1]}<strong
+								class="text-green"
+								>{formatMultiplier(ratio)}</strong
+							>{STRING__COMPARISONS_FASTER_[2]}<span
+								class="text-dim"
 								>({formatPValue(c.pValue)})</span
 							>
 						</p>

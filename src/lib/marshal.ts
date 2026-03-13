@@ -74,10 +74,16 @@ const marshalFunctionStatistics = (functionStatistics: IFunctionStatistics) => {
 			functionStatistics.samples,
 			functionStatistics.rawSamples,
 		],
-		functionStatistics.mean,
-		functionStatistics.median,
-		functionStatistics.stdDev,
-		/** Standard error of the mean (ms). */
+		[
+			functionStatistics.mean,
+			functionStatistics.median,
+			functionStatistics.stdDev,
+		],
+		[
+			functionStatistics.rawMean,
+			functionStatistics.rawMedian,
+			functionStatistics.rawStdDev,
+		],
 		[
 			functionStatistics.sem,
 			functionStatistics.min,

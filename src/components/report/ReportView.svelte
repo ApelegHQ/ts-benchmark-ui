@@ -26,6 +26,7 @@
 		STRING__REPORT_VIEW_SIGNIFICANCE_,
 		STRING__REPORT_VIEW_TRIALS_SHORT_,
 		STRING__REPORT_VIEW_WARMUP_SHORT_,
+		STRING__SPEED_MATRIX_RAW_RATIOS_,
 	} from '../../i18n/strings.js';
 
 	import Baseline from './Baseline.svelte';
@@ -69,6 +70,13 @@
 		</div>
 	</div>
 
+	{#if !(fns[0].mean > 0)}
+		<div class="warn">
+			<span class="text-yellow">⚠</span>
+			<span class="text-yellow">{STRING__SPEED_MATRIX_RAW_RATIOS_}</span>
+		</div>
+	{/if}
+
 	{#if fns.length > 0}
 		<Winner {fns} {comps} />
 		<Leaderboard {fns} />
@@ -108,6 +116,11 @@
 </section>
 
 <style>
+	.warn {
+		font-size: 0.725rem;
+		padding: 1em;
+	}
+
 	.no-fns {
 		margin-top: 1rem;
 	}

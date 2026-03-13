@@ -24,14 +24,11 @@
 		formatPValue_ as formatPValue,
 	} from '../../format.js';
 	import {
-		STRING__WINNER_AND_,
-		STRING__WINNER_ARE_,
 		STRING__WINNER_FASTER_THAN_,
 		STRING__WINNER_FASTEST_,
-		STRING__WINNER_IS_THE_,
 		STRING__WINNER_STATISTICALLY_TIED_,
-		STRING__WINNER_VS_,
 	} from '../../i18n/strings.js';
+	import getRatio from '../../lib/get-ratio.js';
 
 	export let fns: IFunctionStatistics[];
 	export let comps: IPairedComparison[];
@@ -49,8 +46,8 @@
 		: null;
 
 	$: isTied = topComp && !topComp.significant;
-	$: ratioVsSecond = second ? second.mean / fastest.mean : 1;
-	$: ratioVsSlowest = slowest ? slowest.mean / fastest.mean : 1;
+	$: ratioVsSecond = second ? getRatio(fastest, second, fastest) : 1;
+	$: ratioVsSlowest = slowest ? getRatio(fastest, slowest, fastest) : 1;
 </script>
 
 {#if fns.length >= 2}
@@ -58,29 +55,32 @@
 		{#if isTied}
 			<span class="winner-icon" aria-hidden="true">≈</span>
 			<span>
-				<strong>{fastest.name}</strong>
-				{STRING__WINNER_AND_}
-				<strong>{second?.name}</strong>
-				{STRING__WINNER_ARE_}
-				<span class="text-yellow text-bold"
-					>{STRING__WINNER_STATISTICALLY_TIED_}</span
+				{STRING__WINNER_STATISTICALLY_TIED_[0]}<strong
+					>{fastest.name}</strong
 				>
-				<span class="text-dim"
+				{STRING__WINNER_STATISTICALLY_TIED_[1]}<strong
+					>{second?.name}</strong
+				>
+				{STRING__WINNER_STATISTICALLY_TIED_[2]}<span
+					class="text-yellow text-bold"
+					>{STRING__WINNER_STATISTICALLY_TIED_[3]}</span
+				>{STRING__WINNER_STATISTICALLY_TIED_[4]}<span class="text-dim"
 					>({formatPValue(topComp?.pValue ?? 1)})</span
-				>
+				>{STRING__WINNER_STATISTICALLY_TIED_[5]}
 			</span>
 		{:else}
 			<span class="winner-icon text-green" aria-hidden="true">⚡</span>
 			<span>
-				<strong class="text-green">{fastest.name}</strong
-				>{STRING__WINNER_IS_THE_}{STRING__WINNER_FASTEST_}
+				{STRING__WINNER_FASTEST_[0]}<strong class="text-green"
+					>{fastest.name}</strong
+				>{STRING__WINNER_FASTEST_[1]}
 				<span class="text-dim">
-					— {formatMultiplier(
+					{STRING__WINNER_FASTER_THAN_[0]}{formatMultiplier(
 						ratioVsSecond,
-					)}{STRING__WINNER_FASTER_THAN_}{second?.name}{#if fns.length > 2},
+					)}{STRING__WINNER_FASTER_THAN_[1]}{second?.name}{#if fns.length > 2},
 						{formatMultiplier(
 							ratioVsSlowest,
-						)}{STRING__WINNER_VS_}{slowest.name}{/if}
+						)}{STRING__WINNER_FASTER_THAN_[2]}{slowest.name}{/if}
 				</span>
 			</span>
 		{/if}

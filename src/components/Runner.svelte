@@ -123,7 +123,13 @@
 						) {
 							reject(new TypeError(STRING__RUNNER_INVALID_DATA_));
 						} else if (typedEvent.data[0]) {
-							resolve(unmarshalSuiteReport(typedEvent.data[1]));
+							try {
+								resolve(
+									unmarshalSuiteReport(typedEvent.data[1]),
+								);
+							} catch (e) {
+								reject(e);
+							}
 						} else {
 							const errorData =
 								typedEvent.data as RunnerErrorData;

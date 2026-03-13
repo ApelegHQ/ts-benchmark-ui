@@ -75,14 +75,14 @@ export const STRING__COMPARISONS_95_PERCENT_CI_SEPARATOR_ = ', ';
 export const STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_ = ']';
 export const STRING__COMPARISONS_DELTA_PREFIX_ = 'Δ = ';
 export const STRING__COMPARISONS_DF_PREFIX_ = 'df = ';
-export const STRING__COMPARISONS_FASTER_ = 'faster';
+export const STRING__COMPARISONS_FASTER_ = ['', ' is ', ' faster'];
 export const STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_ =
 	'No significant difference';
 export const STRING__COMPARISONS_PAIRED_T_TEST_ =
 	'Pairwise Comparisons (paired t-test)';
 export const STRING__COMPARISONS_SE_DELTA_PREFIX_ = 'SE(Δ) = ';
 export const STRING__COMPARISONS_T_PREFIX_ = 't = ';
-export const STRING__COMPARISONS_VS_ = ['', 'vs', ''];
+export const STRING__COMPARISONS_VS_ = ['', ' vs ', ''];
 
 export const STRING__COPYRIGHT_YEAR_ALL_RIGHTS_RESERVED_ = [
 	'© ',
@@ -240,11 +240,26 @@ export const STRING__SPEED_MATRIX_CAPTION_ = 'Cell = column time ÷ row time ·'
 export const STRING__SPEED_MATRIX_GREEN_GT_1_ = 'green > 1 (row is faster) ·';
 export const STRING__SPEED_MATRIX_RED_LT_1_ = 'red < 1 (row is slower) ·';
 export const STRING__SPEED_MATRIX_SIGNIFICANT_ = 'significant';
+export const STRING__SPEED_MATRIX_RAW_RATIOS_ =
+	'Raw ratios shown \u2014 some baseline-adjusted measurements fall at or below the noise floor, making adjusted ratios unreliable.';
 
-export const STRING__WINNER_ARE_ = 'are';
-export const STRING__WINNER_AND_ = 'and';
-export const STRING__WINNER_FASTEST_ = 'fastest';
-export const STRING__WINNER_FASTER_THAN_ = ' faster than ';
-export const STRING__WINNER_IS_THE_ = ' is the ';
-export const STRING__WINNER_STATISTICALLY_TIED_ = 'statistically tied';
-export const STRING__WINNER_VS_ = ' vs ';
+export const STRING__WINNER_FASTEST_ = ['', ' is the fastest '];
+export const STRING__WINNER_FASTER_THAN_ = ['\u2014 ', ' faster than ', ' vs '];
+export const STRING__WINNER_STATISTICALLY_TIED_ = [
+	'',
+	' and ',
+	' are ',
+	' statistically tied',
+	'',
+	'',
+];
+
+export const STRING_CM_EDITOR_ESCAPE_HATCH_ = [
+	'Press ',
+	', then ',
+	' or ',
+	' to move to outside of the editor.',
+];
+export const STRING_KBD_KEY_ESCAPE_ = 'Escape';
+export const STRING_KBD_KEY_TAB_ = 'Tab';
+export const STRING_KBD_KEY_SHIFT_TAB_ = 'Shift-Tab';

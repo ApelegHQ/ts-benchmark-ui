@@ -25,6 +25,8 @@ export interface ICreateEditorOptions {
 	doc_: string;
 	/** Called on every document change with the new full text. */
 	onUpdate_: (code: string) => void;
+	onFocus_?: () => void;
+	onBlur_?: () => void;
 	/** Placeholder shown when the editor is empty. */
 	placeholder_?: string;
 	/** Label elements */
@@ -364,12 +366,18 @@ export async function createEditor_(
 		}
 	});
 
+	const focusListeners = EditorView.domEventHandlers({
+		['focus']: opts.onFocus_,
+		['blur']: opts.onBlur_,
+	});
+
 	const extensions: Extension[] = [
 		buildBaseExtensions_(modules),
 		javascript(),
 		buildTheme_(modules),
 		syntaxHighlighting(buildHighlightStyle_(modules)),
 		updateListener,
+		focusListeners,
 		EditorView.lineWrapping,
 	];
 

@@ -28,6 +28,7 @@
 		STRING__SPEED_MATRIX_RED_LT_1_,
 		STRING__SPEED_MATRIX_SIGNIFICANT_,
 	} from '../../i18n/strings.js';
+	import getRatio from '../../lib/get-ratio.js';
 
 	export let fns: IFunctionStatistics[];
 	export let comps: IPairedComparison[];
@@ -48,16 +49,18 @@
 <h3 class="section-title">{STRING__SPEED_MATRIX_}</h3>
 
 <div class="card matrix-card">
-	<p class="matrix-caption text-dim">
-		{STRING__SPEED_MATRIX_CAPTION_}
-		<span class="text-green">{STRING__SPEED_MATRIX_GREEN_GT_1_}</span>
-		<span class="text-red">{STRING__SPEED_MATRIX_RED_LT_1_}</span>
-		<span class="text-yellow">*</span>
-		{STRING__SPEED_MATRIX_SIGNIFICANT_}
-	</p>
-
 	<div class="table-scroll">
 		<table class="data-table" aria-label={STRING__SPEED_MATRIX_ARIA_LABEL_}>
+			<caption class="matrix-caption text-dim">
+				{STRING__SPEED_MATRIX_CAPTION_}
+				<span class="text-green"
+					>{STRING__SPEED_MATRIX_GREEN_GT_1_}</span
+				>
+				<span class="text-red">{STRING__SPEED_MATRIX_RED_LT_1_}</span>
+				<span class="text-yellow">*</span>
+				{STRING__SPEED_MATRIX_SIGNIFICANT_}
+			</caption>
+
 			<thead>
 				<tr>
 					<th scope="col"></th>
@@ -79,7 +82,11 @@
 								{#if rowF.name === colF.name}
 									<span class="text-muted">—</span>
 								{:else}
-									{@const ratio = colF.mean / rowF.mean}
+									{@const ratio = getRatio(
+										fns[0],
+										colF,
+										rowF,
+									)}
 									{@const comp = findComp(
 										rowF.name,
 										colF.name,
@@ -107,12 +114,15 @@
 	}
 
 	.matrix-caption {
+		font-family: var(--font-sans);
+		text-align: left;
 		font-size: 0.7rem;
 		margin-bottom: 0.75rem;
 	}
 
 	@media not (writing-mode: tb-lr) {
 		.matrix-caption {
+			text-align: start;
 			margin-bottom: 0;
 			margin-block-end: 0.75rem;
 		}

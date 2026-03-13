@@ -171,7 +171,8 @@ button {
 	}
 }
 
-button:hover:not(:disabled) {
+button:hover:not(:disabled),
+button:focus:not(:disabled) {
 	background: var(--c-surface-2);
 	border-color: var(--c-text-dim);
 }
@@ -188,7 +189,8 @@ button.primary {
 	font-weight: 600;
 }
 
-button.primary:hover:not(:disabled) {
+button.primary:hover:not(:disabled),
+button.primary:focus:not(:disabled) {
 	background: var(--c-accent-hover);
 	border-color: var(--c-accent-hover);
 }
@@ -199,7 +201,8 @@ button.danger {
 	background: transparent;
 }
 
-button.danger:hover:not(:disabled) {
+button.danger:hover:not(:disabled),
+button.danger:focus:not(:disabled) {
 	background: var(--c-danger-soft);
 }
 

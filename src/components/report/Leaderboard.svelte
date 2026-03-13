@@ -35,25 +35,27 @@
 		STRING__LEADERBOARD_RELATIVE_THROUGHPUT_,
 		STRING__LEADERBOARD_SLOWER_,
 	} from '../../i18n/strings.js';
+	import getRatio from '../../lib/get-ratio.js';
 
 	export let fns: IFunctionStatistics[];
 
 	const MEDALS = ['🥇', '🥈', '🥉'];
 
 	$: fastest = fns[0];
-	$: maxOps = fastest?.mean > 0 ? 1 / fastest.mean : 0;
+	$: maxOps = fastest
+		? fastest.mean > 0
+			? 1 / fastest.mean
+			: 1 / fastest.rawMean
+		: 0;
 
-	function barWidth(f: IFunctionStatistics): number {
-		if (maxOps <= 0) return 0;
-		const ops = f.mean > 0 ? 1 / f.mean : 0;
-		return (ops / maxOps) * 100;
-	}
+	function barWidth(
+		fastest: IFunctionStatistics,
+		f: IFunctionStatistics,
+	): number {
+		const ops = fastest.mean > 0 ? 1 / f.mean : 1 / f.rawMean;
+		const ratio = maxOps > 0 ? ops / maxOps : 0;
 
-	function barColor(rank: number): string {
-		if (rank === 0) return 'var(--c-green)';
-		if (rank === 1) return 'var(--c-cyan)';
-		if (rank === 2) return 'var(--c-yellow)';
-		return 'var(--c-magenta)';
+		return (Math.min(ratio, 1) || 0) * 100;
 	}
 </script>
 
@@ -81,6 +83,8 @@
 		</thead>
 		<tbody>
 			{#each fns as f, i}
+				{@const ratio = getRatio(fastest, f, fastest)}
+				{@const bw = barWidth(fns[0], f)}
 				<tr>
 					<td>
 						{#if i < 3}
@@ -107,23 +111,22 @@
 					<td class="num">{formatOps(f.mean)}</td>
 					<td>
 						<div class="bar-cell">
-							<div
-								class="bar-fill"
-								style={`width: ${barWidth(
-									f,
-								)}%; background: ${barColor(i)};`}
-								role="img"
-								aria-label={`${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[0]}${barWidth(f).toFixed(0)}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[1]}`}
-							></div>
+							<meter
+								min="0"
+								max="10000"
+								value={bw * 100}
+								class={`r${i}`}
+								aria-label={`${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[0]}${bw.toFixed(0)}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[1]}`}
+							></meter>
 							<span class="bar-label">
 								{#if i === 0}
 									<span class="text-green"
 										>{STRING__LEADERBOARD_FASTEST_}</span
 									>
-								{:else if fastest.mean > 0}
+								{:else if ratio}
 									<span class="text-dim"
 										>{STRING__LEADERBOARD_SLOWER_[0]}{formatMultiplier(
-											f.mean / fastest.mean,
+											ratio,
 										)}{STRING__LEADERBOARD_SLOWER_[1]}</span
 									>
 								{/if}
@@ -170,20 +173,59 @@
 		gap: 0.5rem;
 	}
 
-	.bar-fill {
+	meter {
+		appearance: none;
 		height: 10px;
 		border-radius: 2px;
 		min-width: 2px;
-		transition: width 0.3s ease;
-		forced-color-adjust: none;
+		background: none;
 	}
 
 	@media not (writing-mode: tb-lr) {
-		.bar-fill {
+		meter {
 			min-width: auto;
 			block-size: 10px;
 			min-inline-size: 2px;
 		}
+	}
+
+	meter::-webkit-meter-bar {
+		background: none;
+	}
+
+	meter::-webkit-meter-optimum-value {
+		background: var(--c-magenta);
+		transition: width 0.3s ease;
+		forced-color-adjust: none;
+		background-size: 100% 100%;
+	}
+
+	meter::-moz-meter-bar {
+		background: var(--c-magenta);
+		forced-color-adjust: none;
+		background-size: 100% 100%;
+	}
+	meter.r2::-webkit-meter-optimum-value {
+		background: var(--c-yellow);
+	}
+
+	meter.r2::-moz-meter-bar {
+		background: var(--c-yellow);
+	}
+	meter.r1::-webkit-meter-optimum-value {
+		background: var(--c-cyan);
+	}
+
+	meter.r1::-moz-meter-bar {
+		background: var(--c-cyan);
+	}
+
+	meter.r0::-webkit-meter-optimum-value {
+		background: var(--c-green);
+	}
+
+	meter.r0::-moz-meter-bar {
+		background: var(--c-green);
 	}
 
 	.bar-label {

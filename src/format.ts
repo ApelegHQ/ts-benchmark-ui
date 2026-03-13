@@ -23,10 +23,12 @@ import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 export function formatTime_(ms: number): string {
 	const a = Math.abs(ms);
 	const sign = ms < 0 ? '−' : '';
-	if (a === 0) return '0.00 ns';
-	if (a < 0.000_001) return `${sign}${(a * 1e6).toFixed(2)} ns`;
-	if (a < 0.001) return `${sign}${(a * 1e6).toFixed(2)} ns`;
-	if (a < 1) return `${sign}${(a * 1e3).toFixed(2)} µs`;
+	if (a === 0) return '0.000 ns';
+	if (a < 0.000_000_000_001) return `${sign}${(a * 1e15).toFixed(3)} as`;
+	if (a < 0.000_000_001) return `${sign}${(a * 1e12).toFixed(3)} fs`;
+	if (a < 0.000_001) return `${sign}${(a * 1e9).toFixed(3)} ps`;
+	if (a < 0.001) return `${sign}${(a * 1e6).toFixed(3)} ns`;
+	if (a < 1) return `${sign}${(a * 1e3).toFixed(3)} µs`;
 	if (a < 1000) return `${sign}${a.toFixed(3)} ms`;
 	return `${sign}${(a / 1000).toFixed(3)} s`;
 }
@@ -35,13 +37,15 @@ export function formatTime_(ms: number): string {
  * Format throughput as operations per second with SI suffix.
  */
 export function formatOps_(ms: number): string {
-	if (ms <= 0) return '∞ op/s';
+	if (ms <= 0) return '\u221e';
 	const ops = 1000 / ms;
-	if (ops >= 1e12) return `${(ops / 1e12).toFixed(2)}T op/s`;
-	if (ops >= 1e9) return `${(ops / 1e9).toFixed(2)}G op/s`;
-	if (ops >= 1e6) return `${(ops / 1e6).toFixed(2)}M op/s`;
-	if (ops >= 1e3) return `${(ops / 1e3).toFixed(2)}k op/s`;
-	return `${ops.toFixed(2)} op/s`;
+	if (ops >= 1e18) return `${(ops / 1e18).toFixed(2)}\u202fE`;
+	if (ops >= 1e15) return `${(ops / 1e15).toFixed(2)}\u202fP`;
+	if (ops >= 1e12) return `${(ops / 1e12).toFixed(2)}\u202fT`;
+	if (ops >= 1e9) return `${(ops / 1e9).toFixed(2)}\u202fG`;
+	if (ops >= 1e6) return `${(ops / 1e6).toFixed(2)}\u202fM`;
+	if (ops >= 1e3) return `${(ops / 1e3).toFixed(2)}\u202fk`;
+	return `${ops.toFixed(2)}`;
 }
 
 /**

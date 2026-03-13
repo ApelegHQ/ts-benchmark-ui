@@ -16,6 +16,8 @@
  */
 
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import cssnano from 'cssnano';
+import postcssNesting from 'postcss-nesting';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import sri from 'vite-plugin-sri-gen';
@@ -37,6 +39,11 @@ export default defineConfig({
 			},
 		},
 		target: 'esnext',
+	},
+	css: {
+		postcss: {
+			plugins: [postcssNesting(), cssnano({ preset: 'default' })],
+		},
 	},
 	plugins: [
 		svelte(),
