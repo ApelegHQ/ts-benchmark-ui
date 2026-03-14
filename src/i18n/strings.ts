@@ -250,7 +250,7 @@ export const STRING__WINNER_STATISTICALLY_TIED_ = [
 	' and ',
 	' are ',
 	' statistically tied',
-	'',
+	' ',
 	'',
 ];
 

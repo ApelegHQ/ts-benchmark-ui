@@ -48,6 +48,8 @@
 		"lint:fix": "prettier -w . && eslint . --ext .svelte,.cjs,.cts,.mjs,.mjs,.js,.ts,.json --fix",
 		"dev": "vite",
 		"build": "vite build",
+		"build:es": "LOCALE=es vite build",
+		"build:all": "vite build && LOCALE=es vite build",
 		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
 		"prepack": "npm run build",

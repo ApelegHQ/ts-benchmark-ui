@@ -17,25 +17,46 @@
 
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import cssnano from 'cssnano';
-import postcssNesting from 'postcss-nesting';
+import { existsSync } from 'node:fs';
+import { basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import postcssNesting from 'postcss-nesting';
 import { defineConfig } from 'vite';
 import sri from 'vite-plugin-sri-gen';
 import customMetaPlugin from './vite-plugins/custom-meta.js';
 import importsWorkerPlugin from './vite-plugins/imports-worker.js';
+import renameIndexPlugin from './vite-plugins/rename-index.js';
 import serviceWorkerPlugin from './vite-plugins/service-worker.js';
 import xhtmlMinifyPlugin from './vite-plugins/xhtml-minify.js';
 
+const locale = process.env.LOCALE || 'en';
+
+const indexDefaultPath = fileURLToPath(new URL(`./index.html`, import.meta.url))
+const indexLocalePath = fileURLToPath(new URL(`./index.${locale}.html`, import.meta.url))
+const indexPath = existsSync(indexLocalePath) ? indexLocalePath : indexDefaultPath;
+
 // https://vite.dev/config/
 export default defineConfig({
+	resolve:
+		locale === 'en'
+			? undefined
+			: {
+					alias: [
+						{
+							find: /^(.*\/i18n\/strings)\.js$/,
+							replacement: `$1.${locale}.ts`,
+						},
+					],
+				},
 	build: {
-		manifest: true,
+		manifest: `.vite/manifest.${locale}.json`,
+		outDir: 'dist',
 		rollupOptions: {
 			input: {
 				runner: fileURLToPath(
 					new URL('./resources/runner.html', import.meta.url),
 				),
-				index: fileURLToPath(new URL('./index.html', import.meta.url)),
+				index: indexPath,
 			},
 		},
 		target: 'esnext',
@@ -61,6 +82,7 @@ export default defineConfig({
 			runtimePatchDynamicLinks: false,
 		}),
 		xhtmlMinifyPlugin(),
+		renameIndexPlugin({ from: basename(indexPath), to: `${locale}/index.html` }),
 	],
 	preview: {
 		headers: {
