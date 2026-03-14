@@ -77,7 +77,7 @@ export const STRING__COMPARISONS_95_PERCENT_CI_SEPARATOR_ = ', ';
 export const STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_ = ']';
 export const STRING__COMPARISONS_DELTA_PREFIX_ = 'Δ = ';
 export const STRING__COMPARISONS_DF_PREFIX_ = 'df = ';
-export const STRING__COMPARISONS_FASTER_ = ['', ' es ', ' más rápido'];
+export const STRING__COMPARISONS_FASTER_ = ['', ' es ', ' más rápido '];
 export const STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_ =
 	'Sin diferencia significativa';
 export const STRING__COMPARISONS_PAIRED_T_TEST_ =

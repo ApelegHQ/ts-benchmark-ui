@@ -130,6 +130,12 @@
 {/if}
 
 <style>
+	textarea,
+	.cm-wrapper {
+		direction: ltr;
+		writing-mode: horizontal-tb;
+	}
+
 	.note {
 		font-size: 0.8em;
 	}

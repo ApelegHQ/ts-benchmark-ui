@@ -15,6 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+html,
+:host {
+	direction: --x-direction();
+	text-orientation: --x-text-orientation();
+	writing-mode: --x-writing-mode();
+}
+
 :root {
 	color-scheme: light;
 	--c-bg: #f6f7fb;

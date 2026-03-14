@@ -17,7 +17,9 @@
 
 import { type Plugin } from 'vite';
 
-export default function renameIndexPlugin(opts: { from?: string, to?: string } = {}) {
+export default function renameIndexPlugin_(
+	opts: { ['from']?: string; ['to']?: string } = {},
+) {
 	const from = opts.from || 'index.html';
 	const to = opts.to || 'index.html';
 
@@ -25,7 +27,7 @@ export default function renameIndexPlugin(opts: { from?: string, to?: string } =
 		name: 'vite:plugin-rename-index',
 		apply: 'build',
 		enforce: 'post',
-		generateBundle(_, bundle) {
+		['generateBundle'](_, bundle) {
 			for (const [fileName, chunkOrAsset] of Object.entries(bundle)) {
 				// We only care about emitted asset named index.html
 				if (fileName === from && chunkOrAsset.type === 'asset') {
@@ -33,7 +35,7 @@ export default function renameIndexPlugin(opts: { from?: string, to?: string } =
 					delete bundle[fileName];
 					bundle[to] = chunkOrAsset;
 					// ensure the asset.name/ fileName references are consistent if present
-          chunkOrAsset.fileName = to;
+					chunkOrAsset.fileName = to;
 					if (chunkOrAsset.names) chunkOrAsset.names = [to];
 					return; // done
 				}
