@@ -75,7 +75,7 @@ onLoad(() => {
 		['target']: target$,
 	});
 
-	window.onerror = null;
+	self.onerror = null;
 });
 
 registerServiceWorker_(import.meta.serviceWorkerPath).catch(function (error) {

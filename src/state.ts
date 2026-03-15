@@ -188,7 +188,7 @@ export function decodeState_(raw: string): ISuiteState | null {
  * Load initial state: from URL hash if present, otherwise defaults.
  */
 function loadInitialState(): ISuiteState {
-	const hash = window.location.hash.slice(1);
+	const hash = self.location.hash.slice(1);
 	if (hash) {
 		const restored = decodeState_(hash);
 		if (restored) return restored;
@@ -209,7 +209,7 @@ suiteState_.subscribe((state) => {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(() => {
 		const encoded = encodeState_(state);
-		window.history.replaceState(null, '', '#' + encoded);
+		self.history.replaceState(null, '', '#' + encoded);
 	}, 400);
 });
 
@@ -266,5 +266,5 @@ export function updateConfig_(
 }
 
 export function getShareUrl_(): string {
-	return window.location.href;
+	return self.location.href;
 }

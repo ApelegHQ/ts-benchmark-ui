@@ -43,30 +43,79 @@
 	$: globalMin = Math.min(...fns.map((f) => f.p5));
 	$: globalMax = Math.max(...fns.map((f) => f.p95));
 
-	const ROW_HEIGHT = 36;
-	const PADDING_LEFT = 160;
-	const PADDING_RIGHT = 40;
-	const PADDING_TOP = 28;
+	const ROW_BLOCK_SIZE = 36;
+	const PADDING_INLINE_START = 160;
+	const PADDING_INLINE_END = 40;
+	const PADDING_BLOCK_START = 28;
 
-	$: canvasHeight = PADDING_TOP + fns.length * ROW_HEIGHT + 10;
+	let vertical: boolean;
+
+	$: canvasBlockSize = PADDING_BLOCK_START + fns.length * ROW_BLOCK_SIZE + 10;
 
 	function drawChart() {
 		if (!canvasEl) return;
 		const ctx = canvasEl.getContext('2d');
 		if (!ctx) return;
 
-		const dpr = window.devicePixelRatio || 1;
-		const width = canvasEl.clientWidth;
-		const height = canvasHeight;
+		const dpr = self.devicePixelRatio || 1;
+		const inlineSize = vertical
+			? canvasEl.clientHeight
+			: canvasEl.clientWidth;
+		const blockSize = canvasBlockSize;
 
-		canvasEl.width = width * dpr;
-		canvasEl.height = height * dpr;
+		if (vertical) {
+			canvasEl.width = blockSize * dpr;
+			canvasEl.height = inlineSize * dpr;
+		} else {
+			canvasEl.width = inlineSize * dpr;
+			canvasEl.height = blockSize * dpr;
+		}
 		ctx.scale(dpr, dpr);
-		ctx.clearRect(0, 0, width, height);
+		ctx.clearRect(
+			0,
+			0,
+			vertical ? blockSize : inlineSize,
+			vertical ? inlineSize : blockSize,
+		);
 
-		const plotLeft = PADDING_LEFT;
-		const plotRight = width - PADDING_RIGHT;
-		const plotWidth = plotRight - plotLeft;
+		const stroke = () => ctx.stroke();
+		const beginPath = () => ctx.beginPath();
+		const lineWidth = (w: number) => (ctx.lineWidth = w);
+		const fillStyle = (s: string) => (ctx.fillStyle =  s);
+		const strokeStyle = (s: string) => (ctx.strokeStyle =  s);
+		const textAlign = (a: CanvasTextAlign) => (ctx.textAlign = a);
+		const font = (f: string) => (ctx.font = f);
+		const fillText = (
+			text: string,
+			x: number,
+			y: number,
+			maxWidth?: number,
+		) =>
+			vertical
+				? ctx.fillText(text, y, x, maxWidth)
+				: ctx.fillText(text, x, y, maxWidth);
+		const moveTo = (x: number, y: number) =>
+			vertical ? ctx.moveTo(y, x) : ctx.moveTo(x, y);
+		const lineTo = (x: number, y: number) =>
+			vertical ? ctx.lineTo(y, x) : ctx.lineTo(x, y);
+		const fillRect = (x: number, y: number, w: number, h: number) =>
+			vertical ? ctx.fillRect(y, x, h, w) : ctx.fillRect(x, y, w, h);
+		const arc = (
+			x: number,
+			y: number,
+			radius: number,
+			startAngle: number,
+			endAngle: number,
+			counterclockwise?: boolean,
+		) =>
+			vertical
+				? ctx.arc(y, x, radius, startAngle, endAngle, counterclockwise)
+				: ctx.arc(x, y, radius, startAngle, endAngle, counterclockwise);
+		const fill = () => ctx.fill();
+
+		const plotInlineStart = PADDING_INLINE_START;
+		const plotInlineEnd = inlineSize - PADDING_INLINE_END;
+		const plotInlineSize = plotInlineEnd - plotInlineStart;
 		const range = globalMax - globalMin;
 		const styles = getComputedStyle(document.documentElement);
 		const chartAxis = styles.getPropertyValue('--c-chart-axis').trim();
@@ -80,35 +129,38 @@
 		const accentBlue = styles.getPropertyValue('--c-blue').trim();
 		const textPrimary = styles.getPropertyValue('--c-text').trim();
 
-		function xPos(value: number): number {
-			if (range <= 0) return plotLeft + plotWidth / 2;
-			return plotLeft + ((value - globalMin) / range) * plotWidth;
+		const xPos = (value: number): number => {
+			if (range <= 0) return plotInlineStart + plotInlineSize / 2;
+			return (
+				plotInlineStart + ((value - globalMin) / range) * plotInlineSize
+			);
 		}
 
-		ctx.fillStyle = chartAxis;
-		ctx.font = '11px JetBrains Mono, Fira Code, monospace';
-		ctx.textAlign = 'left';
-		ctx.fillText(formatTime(globalMin), plotLeft, 14);
-		ctx.textAlign = 'right';
-		ctx.fillText(formatTime(globalMax), plotRight, 14);
+		fillStyle(chartAxis);
+		font('11px JetBrains Mono, Fira Code, monospace');
+		textAlign('left');
+		fillText(formatTime(globalMin), plotInlineStart, 14);
+		textAlign('right');
+		fillText(formatTime(globalMax), plotInlineEnd, 14);
 
-		ctx.strokeStyle = chartLine;
-		ctx.lineWidth = 1;
-		ctx.beginPath();
-		ctx.moveTo(plotLeft, PADDING_TOP - 6);
-		ctx.lineTo(plotRight, PADDING_TOP - 6);
-		ctx.stroke();
+		strokeStyle(chartLine);
+		lineWidth(1);
+		beginPath();
+		moveTo(plotInlineStart, PADDING_BLOCK_START - 6);
+		lineTo(plotInlineEnd, PADDING_BLOCK_START - 6);
+		stroke();
 
 		for (let i = 0; i < fns.length; i++) {
 			const f = fns[i];
-			const cy = PADDING_TOP + i * ROW_HEIGHT + ROW_HEIGHT / 2;
+			const cy =
+				PADDING_BLOCK_START + i * ROW_BLOCK_SIZE + ROW_BLOCK_SIZE / 2;
 
-			ctx.fillStyle = i === 0 ? chartLabelStrong : chartLabel;
-			ctx.font = `${i === 0 ? 'bold ' : ''}12px Inter, -apple-system, sans-serif`;
-			ctx.textAlign = 'right';
-			ctx.fillText(
+			fillStyle(i === 0 ? chartLabelStrong : chartLabel);
+			font(`${i === 0 ? 'bold ' : ''}12px Inter, -apple-system, sans-serif`);
+			textAlign('right');
+			fillText(
 				f.name.length > 18 ? f.name.slice(0, 17) + '…' : f.name,
-				plotLeft - 12,
+				plotInlineStart - 12,
 				cy + 4,
 			);
 
@@ -118,49 +170,62 @@
 			const x75 = xPos(f.p75);
 			const x95 = xPos(f.p95);
 
-			ctx.strokeStyle = chartAxis;
-			ctx.lineWidth = 1;
-			ctx.beginPath();
-			ctx.moveTo(x5, cy);
-			ctx.lineTo(x25, cy);
-			ctx.stroke();
-			ctx.beginPath();
-			ctx.moveTo(x75, cy);
-			ctx.lineTo(x95, cy);
-			ctx.stroke();
-			ctx.beginPath();
-			ctx.moveTo(x5, cy - 5);
-			ctx.lineTo(x5, cy + 5);
-			ctx.stroke();
-			ctx.beginPath();
-			ctx.moveTo(x95, cy - 5);
-			ctx.lineTo(x95, cy + 5);
-			ctx.stroke();
+			strokeStyle(chartAxis);
+			lineWidth(1);
+			beginPath();
+			moveTo(x5, cy);
+			lineTo(x25, cy);
+			stroke();
+			beginPath();
+			moveTo(x75, cy);
+			lineTo(x95, cy);
+			stroke();
+			beginPath();
+			moveTo(x5, cy - 5);
+			lineTo(x5, cy + 5);
+			stroke();
+			beginPath();
+			moveTo(x95, cy - 5);
+			lineTo(x95, cy + 5);
+			stroke();
 
 			const boxH = 14;
-			ctx.fillStyle = accentCyan;
-			ctx.fillRect(x25, cy - boxH / 2, xMed - x25, boxH);
-			ctx.fillStyle = accentBlue;
-			ctx.fillRect(xMed, cy - boxH / 2, x75 - xMed, boxH);
+			fillStyle(accentCyan);
+			fillRect(x25, cy - boxH / 2, xMed - x25, boxH);
+			fillStyle(accentBlue);
+			fillRect(xMed, cy - boxH / 2, x75 - xMed, boxH);
 
-			ctx.strokeStyle = textPrimary;
-			ctx.lineWidth = 2;
-			ctx.beginPath();
-			ctx.moveTo(xMed, cy - boxH / 2 - 1);
-			ctx.lineTo(xMed, cy + boxH / 2 + 1);
-			ctx.stroke();
+			strokeStyle(textPrimary);
+			lineWidth(2);
+			beginPath();
+			moveTo(xMed, cy - boxH / 2 - 1);
+			lineTo(xMed, cy + boxH / 2 + 1);
+			stroke();
 
 			if (f.samples.length > 1) {
-				ctx.fillStyle = chartSample;
+				fillStyle(chartSample);
 				for (const sample of f.samples) {
 					const sx = xPos(
 						Math.max(globalMin, Math.min(globalMax, sample)),
 					);
-					ctx.beginPath();
-					ctx.arc(sx, cy + boxH / 2 + 6, 1.5, 0, Math.PI * 2);
-					ctx.fill();
+					beginPath();
+					arc(sx, cy + boxH / 2 + 6, 1.5, 0, Math.PI * 2);
+					fill();
 				}
 			}
+		}
+	}
+
+	$: if (canvasEl && canvasBlockSize != null) {
+		const styles = getComputedStyle(canvasEl);
+		if (styles['writingMode']?.startsWith('vertical-')) {
+			canvasEl.style.inlineSize = '100%';
+			canvasEl.style.blockSize = `${canvasBlockSize}px`;
+			vertical = true;
+		} else {
+			canvasEl.style.width = '100%';
+			canvasEl.style.height = `${canvasBlockSize}px`;
+			vertical = false;
 		}
 	}
 
@@ -177,10 +242,7 @@
 <h3 class="section-title">{STRING__DISTRIBUTION_}</h3>
 
 <div class="card distribution-card">
-	<canvas
-		bind:this={canvasEl}
-		style={`width: 100%; height: ${canvasHeight}px;`}
-		aria-label={STRING__DISTRIBUTION_ARIA_LABEL_}
+	<canvas bind:this={canvasEl} aria-label={STRING__DISTRIBUTION_ARIA_LABEL_}
 	></canvas>
 
 	<div class="legend">
