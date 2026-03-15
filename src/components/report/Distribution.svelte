@@ -16,7 +16,7 @@
 
 <script lang="ts">
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
-	import { afterUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { formatTime_ as formatTime } from '../../format.js';
 	import {
 		STRING__DISTRIBUTION_,
@@ -38,7 +38,9 @@
 
 	export let fns: IFunctionStatistics[];
 
-	let canvasEl: HTMLCanvasElement;
+	let svgEl: SVGSVGElement;
+	let svgInlineSize = 0;
+	let svgBlockSize = 0;
 
 	$: globalMin = Math.min(...fns.map((f) => f.p5));
 	$: globalMax = Math.max(...fns.map((f) => f.p95));
@@ -48,204 +50,224 @@
 	const PADDING_INLINE_END = 40;
 	const PADDING_BLOCK_START = 28;
 
-	let vertical: boolean;
+	let vertical = false;
 
-	$: canvasBlockSize = PADDING_BLOCK_START + fns.length * ROW_BLOCK_SIZE + 10;
+	$: chartBlockSize = PADDING_BLOCK_START + fns.length * ROW_BLOCK_SIZE + 10;
+	$: measuredInlineSize = vertical ? svgBlockSize : svgInlineSize;
+	$: plotInlineStart = PADDING_INLINE_START;
+	$: plotInlineEnd = measuredInlineSize - PADDING_INLINE_END;
+	$: plotInlineSize = Math.max(0, plotInlineEnd - plotInlineStart);
+	$: range = globalMax - globalMin;
+	$: svgWidth = vertical ? chartBlockSize : Math.max(measuredInlineSize, 0);
+	$: svgHeight = vertical ? Math.max(measuredInlineSize, 0) : chartBlockSize;
+	$: viewBox = `0 0 ${Math.max(svgWidth, 1)} ${Math.max(svgHeight, 1)}`;
 
-	function drawChart() {
-		if (!canvasEl) return;
-		const ctx = canvasEl.getContext('2d');
-		if (!ctx) return;
-
-		const dpr = self.devicePixelRatio || 1;
-		const inlineSize = vertical
-			? canvasEl.clientHeight
-			: canvasEl.clientWidth;
-		const blockSize = canvasBlockSize;
+	onMount(() => {
+		if (!svgEl) return;
+		const styles = getComputedStyle(svgEl);
+		vertical = styles['writingMode']?.startsWith('vertical-') ?? false;
 
 		if (vertical) {
-			canvasEl.width = blockSize * dpr;
-			canvasEl.height = inlineSize * dpr;
+			svgEl.style.inlineSize = '100%';
+			svgEl.style.blockSize = `${chartBlockSize}px`;
+			svgEl.style.width = '';
+			svgEl.style.height = '';
 		} else {
-			canvasEl.width = inlineSize * dpr;
-			canvasEl.height = blockSize * dpr;
+			svgEl.style.width = '100%';
+			svgEl.style.height = `${chartBlockSize}px`;
+			svgEl.style.inlineSize = '';
+			svgEl.style.blockSize = '';
 		}
-		ctx.scale(dpr, dpr);
-		ctx.clearRect(
-			0,
-			0,
-			vertical ? blockSize : inlineSize,
-			vertical ? inlineSize : blockSize,
-		);
+	});
 
-		const stroke = () => ctx.stroke();
-		const beginPath = () => ctx.beginPath();
-		const lineWidth = (w: number) => (ctx.lineWidth = w);
-		const fillStyle = (s: string) => (ctx.fillStyle =  s);
-		const strokeStyle = (s: string) => (ctx.strokeStyle =  s);
-		const textAlign = (a: CanvasTextAlign) => (ctx.textAlign = a);
-		const font = (f: string) => (ctx.font = f);
-		const fillText = (
-			text: string,
-			x: number,
-			y: number,
-			maxWidth?: number,
-		) =>
-			vertical
-				? ctx.fillText(text, y, x, maxWidth)
-				: ctx.fillText(text, x, y, maxWidth);
-		const moveTo = (x: number, y: number) =>
-			vertical ? ctx.moveTo(y, x) : ctx.moveTo(x, y);
-		const lineTo = (x: number, y: number) =>
-			vertical ? ctx.lineTo(y, x) : ctx.lineTo(x, y);
-		const fillRect = (x: number, y: number, w: number, h: number) =>
-			vertical ? ctx.fillRect(y, x, h, w) : ctx.fillRect(x, y, w, h);
-		const arc = (
-			x: number,
-			y: number,
-			radius: number,
-			startAngle: number,
-			endAngle: number,
-			counterclockwise?: boolean,
-		) =>
-			vertical
-				? ctx.arc(y, x, radius, startAngle, endAngle, counterclockwise)
-				: ctx.arc(x, y, radius, startAngle, endAngle, counterclockwise);
-		const fill = () => ctx.fill();
+	$: xPos = (value: number): number => {
+		if (range <= 0) return plotInlineStart + plotInlineSize / 2;
+		return plotInlineStart + ((value - globalMin) / range) * plotInlineSize;
+	};
 
-		const plotInlineStart = PADDING_INLINE_START;
-		const plotInlineEnd = inlineSize - PADDING_INLINE_END;
-		const plotInlineSize = plotInlineEnd - plotInlineStart;
-		const range = globalMax - globalMin;
-		const styles = getComputedStyle(document.documentElement);
-		const chartAxis = styles.getPropertyValue('--c-chart-axis').trim();
-		const chartLine = styles.getPropertyValue('--c-chart-line').trim();
-		const chartLabelStrong = styles
-			.getPropertyValue('--c-chart-label-strong')
-			.trim();
-		const chartLabel = styles.getPropertyValue('--c-chart-label').trim();
-		const chartSample = styles.getPropertyValue('--c-chart-sample').trim();
-		const accentCyan = styles.getPropertyValue('--c-cyan').trim();
-		const accentBlue = styles.getPropertyValue('--c-blue').trim();
-		const textPrimary = styles.getPropertyValue('--c-text').trim();
-
-		const xPos = (value: number): number => {
-			if (range <= 0) return plotInlineStart + plotInlineSize / 2;
-			return (
-				plotInlineStart + ((value - globalMin) / range) * plotInlineSize
-			);
-		}
-
-		fillStyle(chartAxis);
-		font('11px JetBrains Mono, Fira Code, monospace');
-		textAlign('left');
-		fillText(formatTime(globalMin), plotInlineStart, 14);
-		textAlign('right');
-		fillText(formatTime(globalMax), plotInlineEnd, 14);
-
-		strokeStyle(chartLine);
-		lineWidth(1);
-		beginPath();
-		moveTo(plotInlineStart, PADDING_BLOCK_START - 6);
-		lineTo(plotInlineEnd, PADDING_BLOCK_START - 6);
-		stroke();
-
-		for (let i = 0; i < fns.length; i++) {
-			const f = fns[i];
-			const cy =
-				PADDING_BLOCK_START + i * ROW_BLOCK_SIZE + ROW_BLOCK_SIZE / 2;
-
-			fillStyle(i === 0 ? chartLabelStrong : chartLabel);
-			font(`${i === 0 ? 'bold ' : ''}12px Inter, -apple-system, sans-serif`);
-			textAlign('right');
-			fillText(
-				f.name.length > 18 ? f.name.slice(0, 17) + '…' : f.name,
-				plotInlineStart - 12,
-				cy + 4,
-			);
-
-			const x5 = xPos(f.p5);
-			const x25 = xPos(f.p25);
-			const xMed = xPos(f.median);
-			const x75 = xPos(f.p75);
-			const x95 = xPos(f.p95);
-
-			strokeStyle(chartAxis);
-			lineWidth(1);
-			beginPath();
-			moveTo(x5, cy);
-			lineTo(x25, cy);
-			stroke();
-			beginPath();
-			moveTo(x75, cy);
-			lineTo(x95, cy);
-			stroke();
-			beginPath();
-			moveTo(x5, cy - 5);
-			lineTo(x5, cy + 5);
-			stroke();
-			beginPath();
-			moveTo(x95, cy - 5);
-			lineTo(x95, cy + 5);
-			stroke();
-
-			const boxH = 14;
-			fillStyle(accentCyan);
-			fillRect(x25, cy - boxH / 2, xMed - x25, boxH);
-			fillStyle(accentBlue);
-			fillRect(xMed, cy - boxH / 2, x75 - xMed, boxH);
-
-			strokeStyle(textPrimary);
-			lineWidth(2);
-			beginPath();
-			moveTo(xMed, cy - boxH / 2 - 1);
-			lineTo(xMed, cy + boxH / 2 + 1);
-			stroke();
-
-			if (f.samples.length > 1) {
-				fillStyle(chartSample);
-				for (const sample of f.samples) {
-					const sx = xPos(
-						Math.max(globalMin, Math.min(globalMax, sample)),
-					);
-					beginPath();
-					arc(sx, cy + boxH / 2 + 6, 1.5, 0, Math.PI * 2);
-					fill();
-				}
-			}
-		}
+	function px(inline: number, block: number): number {
+		return vertical ? block : inline;
 	}
 
-	$: if (canvasEl && canvasBlockSize != null) {
-		const styles = getComputedStyle(canvasEl);
-		if (styles['writingMode']?.startsWith('vertical-')) {
-			canvasEl.style.inlineSize = '100%';
-			canvasEl.style.blockSize = `${canvasBlockSize}px`;
-			vertical = true;
-		} else {
-			canvasEl.style.width = '100%';
-			canvasEl.style.height = `${canvasBlockSize}px`;
-			vertical = false;
-		}
+	function py(inline: number, block: number): number {
+		return vertical ? inline : block;
 	}
 
-	onMount(drawChart);
-	afterUpdate(drawChart);
+	function textX(inline: number, block: number): number {
+		return vertical ? chartBlockSize - block : inline;
+	}
 
-	function handleResize() {
-		drawChart();
+	function textY(inline: number, block: number): number {
+		return vertical ? inline : block;
+	}
+
+	function rectWidth(inlineSize: number, blockSize: number): number {
+		return vertical ? blockSize : inlineSize;
+	}
+
+	function rectHeight(inlineSize: number, blockSize: number): number {
+		return vertical ? inlineSize : blockSize;
+	}
+
+	function labelText(name: string): string {
+		return name.length > 18 ? name.slice(0, 17) + '…' : name;
+	}
+
+	function statsDescription(f: IFunctionStatistics): string {
+		return `${f.name}: ${STRING__DISTRIBUTION_P5_} ${formatTime(f.p5)}, ${STRING__DISTRIBUTION_P25_} ${formatTime(f.p25)}, ${STRING__DISTRIBUTION_MEDIAN_} ${formatTime(f.median)}, ${STRING__DISTRIBUTION_P75_} ${formatTime(f.p75)}, ${STRING__DISTRIBUTION_P95_} ${formatTime(f.p95)}, ${STRING__DISTRIBUTION_SAMPLES_} ${f.samples.length}`;
 	}
 </script>
 
-<svelte:window on:resize={handleResize} />
-
 <h3 class="section-title">{STRING__DISTRIBUTION_}</h3>
 
-<div class="card distribution-card">
-	<canvas bind:this={canvasEl} aria-label={STRING__DISTRIBUTION_ARIA_LABEL_}
-	></canvas>
+<figure class="card distribution-card">
+	<div
+		bind:clientWidth={svgInlineSize}
+		bind:clientHeight={svgBlockSize}
+		class="container"
+	>
+		<svg
+			bind:this={svgEl}
+			{viewBox}
+			aria-label={STRING__DISTRIBUTION_ARIA_LABEL_}
+			preserveAspectRatio="none"
+		>
+			<title>{STRING__DISTRIBUTION_ARIA_LABEL_}</title>
 
-	<div class="legend">
+			{#if measuredInlineSize > 0}
+				<text
+					x={textX(plotInlineStart, 14)}
+					y={textY(plotInlineStart, 14)}
+					class="axis"
+					text-anchor={vertical ? 'middle' : 'start'}
+					dominant-baseline={vertical ? 'hanging' : 'alphabetic'}
+				>
+					{formatTime(globalMin)}
+				</text>
+
+				<text
+					x={textX(plotInlineEnd, 14)}
+					y={textY(plotInlineEnd, 14)}
+					class="axis"
+					text-anchor={vertical ? 'middle' : 'end'}
+					dominant-baseline={vertical
+						? 'text-after-edge'
+						: 'alphabetic'}
+				>
+					{formatTime(globalMax)}
+				</text>
+
+				<line
+					x1={px(plotInlineStart, PADDING_BLOCK_START - 6)}
+					y1={py(plotInlineStart, PADDING_BLOCK_START - 6)}
+					x2={px(plotInlineEnd, PADDING_BLOCK_START - 6)}
+					y2={py(plotInlineEnd, PADDING_BLOCK_START - 6)}
+					class="axis"
+				/>
+
+				{#each fns as f, i}
+					{@const cy =
+						PADDING_BLOCK_START +
+						i * ROW_BLOCK_SIZE +
+						ROW_BLOCK_SIZE / 2}
+					{@const x5 = xPos(f.p5)}
+					{@const x25 = xPos(f.p25)}
+					{@const xMed = xPos(f.median)}
+					{@const x75 = xPos(f.p75)}
+					{@const x95 = xPos(f.p95)}
+					{@const boxH = 14}
+
+					<g role="group" aria-label={f.name}>
+						<desc>{statsDescription(f)}</desc>
+
+						<text
+							x={textX(plotInlineStart - 12, cy + 4)}
+							y={textY(plotInlineStart - 12, cy + 4)}
+							class="fn"
+							class:first={i === 0}
+							text-anchor={vertical ? 'middle' : 'end'}
+							dominant-baseline={vertical
+								? 'text-after-edge'
+								: 'alphabetic'}
+						>
+							{labelText(f.name)}
+						</text>
+
+						<line
+							x1={px(x5, cy)}
+							y1={py(x5, cy)}
+							x2={px(x25, cy)}
+							y2={py(x25, cy)}
+							class="whisker"
+						/>
+						<line
+							x1={px(x75, cy)}
+							y1={py(x75, cy)}
+							x2={px(x95, cy)}
+							y2={py(x95, cy)}
+							class="whisker"
+						/>
+						<line
+							x1={px(x5, cy - 5)}
+							y1={py(x5, cy - 5)}
+							x2={px(x5, cy + 5)}
+							y2={py(x5, cy + 5)}
+							class="whisker"
+						/>
+						<line
+							x1={px(x95, cy - 5)}
+							y1={py(x95, cy - 5)}
+							x2={px(x95, cy + 5)}
+							y2={py(x95, cy + 5)}
+							class="whisker"
+						/>
+
+						<rect
+							x={px(x25, cy - boxH / 2)}
+							y={py(x25, cy - boxH / 2)}
+							width={rectWidth(xMed - x25, boxH)}
+							height={rectHeight(xMed - x25, boxH)}
+							class="p25"
+						/>
+						<rect
+							x={px(xMed, cy - boxH / 2)}
+							y={py(xMed, cy - boxH / 2)}
+							width={rectWidth(x75 - xMed, boxH)}
+							height={rectHeight(x75 - xMed, boxH)}
+							class="p75"
+						/>
+
+						<line
+							x1={px(xMed, cy - boxH / 2 - 1)}
+							y1={py(xMed, cy - boxH / 2 - 1)}
+							x2={px(xMed, cy + boxH / 2 + 1)}
+							y2={py(xMed, cy + boxH / 2 + 1)}
+							class="median-c"
+						/>
+
+						{#if f.samples.length > 1}
+							{#each f.samples as sample}
+								{@const sx = xPos(
+									Math.max(
+										globalMin,
+										Math.min(globalMax, sample),
+									),
+								)}
+								<circle
+									class="sample"
+									cx={px(sx, cy + boxH / 2 + 6)}
+									cy={py(sx, cy + boxH / 2 + 6)}
+									r="1.5"
+								/>
+							{/each}
+						{/if}
+					</g>
+				{/each}
+			{/if}
+		</svg>
+	</div>
+
+	<legend class="legend">
 		<span class="legend-item">
 			<span class="legend-swatch whiskers">╷</span>
 			<span class="text-dim"
@@ -280,16 +302,25 @@
 			<span class="legend-dot samples"></span>
 			<span class="text-dim">{STRING__DISTRIBUTION_SAMPLES_}</span>
 		</span>
-	</div>
-</div>
+	</legend>
+</figure>
 
 <style>
+	.container {
+		display: block;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		outline: 0;
+	}
+
 	.distribution-card {
 		padding: 1rem;
 	}
 
-	canvas {
+	svg {
 		display: block;
+		forced-color-adjust: none;
 	}
 
 	.legend {
@@ -370,5 +401,56 @@
 
 	.samples {
 		background: var(--c-chart-sample);
+	}
+
+	text.axis {
+		fill: var(--c-chart-axis);
+		font-family:
+			JetBrains Mono,
+			Fira Code,
+			monospace;
+		font-size: 11px;
+	}
+
+	line.axis {
+		stroke: var(--c-chart-line);
+		stroke-width: 1px;
+	}
+
+	.whisker {
+		stroke: var(--c-chart-axis);
+		stroke-width: 1px;
+	}
+
+	.median-c {
+		stroke: var(--c-text);
+		stroke-width: 2px;
+	}
+
+	.p25 {
+		fill: var(--c-cyan);
+	}
+
+	.p75 {
+		fill: var(--c-blue);
+	}
+
+	.sample {
+		fill: var(--c-chart-sample);
+	}
+
+	.fn {
+		fill: var(--c-chart-label);
+		font-family:
+			Inter,
+			-apple-system,
+			sans-serif;
+		font-size: 12px;
+		font-weight: 400;
+	}
+
+	.fn.first {
+		fill: var(--c-chart-label-strong);
+		font-weight: 700;
 	}
 </style>

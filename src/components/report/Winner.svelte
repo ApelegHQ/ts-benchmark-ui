@@ -102,7 +102,7 @@
 
 	@media not (writing-mode: tb-lr) {
 		.winner-banner {
-			margin-top: 0;
+			margin: 0;
 			padding-block: 0.875rem;
 			padding-inline: 1.25rem;
 			margin-block-start: 1rem;
