@@ -170,7 +170,11 @@
 			title={STRING__DOWNLOAD_REPORT_DOWNLOAD_REPORT_}
 			on:click|stopPropagation={toggleMenu}
 		>
-			<svg viewBox="0 0 20 20" aria-hidden="true">
+			<svg
+				viewBox="0 0 20 20"
+				aria-hidden="true"
+				xmlns="http://www.w3.org/2000/svg"
+			>
 				<path
 					d="M10 2.75a.75.75 0 0 1 .75.75v7.19l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 0 1 1.06-1.06l2.22 2.22V3.5a.75.75 0 0 1 .75-.75Zm-5 11a.75.75 0 0 1 .75.75v.75h8.5v-.75a.75.75 0 0 1 1.5 0v1.5a.75.75 0 0 1-.75.75H5a.75.75 0 0 1-.75-.75v-1.5A.75.75 0 0 1 5 13.75Z"
 				/>
