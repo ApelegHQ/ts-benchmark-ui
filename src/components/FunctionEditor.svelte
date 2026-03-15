@@ -127,6 +127,10 @@
 		}
 	}
 
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
 	summary::marker {
 		content: '';
 	}
@@ -137,7 +141,7 @@
 		content: '\2795\FE0E';
 	}
 
-	details[open] summary::before {
+	details[open] > summary::before {
 		content: '\2796\FE0E';
 	}
 

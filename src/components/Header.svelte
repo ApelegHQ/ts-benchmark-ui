@@ -320,13 +320,17 @@
 		display: none;
 	}
 
+	.setup-details summary::marker {
+		content: '';
+	}
+
 	.setup-details summary::before {
 		content: '▶';
 		font-size: 0.65rem;
 		transition: transform 0.15s;
 	}
 
-	.setup-details[open] summary::before {
+	.setup-details[open] > summary::before {
 		transform: rotate(90deg);
 	}
 

@@ -204,13 +204,17 @@
 		display: none;
 	}
 
+	.error-details summary::marker {
+		content: '';
+	}
+
 	.error-details summary::before {
 		content: '▸';
 		color: var(--c-red);
 		transition: transform 0.15s ease;
 	}
 
-	.error-details[open] summary::before {
+	.error-details[open] > summary::before {
 		transform: rotate(90deg);
 	}
 
