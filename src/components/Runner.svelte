@@ -294,8 +294,8 @@
 		clearTimeout(timeoutId);
 	};
 
-	onMount(() => {
-		iframeEl = document.createElementNS(
+	const createIframe = (): HTMLIFrameElement => {
+		const iframeEl = document.createElementNS(
 			'http://www.w3.org/1999/xhtml',
 			'iframe',
 		) as HTMLIFrameElement;
@@ -323,10 +323,21 @@
 		} else {
 			iframeEl.sandbox = 'allow-scripts';
 		}
+		if (iframeEl.referrerPolicy !== undefined) {
+			iframeEl.referrerPolicy = 'strict-origin';
+		}
 		iframeEl.src = iframeSrc;
 		iframeEl.title = '';
+
+		iframeEl.height = '1';
+		iframeEl.width = '1';
 		iframeEl.style.setProperty('display', 'none', 'important');
 
+		return iframeEl;
+	}
+
+	onMount(() => {
+		iframeEl = createIframe();
 		document.body.appendChild(iframeEl);
 
 		self.addEventListener('message', onmessage, false);
