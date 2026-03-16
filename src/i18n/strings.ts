@@ -262,5 +262,8 @@ export const STRING_CM_EDITOR_ESCAPE_HATCH_ = [
 ];
 export const STRING_KBD_KEY_ESCAPE_ = 'Escape';
 export const STRING_KBD_KEY_TAB_ = 'Tab\u202f\u2b7e';
-export const STRING_KBD_KEY_SHIFT_TAB_ =
-	'\u21e7\u202fShift\u2013Tab\u202f\u2b7e';
+export const STRING_KBD_KEY_SHIFT_TAB_ = [
+	'\u21e7\u202fShift',
+	'\u2013',
+	'Tab\u202f\u2b7e',
+];

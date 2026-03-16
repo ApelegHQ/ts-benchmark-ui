@@ -120,11 +120,16 @@
 	bind:this={editorContainer}
 ></div>
 {#if cmFocused}
-	<div class="note text-dim" role="alert">
-		{STRING_CM_EDITOR_ESCAPE_HATCH_[0]}<kbd>{STRING_KBD_KEY_ESCAPE_}</kbd
-		>{STRING_CM_EDITOR_ESCAPE_HATCH_[1]}<kbd>{STRING_KBD_KEY_TAB_}</kbd
+	<div class="escape-hatch text-dim" role="alert">
+		{STRING_CM_EDITOR_ESCAPE_HATCH_[0]}<kbd
+			><kbd>{STRING_KBD_KEY_ESCAPE_}</kbd></kbd
+		>{STRING_CM_EDITOR_ESCAPE_HATCH_[1]}<kbd
+			><kbd>{STRING_KBD_KEY_TAB_}</kbd></kbd
 		>{STRING_CM_EDITOR_ESCAPE_HATCH_[2]}<kbd
-			>{STRING_KBD_KEY_SHIFT_TAB_}</kbd
+			><kbd>{STRING_KBD_KEY_SHIFT_TAB_[0]}</kbd
+			>{STRING_KBD_KEY_SHIFT_TAB_[1]}<kbd
+				>{STRING_KBD_KEY_SHIFT_TAB_[2]}</kbd
+			></kbd
 		>{STRING_CM_EDITOR_ESCAPE_HATCH_[3]}
 	</div>
 {/if}
@@ -136,7 +141,15 @@
 		writing-mode: horizontal-tb;
 	}
 
-	.note {
+	.escape-hatch {
 		font-size: 0.8em;
+		padding: 0.5em 0;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.escape-hatch {
+			padding-block: 0.5em;
+			padding-inline: 0;
+		}
 	}
 </style>

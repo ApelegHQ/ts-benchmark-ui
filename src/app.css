@@ -511,3 +511,9 @@ a:hover,
 a:active {
 	color: currentColor;
 }
+
+kbd > kbd {
+	border-radius: 3px;
+	padding: 0.25em;
+	border: 1px solid var(--c-text);
+}

@@ -21,7 +21,7 @@ import type {
 	TrustedTypesWindow,
 } from 'trusted-types/lib';
 
-declare const TrustedTypePolicyFactory: () => {}
+declare const TrustedTypePolicyFactory: () => object;
 
 const p$trustedTypes = 'trustedTypes';
 const m$createScript = 'createScript';
@@ -33,7 +33,10 @@ const trustedTypes = ttSelf[p$trustedTypes];
 let createScript_: (script: string) => string | TrustedScript;
 let createScriptURL_: (url: string) => string | TrustedScriptURL;
 
-if (typeof TrustedTypePolicyFactory === 'function' && trustedTypes) {
+if (
+	typeof TrustedTypePolicyFactory === 'function' &&
+	trustedTypes instanceof TrustedTypePolicyFactory
+) {
 	const policy = trustedTypes.createPolicy('runner', {
 		[m$createScript](script) {
 			return script;
