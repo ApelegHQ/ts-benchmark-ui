@@ -19,6 +19,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte';
 import cssnano from 'cssnano';
 import { existsSync } from 'node:fs';
 import { basename } from 'node:path';
+import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import type { Plugin } from 'postcss';
 import functions from 'postcss-functions';
@@ -121,10 +122,12 @@ export default defineConfig({
 		outDir: 'dist',
 		rollupOptions: {
 			input: {
-				runner: fileURLToPath(
-					new URL('./resources/runner.html', import.meta.url),
-				),
-				index: indexPath,
+				...(process.env.BUILD_RUNNER !== '0' && {
+					runner: fileURLToPath(
+						new URL('./resources/runner.html', import.meta.url),
+					),
+				}),
+				...(process.env.BUILD_INDEX !== '0' && { index: indexPath }),
 			},
 		},
 		target: 'esnext',

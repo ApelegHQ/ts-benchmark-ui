@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import process from 'node:process';
 import { type Plugin } from 'vite';
 import packageJson from '../package.json' with { type: 'json' };
 import gitCommitHash_ from './git-commit-hash.js';
-import process from 'node:process';
 
 export default function customMetaPlugin_(): Plugin {
 	return {
@@ -33,7 +33,9 @@ export default function customMetaPlugin_(): Plugin {
 				'import.meta.serviceWorkerPath': JSON.stringify(
 					process.env.SERVICE_WORKER_PATH ?? '/service-worker.js',
 				),
-				'import.meta.runnerUrl': '"/resources/runner"',
+				'import.meta.runnerUrl': JSON.stringify(
+					process.env.RUNNER_URL ?? '/resources/runner',
+				),
 				'import.meta.pkg.repository':
 					JSON.stringify(Reflect.get(packageJson, 'repository')) ||
 					'undefined',
