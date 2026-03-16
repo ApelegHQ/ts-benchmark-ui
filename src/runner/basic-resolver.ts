@@ -15,13 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import type { TrustedScriptURL } from 'trusted-types/lib';
 import compileFunction from './compile-function.js';
+import { createScriptURL_ as createScriptURL } from './policy.js';
+
+type TSpecifierExpression = string | TrustedScriptURL;
+type TOptionsExpression = { ['with']: Record<string, string> };
 
 const __import__ = (() => {
 	try {
-		return compileFunction(['$'], 'return import($)') as (
-			specifierExpression: string,
+		const fn = compileFunction(['$'], 'return import($)') as (
+			specifierExpression: TSpecifierExpression,
 		) => Promise<unknown>;
+
+		return (url: string) => fn(createScriptURL(url));
 	} catch (e) {
 		return async () => {
 			throw new SyntaxError('Dynamic imports not supported', {
@@ -33,10 +40,13 @@ const __import__ = (() => {
 
 const __import_with_options__ = (() => {
 	try {
-		return compileFunction(['$', '_'], 'return import($,_)') as (
-			specifierExpression: string,
-			optionsExpression: { ['with']: Record<string, string> },
+		const fn = compileFunction(['$', '_'], 'return import($,_)') as (
+			specifierExpression: TSpecifierExpression,
+			optionsExpression: TOptionsExpression,
 		) => Promise<unknown>;
+
+		return (url: string, options: TOptionsExpression) =>
+			fn(createScriptURL(url), options);
 	} catch (e) {
 		return async () => {
 			throw new SyntaxError('Dynamic imports not supported', {

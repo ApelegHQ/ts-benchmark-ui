@@ -334,7 +334,7 @@
 		iframeEl.style.setProperty('display', 'none', 'important');
 
 		return iframeEl;
-	}
+	};
 
 	onMount(() => {
 		iframeEl = createIframe();

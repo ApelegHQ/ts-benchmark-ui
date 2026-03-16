@@ -15,6 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { createScript_ as createScript } from './policy.js';
+
 /**
  * Build a function from user-supplied code string.
  * The code is wrapped in `new Function(...)` and bound via `this`.
@@ -30,11 +32,12 @@ const compileFunction_ = (() => {
 		params: string[],
 		code: string,
 	): (() => TR | Promise<TR>) => {
+		const trustedCode = createScript(code);
 		try {
-			return FunctionCtor(...params, code);
+			return FunctionCtor(...params, trustedCode);
 		} catch (e) {
 			if (e instanceof SyntaxError && code.includes('await')) {
-				return AsyncFunctionCtor(...params, code);
+				return AsyncFunctionCtor(...params, trustedCode);
 			}
 
 			throw e;
