@@ -301,10 +301,28 @@
 		) as HTMLIFrameElement;
 		iframeEl.allow = 'cross-origin-isolated';
 		if (iframeEl.credentialless !== undefined) {
-			// Blink-only
+			// credentialless is Blink-only for now
+			const isCrossOrigin = () => {
+				try {
+					return (
+						new URL(iframeSrc, self.location.href).origin !==
+						(self.origin || self.location.origin)
+					);
+				} catch (e) {
+					void e;
+					return false;
+				}
+			};
+
 			iframeEl.credentialless = true;
+			// allow-same-origin is safe to do for a different origin
+			// This makes localStorage and other APIs available.
+			iframeEl.sandbox = isCrossOrigin()
+				? 'allow-same-origin allow-scripts'
+				: 'allow-scripts';
+		} else {
+			iframeEl.sandbox = 'allow-scripts';
 		}
-		iframeEl.sandbox = 'allow-scripts';
 		iframeEl.src = iframeSrc;
 		iframeEl.title = '';
 		iframeEl.style.setProperty('display', 'none', 'important');
@@ -325,7 +343,10 @@
 
 		return () => {
 			clear();
-			document.body.removeChild(iframeEl);
+			if (iframeEl) {
+				document.body.removeChild(iframeEl);
+				iframeEl = null;
+			}
 		};
 	});
 </script>
