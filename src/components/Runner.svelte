@@ -295,6 +295,22 @@
 	};
 
 	onMount(() => {
+		iframeEl = document.createElementNS(
+			'http://www.w3.org/1999/xhtml',
+			'iframe',
+		) as HTMLIFrameElement;
+		iframeEl.allow = 'cross-origin-isolated';
+		if (iframeEl.credentialless !== undefined) {
+			// Blink-only
+			iframeEl.credentialless = true;
+		}
+		iframeEl.sandbox = 'allow-scripts';
+		iframeEl.src = iframeSrc;
+		iframeEl.title = '';
+		iframeEl.style.setProperty('display', 'none', 'important');
+
+		document.body.appendChild(iframeEl);
+
 		self.addEventListener('message', onmessage, false);
 		self.addEventListener('messageerror', onmessageerror, false);
 		timeoutId = setTimeout(() => {
@@ -307,20 +323,9 @@
 			dispatch('error', { message: errorMessage });
 		}, 5_000);
 
-		return clear;
+		return () => {
+			clear();
+			document.body.removeChild(iframeEl);
+		};
 	});
 </script>
-
-<iframe
-	allow="cross-origin-isolated"
-	bind:this={iframeEl}
-	sandbox="allow-scripts"
-	src={iframeSrc}
-	title=""
-></iframe>
-
-<style>
-	iframe {
-		display: none;
-	}
-</style>

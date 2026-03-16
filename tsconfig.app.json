@@ -20,10 +20,9 @@
 	},
 	"include": [
 		"@types/import-meta.d.ts",
+		"@types/iframe.d.ts",
 		"src/**/*.ts",
 		"src/**/*.js",
-		"src/**/*.svelte",
-		"worker/imports/parse-imports.ts",
-		"worker/imports/parse-imports.test.ts"
+		"src/**/*.svelte"
 	]
 }
