@@ -21,6 +21,7 @@
 		suiteState_ as suiteState,
 	} from './state.js';
 
+	import AppLogo from './components/AppLogo.svelte';
 	import ErrorBanner from './components/ErrorBanner.svelte';
 	import Footer from './components/Footer.svelte';
 	import FunctionList from './components/FunctionList.svelte';
@@ -151,7 +152,7 @@
 {#if ready}
 	<header>
 		<h1>
-			<span class="logo" aria-hidden="true">⚡</span>
+			<AppLogo />
 			{STRING__APP_TITLE_}
 		</h1>
 		<p class="subtitle">
@@ -234,16 +235,6 @@
 	@media not (writing-mode: tb-lr) {
 		header h1 {
 			margin-block-end: 0.25rem;
-		}
-	}
-
-	.logo {
-		margin-right: 0.35em;
-	}
-
-	@media not (writing-mode: tb-lr) {
-		.logo {
-			margin-inline-end: 0.35em;
 		}
 	}
 
