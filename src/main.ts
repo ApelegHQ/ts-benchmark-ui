@@ -57,6 +57,7 @@ const onLoad = (handler: { (): void }) => {
 
 onLoad(() => {
 	const rootId = 'app';
+	const fallbackId = 'fallback';
 
 	const target$ = document.getElementById(rootId);
 	if (!target$) {
@@ -68,14 +69,23 @@ onLoad(() => {
 		target$.removeChild(children$$[i]);
 	}
 
-	// Now, create the App. This needs to be done after replacing body because
-	// the sandbox attaches elements to the body that shouldn't be removed.
-	// Otherwise, this would come before replacing body.
-	mount(App, {
-		['target']: target$,
-	});
+	const fallback$ = document.getElementById(fallbackId);
+	try {
+		mount(App, {
+			['target']: target$,
+		});
 
-	self.onerror = null;
+		if (fallback$) {
+			fallback$.style.setProperty('display', 'none', 'important');
+		}
+
+		self.onerror = null;
+	} catch (e) {
+		target$.style.setProperty('display', 'none', 'important');
+		alert(e instanceof Error ? `${e.name}: ${e.message}` : e);
+
+		throw e;
+	}
 });
 
 registerServiceWorker_(import.meta.serviceWorkerPath).catch(function (error) {

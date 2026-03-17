@@ -36,7 +36,7 @@ export const STRING__APP_INITIALISATION_FAILED_ = 'Initialisation failed';
 export const STRING__APP_INITIALISING_BENCHMARK_STUDIO_ =
 	'Initialising Benchmark Studio';
 export const STRING__APP_INTERACTIVE_JAVASCRIPT_BENCHMARKING_IN_YOUR_BROWSER_ =
-	'Interactive JavaScript benchmarking in your browser.';
+	'Interactive JavaScript performance benchmarking in your browser';
 export const STRING__APP_LINK_COPIED_ = 'Link copied!';
 export const STRING__APP_PLEASE_RELOAD_THE_PAGE_TO_TRY_AGAIN_ =
 	'Please reload the page to try again.';

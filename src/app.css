@@ -129,6 +129,7 @@ body {
 	}
 }
 
+#fallback,
 #app {
 	max-width: 1100px;
 	margin: 0 auto;
@@ -136,6 +137,7 @@ body {
 }
 
 @media not (writing-mode: tb-lr) {
+	#fallback,
 	#app {
 		min-block-size: auto;
 		max-inline-size: 1100px;
