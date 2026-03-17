@@ -34,9 +34,9 @@ export const STRING__APP_ERROR_BANNER_DETAILS_ = 'Detalles';
 export const STRING__APP_ERROR_BANNER_NAME_ = 'Nombre';
 export const STRING__APP_ERROR_BANNER_STACK_TRACE_ = 'Traza de pila';
 export const STRING__APP_FAILED_TO_COPY_ = 'Error al copiar';
-export const STRING__APP_INITIALISATION_FAILED_ = 'Error en la inicialización';
+export const STRING__APP_INITIALISATION_FAILED_ = 'Error de carga';
 export const STRING__APP_INITIALISING_BENCHMARK_STUDIO_ =
-	'Inicializando Benchmark Studio';
+	'Cargando Benchmark Studio';
 export const STRING__APP_INTERACTIVE_JAVASCRIPT_BENCHMARKING_IN_YOUR_BROWSER_ =
 	'Evaluación interactiva del rendimiento de JavaScript en tu navegador';
 export const STRING__APP_LINK_COPIED_ = '¡Enlace copiado!';
@@ -122,10 +122,10 @@ export const STRING__DISTRIBUTION_P25_ = 'p25';
 export const STRING__DISTRIBUTION_P5_ = 'p5';
 export const STRING__DISTRIBUTION_P75_ = 'p75';
 export const STRING__DISTRIBUTION_P95_ = 'p95';
-export const STRING__DISTRIBUTION_PERCENTILE_05_ = 'Percentil 5';
-export const STRING__DISTRIBUTION_PERCENTILE_25_ = 'Percentil 25';
-export const STRING__DISTRIBUTION_PERCENTILE_75_ = 'Percentil 75';
-export const STRING__DISTRIBUTION_PERCENTILE_95_ = 'Percentil 95';
+export const STRING__DISTRIBUTION_PERCENTILE_05_ = '5.\u00ba percentil';
+export const STRING__DISTRIBUTION_PERCENTILE_25_ = '25.\u00ba percentil';
+export const STRING__DISTRIBUTION_PERCENTILE_75_ = '75.\u00ba percentil';
+export const STRING__DISTRIBUTION_PERCENTILE_95_ = '95.\u00ba percentil';
 export const STRING__DISTRIBUTION_SAMPLES_ = 'muestras';
 export const STRING__DISTRIBUTION_WHISKERS_ = 'bigotes';
 
@@ -143,7 +143,7 @@ export const STRING__DOWNLOAD_REPORT_PREPARING_XUNIT_ = 'Preparando xUnit…';
 export const STRING__DOWNLOAD_REPORT_PREPARING_XUNIT_EXPORT_ =
 	'Preparando la exportación xUnit…';
 export const STRING__DOWNLOAD_REPORT_RAW_SUITE_REPORT_ =
-	'Informe sin procesar de la suite';
+	'Informe en bruto de la suite';
 export const STRING__DOWNLOAD_REPORT_UNABLE_TO_PREPARE_XUNIT_EXPORT_ =
 	'No se pudo preparar la exportación xUnit.';
 export const STRING__DOWNLOAD_REPORT_XUNIT_ = 'xUnit';
@@ -206,7 +206,7 @@ export const STRING__LEADERBOARD_MARGIN_OF_ERROR_ = 'Margen de error';
 export const STRING__LEADERBOARD_MEAN_ = 'Media';
 export const STRING__LEADERBOARD_MOE_ = 'MOE';
 export const STRING__LEADERBOARD_OPS_PER_SECOND_ = 'ops/s';
-export const STRING__LEADERBOARD_RANK_ = ['Puesto #', ''];
+export const STRING__LEADERBOARD_RANK_ = ['Puesto \u2116', ''];
 export const STRING__LEADERBOARD_RELATIVE_ = 'Relativo';
 export const STRING__LEADERBOARD_RELATIVE_THROUGHPUT_ = [
 	'',
@@ -258,7 +258,7 @@ export const STRING__SPEED_MATRIX_RED_LT_1_ =
 	'rojo &lt; 1 (la fila es más lenta) ·';
 export const STRING__SPEED_MATRIX_SIGNIFICANT_ = 'significativo';
 export const STRING__SPEED_MATRIX_RAW_RATIOS_ =
-	'Se muestran las proporciones sin procesar — algunas mediciones con ajustes de línea base quedan en o por debajo del nivel de ruido, lo que hace que las proporciones ajustadas sean poco fiables.';
+	'Se muestran las proporciones en bruto — algunas mediciones con ajustes de línea base quedan en o por debajo del nivel de ruido, lo que hace que las proporciones ajustadas sean poco fiables.';
 
 export const STRING__WINNER_FASTEST_ = ['', ' es el más rápido '];
 export const STRING__WINNER_FASTER_THAN_ = ['— ', ' más rápido que ', ' vs '];
