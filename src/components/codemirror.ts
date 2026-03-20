@@ -84,8 +84,37 @@ export async function loadModules_(): Promise<ICodeMirrorModules> {
 	};
 }
 
+const supportsCssSelector = (() => {
+	if (
+		typeof CSS === 'undefined' ||
+		!CSS ||
+		typeof CSS.supports !== 'function'
+	) {
+		return () => false;
+	}
+	return (s: string) => {
+		try {
+			return CSS.supports(`selector(${s})`);
+		} catch (e) {
+			void e;
+			return false;
+		}
+	};
+})();
+
 export function buildTheme_(modules: ICodeMirrorModules) {
 	const { EditorView } = modules.view_;
+
+	const supportsWkScrollbar = supportsCssSelector('::-webkit-scrollbar');
+	const supportsWkScrollbarThumb = supportsCssSelector(
+		'::-webkit-scrollbar-thumb',
+	);
+	const supportsWkScrollbarTrack = supportsCssSelector(
+		'::-webkit-scrollbar-track',
+	);
+	const supportsWkScrollbarThumbHover = supportsCssSelector(
+		'::-webkit-scrollbar-thumb:hover',
+	);
 
 	return EditorView.theme(
 		{
@@ -208,20 +237,28 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 				color: 'var(--c-text-muted)',
 				fontStyle: 'italic',
 			},
-			'& ::-webkit-scrollbar': {
-				width: '6px',
-				height: '6px',
-			},
-			'& ::-webkit-scrollbar-track': {
-				background: 'transparent',
-			},
-			'& ::-webkit-scrollbar-thumb': {
-				background: 'var(--c-border)',
-				borderRadius: '3px',
-			},
-			'& ::-webkit-scrollbar-thumb:hover': {
-				background: 'var(--c-text-muted)',
-			},
+			...(supportsWkScrollbar && {
+				'& ::-webkit-scrollbar': {
+					width: '6px',
+					height: '6px',
+				},
+			}),
+			...(supportsWkScrollbarTrack && {
+				'& ::-webkit-scrollbar-track': {
+					background: 'transparent',
+				},
+			}),
+			...(supportsWkScrollbarThumb && {
+				'& ::-webkit-scrollbar-thumb': {
+					background: 'var(--c-border)',
+					borderRadius: '3px',
+				},
+			}),
+			...(supportsWkScrollbarThumbHover && {
+				'& ::-webkit-scrollbar-thumb:hover': {
+					background: 'var(--c-text-muted)',
+				},
+			}),
 		},
 		{ dark: false },
 	);
@@ -394,7 +431,22 @@ export async function createEditor_(
 		extensions,
 	});
 
-	const view = new EditorView({ state, parent: opts.parent_ });
+	const parent = opts.parent_;
+
+	// Firefox seems to be problematic for loading the necessary styles
+	const isGecko =
+		navigator.vendor === '' && navigator.productSub === '20100101';
+	const useShadowRoot =
+		!isGecko &&
+		typeof ShadowRoot === 'function' &&
+		typeof parent.attachShadow === 'function';
+
+	// Prefer a shadow root because that isolates the styles
+	const editorParent: HTMLElement | ShadowRoot = useShadowRoot
+		? parent.attachShadow({ mode: 'closed' })
+		: parent;
+
+	const view = new EditorView({ state, parent: editorParent });
 
 	if (opts.labels_) {
 		view.contentDOM.setAttribute(
