@@ -435,11 +435,14 @@ export async function createEditor_(
 
 	const parent = opts.parent_;
 
-	// Firefox seems to be problematic for loading the necessary styles
-	const isGecko =
-		navigator.vendor === '' && navigator.productSub === '20100101';
+	// Interacting with a Shadow DOM editor in Goanna is glitchy
+	const isGoanna =
+		navigator.vendor === '' &&
+		navigator.productSub === '20100101' &&
+		/ Goanna\//.test(navigator.userAgent);
 	const useShadowRoot =
-		!isGecko &&
+		!isGoanna &&
+		typeof CSSStyleSheet === 'function' &&
 		typeof ShadowRoot === 'function' &&
 		typeof parent.attachShadow === 'function';
 
@@ -458,6 +461,14 @@ export async function createEditor_(
 				.filter((el) => !!el)
 				.join(' '),
 		);
+	}
+
+	// This dummy rule seems to be needed in Firefox so that styles are
+	// applied to the editor.
+	if (editorParent instanceof ShadowRoot) {
+		const sheet = new CSSStyleSheet();
+		editorParent.adoptedStyleSheets.push(sheet);
+		sheet.insertRule('*{}');
 	}
 
 	return view;
