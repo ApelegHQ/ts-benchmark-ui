@@ -136,6 +136,8 @@ export function buildTheme_(modules: ICodeMirrorModules) {
 				maxHeight: '24rem',
 				fontFamily: 'var(--font-mono)',
 				lineHeight: '1.6',
+				scrollbarWidth: 'var(--scrollbar-width)',
+				scrollbarColor: 'var(--c-border) transparent',
 			},
 			'.cm-content': {
 				caretColor: 'var(--c-accent)',

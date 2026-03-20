@@ -59,6 +59,7 @@ html,
 		'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	--radius: 8px;
 	--radius-sm: 4px;
+	--scrollbar-width: auto;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -463,6 +464,11 @@ table.data-table tr:last-child td {
 
 /* ── Scrollbar styling ─────────────────────────────── */
 
+* {
+	scrollbar-color: var(--c-border) transparent;
+	scrollbar-width: var(--scrollbar-width);
+}
+
 ::-webkit-scrollbar {
 	width: 6px;
 	height: 6px;
@@ -484,8 +490,17 @@ table.data-table tr:last-child td {
 	border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-	background: var(--c-text-muted);
+@supports selector(::-webkit-scrollbar-thumb:hover) {
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--c-text-muted);
+	}
+}
+
+@media (forced-colors: active) {
+	/* Scrollbar disappears otherwise */
+	:root {
+		--scrollbar-width: thin;
+	}
 }
 
 .sr-only {
