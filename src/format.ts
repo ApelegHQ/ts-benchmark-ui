@@ -104,7 +104,7 @@ export const formatTime_ = (ms: number): string => {
 	if (a < 1) return formatTimeHelper('microsecond', ms * 1e3);
 	if (a < 1000) return formatTimeHelper('millisecond', ms * 1);
 	return formatTimeHelper('second', ms * 1e-3);
-}
+};
 
 ////
 
@@ -212,14 +212,14 @@ export const significance_ = (p: number): '***' | '**' | '*' | 'n.s.' => {
 	if (p < 0.01) return '**';
 	if (p < 0.05) return '*';
 	return 'n.s.';
-}
+};
 
 /**
  * Coefficient of variation.
  */
 export const cv_ = (f: IFunctionStatistics): number => {
 	return f.mean > 0 ? f.stdDev / f.mean : 0;
-}
+};
 
 /**
  * CSS class for CV color coding.
@@ -229,7 +229,7 @@ export const cvClass_ = (cv: number): string => {
 	if (cv < 0.05) return 'text-cyan';
 	if (cv < 0.1) return 'text-yellow';
 	return 'text-red';
-}
+};
 
 /**
  * Locale-formatted number.
@@ -237,7 +237,7 @@ export const cvClass_ = (cv: number): string => {
 export const formatNumber_ = (n: number): string => {
 	const locale = getLocale();
 	return n.toLocaleString(locale);
-}
+};
 
 export const formatPercent_ = (() => {
 	try {

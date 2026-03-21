@@ -203,6 +203,11 @@ export const STRING__LEADERBOARD_RELATIVE_THROUGHPUT_ = [
 ];
 export const STRING__LEADERBOARD_SLOWER_ = ['', ' slower'];
 
+export const STRING__LANGUAGE_SELECTOR_ACTIVE_LANGUAGE_NAME_ = 'English';
+export const STRING__LANGUAGE_SELECTOR_ARIA_LABEL_ = ['Current language: ', ''];
+export const STRING__LANGUAGE_SELECTOR_ARIA_LABEL_MENU_ = 'Select language';
+export const STRING__LANGUAGE_SELECTOR_TITLE_ = 'Languages';
+
 export const STRING__MADE_WITH_LOVE_BY_ = ['Made with \u2764\ufe0f by ', ''];
 
 export const STRING__REPORT_VIEW_BENCHMARK_RESULTS_ = 'Benchmark Results';

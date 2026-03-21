@@ -26,6 +26,7 @@
 	import Footer from './components/Footer.svelte';
 	import FunctionList from './components/FunctionList.svelte';
 	import Header from './components/Header.svelte';
+	import LanguageSelector from './components/LanguageSelector.svelte';
 	import ReportView from './components/report/ReportView.svelte';
 	import RunButton from './components/RunButton.svelte';
 	import Runner from './components/Runner.svelte';
@@ -151,6 +152,10 @@
 
 {#if ready}
 	<header>
+		<div class="header-topbar">
+			<LanguageSelector />
+		</div>
+
 		<h1>
 			<AppLogo />
 			{STRING__APP_TITLE_}
@@ -215,13 +220,24 @@
 	}
 
 	header {
+		position: relative;
 		text-align: center;
 		margin-bottom: 2rem;
+	}
+
+	.header-topbar {
+		display: flex;
+		justify-content: flex-end;
+		margin-bottom: 1rem;
 	}
 
 	@media not (writing-mode: tb-lr) {
 		header {
 			margin-block-end: 2rem;
+		}
+
+		.header-topbar {
+			margin-block-end: 1rem;
 		}
 	}
 

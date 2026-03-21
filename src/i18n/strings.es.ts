@@ -214,6 +214,11 @@ export const STRING__LEADERBOARD_RELATIVE_THROUGHPUT_ = [
 ];
 export const STRING__LEADERBOARD_SLOWER_ = ['', ' más lento'];
 
+export const STRING__LANGUAGE_SELECTOR_ACTIVE_LANGUAGE_NAME_ = 'castellano';
+export const STRING__LANGUAGE_SELECTOR_ARIA_LABEL_ = ['Idioma actual: ', ''];
+export const STRING__LANGUAGE_SELECTOR_ARIA_LABEL_MENU_ = 'Seleccionar idioma';
+export const STRING__LANGUAGE_SELECTOR_TITLE_ = 'Idiomas';
+
 export const STRING__MADE_WITH_LOVE_BY_ = ['Hecho con ❤️ por ', ''];
 
 export const STRING__REPORT_VIEW_BENCHMARK_RESULTS_ =
