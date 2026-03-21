@@ -20,6 +20,7 @@
 		IPairedComparison,
 	} from '@apeleghq/benchmark/types';
 	import {
+		format3SD_ as format3SD,
 		formatMultiplier_ as formatMultiplier,
 		formatPValue_ as formatPValue,
 		formatTime_ as formatTime,
@@ -119,7 +120,7 @@
 						)}{STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_}
 					</p>
 					<p class="comp-detail text-dim">
-						{STRING__COMPARISONS_T_PREFIX_}{c.tStatistic.toFixed(3)} &nbsp;
+						{STRING__COMPARISONS_T_PREFIX_}{format3SD(c.tStatistic)} &nbsp;
 						{STRING__COMPARISONS_DF_PREFIX_}{c.degreesOfFreedom}
 						&nbsp; {STRING__COMPARISONS_SE_DELTA_PREFIX_}{formatTime(
 							seD,

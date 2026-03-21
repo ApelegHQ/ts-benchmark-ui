@@ -56,10 +56,10 @@ export const STRING__BASELINE_CONSIDER_INCREASING_WORK_PER_ITERATION_FOR_MORE_AC
 export const STRING__BASELINE_MEASUREMENT_OVERHEAD_ = 'Measurement Overhead';
 export const STRING__BASELINE_NEGLIGIBLE_ = 'negligible';
 export const STRING__BASELINE_OF_THE_FASTEST_FUNCTION_ =
-	'% of the fastest function.';
+	' of the fastest function.';
 export const STRING__BASELINE_OVERHEAD_IS_ = [
 	'Overhead is ',
-	'% of the fastest —',
+	' of the fastest —',
 ];
 export const STRING__BASELINE_PER_ITERATION_ = ['', '/iter'];
 

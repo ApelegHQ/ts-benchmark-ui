@@ -18,6 +18,7 @@
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import {
 		formatMultiplier_ as formatMultiplier,
+		formatNumber_ as formatNumber,
 		formatOps_ as formatOps,
 		formatTime_ as formatTime,
 	} from '../../format.js';
@@ -116,7 +117,7 @@
 								max="10000"
 								value={bw * 100}
 								class={`r${i}`}
-								aria-label={`${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[0]}${bw.toFixed(0)}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[1]}`}
+								aria-label={`${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[0]}${formatNumber(Math.round(bw))}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[1]}`}
 							></meter>
 							<span class="bar-label">
 								{#if i === 0}

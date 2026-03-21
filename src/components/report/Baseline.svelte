@@ -16,7 +16,10 @@
 
 <script lang="ts">
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
-	import { formatTime_ as formatTime } from '../../format.js';
+	import {
+		formatPercent_ as formatPercent,
+		formatTime_ as formatTime,
+	} from '../../format.js';
 	import {
 		STRING__BASELINE_ALL_REPORTED_TIMES_HAVE_THIS_OVERHEAD_SUBTRACTED_,
 		STRING__BASELINE_BASELINE_,
@@ -60,9 +63,9 @@
 			{#if isHigh}
 				<span class="text-yellow">⚠</span>
 				<span class="text-yellow">
-					{STRING__BASELINE_OVERHEAD_IS_[0]}{(
-						overheadRatio * 100
-					).toFixed(1)}{STRING__BASELINE_OF_THE_FASTEST_FUNCTION_}
+					{STRING__BASELINE_OVERHEAD_IS_[0]}{formatPercent(
+						overheadRatio,
+					)}{STRING__BASELINE_OF_THE_FASTEST_FUNCTION_}
 				</span>
 				<br />
 				<span class="text-dim high-overhead">
@@ -70,9 +73,9 @@
 				</span>
 			{:else}
 				<span class="text-dim">
-					{STRING__BASELINE_OVERHEAD_IS_[0]}{(
-						overheadRatio * 100
-					).toFixed(2)}{STRING__BASELINE_OVERHEAD_IS_[1]}
+					{STRING__BASELINE_OVERHEAD_IS_[0]}{formatPercent(
+						overheadRatio,
+					)}{STRING__BASELINE_OVERHEAD_IS_[1]}
 				</span>
 				<span class="text-green">{STRING__BASELINE_NEGLIGIBLE_}</span>
 			{/if}

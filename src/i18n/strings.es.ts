@@ -58,10 +58,10 @@ export const STRING__BASELINE_CONSIDER_INCREASING_WORK_PER_ITERATION_FOR_MORE_AC
 export const STRING__BASELINE_MEASUREMENT_OVERHEAD_ = 'Sobrecarga de medición';
 export const STRING__BASELINE_NEGLIGIBLE_ = 'despreciable';
 export const STRING__BASELINE_OF_THE_FASTEST_FUNCTION_ =
-	'% de la función más rápida.';
+	' de la función más rápida.';
 export const STRING__BASELINE_OVERHEAD_IS_ = [
 	'La sobrecarga es ',
-	'% de la más rápida —',
+	' de la más rápida —',
 ];
 export const STRING__BASELINE_PER_ITERATION_ = ['', '/iter'];
 

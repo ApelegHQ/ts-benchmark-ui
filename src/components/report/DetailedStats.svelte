@@ -18,7 +18,8 @@
 	import type { IFunctionStatistics } from '@apeleghq/benchmark/types';
 	import {
 		cvClass_ as cvClass,
-		cvPercent_ as cvPercent,
+		cv_ as cv_,
+		formatPercent_ as formatPercent,
 		formatTime_ as formatTime,
 	} from '../../format.js';
 	import {
@@ -91,13 +92,13 @@
 			</thead>
 			<tbody>
 				{#each fns as f}
-					{@const cv = cvPercent(f)}
+					{@const cv = cv_(f)}
 					<tr>
 						<td>{f.name}</td>
 						<td class="num">{formatTime(f.mean)}</td>
 						<td class="num">{formatTime(f.median)}</td>
 						<td class="num">{formatTime(f.stdDev)}</td>
-						<td class="num {cvClass(cv)}">{cv.toFixed(1)}%</td>
+						<td class="num {cvClass(cv)}">{formatPercent(cv)}</td>
 						<td class="num">{formatTime(f.min)}</td>
 						<td class="num">{formatTime(f.max)}</td>
 						<td class="num">{formatTime(f.sem)}</td>
