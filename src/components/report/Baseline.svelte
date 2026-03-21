@@ -24,10 +24,10 @@
 		STRING__BASELINE_ALL_REPORTED_TIMES_HAVE_THIS_OVERHEAD_SUBTRACTED_,
 		STRING__BASELINE_BASELINE_,
 		STRING__BASELINE_CONSIDER_INCREASING_WORK_PER_ITERATION_FOR_MORE_ACCURATE_RESULTS_,
+		STRING__BASELINE_HIGH_OVERHEAD_,
 		STRING__BASELINE_MEASUREMENT_OVERHEAD_,
-		STRING__BASELINE_NEGLIGIBLE_,
-		STRING__BASELINE_OF_THE_FASTEST_FUNCTION_,
 		STRING__BASELINE_OVERHEAD_IS_,
+		STRING__BASELINE_OVERHEAD_NEGLIGIBLE_,
 		STRING__BASELINE_PER_ITERATION_,
 	} from '../../i18n/strings.js';
 
@@ -63,9 +63,9 @@
 			{#if isHigh}
 				<span class="text-yellow">⚠</span>
 				<span class="text-yellow">
-					{STRING__BASELINE_OVERHEAD_IS_[0]}{formatPercent(
+					{STRING__BASELINE_HIGH_OVERHEAD_[0]}{formatPercent(
 						overheadRatio,
-					)}{STRING__BASELINE_OF_THE_FASTEST_FUNCTION_}
+					)}{STRING__BASELINE_HIGH_OVERHEAD_[1]}
 				</span>
 				<br />
 				<span class="text-dim high-overhead">
@@ -77,7 +77,9 @@
 						overheadRatio,
 					)}{STRING__BASELINE_OVERHEAD_IS_[1]}
 				</span>
-				<span class="text-green">{STRING__BASELINE_NEGLIGIBLE_}</span>
+				<span class="text-green"
+					>{STRING__BASELINE_OVERHEAD_NEGLIGIBLE_}</span
+				>
 			{/if}
 		</p>
 	{/if}

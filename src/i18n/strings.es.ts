@@ -56,9 +56,11 @@ export const STRING__BASELINE_BASELINE_ = 'Línea base';
 export const STRING__BASELINE_CONSIDER_INCREASING_WORK_PER_ITERATION_FOR_MORE_ACCURATE_RESULTS_ =
 	'Considerá aumentar el trabajo por iteración para obtener resultados más precisos.';
 export const STRING__BASELINE_MEASUREMENT_OVERHEAD_ = 'Sobrecarga de medición';
-export const STRING__BASELINE_NEGLIGIBLE_ = 'despreciable';
-export const STRING__BASELINE_OF_THE_FASTEST_FUNCTION_ =
-	' de la función más rápida.';
+export const STRING__BASELINE_OVERHEAD_NEGLIGIBLE_ = 'despreciable';
+export const STRING__BASELINE_HIGH_OVERHEAD_ = [
+	'La sobrecarga es ',
+	' de la función más rápida',
+];
 export const STRING__BASELINE_OVERHEAD_IS_ = [
 	'La sobrecarga es ',
 	' de la más rápida —',
