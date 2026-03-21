@@ -52,13 +52,16 @@
 	<div class="table-scroll">
 		<table class="data-table" aria-label={STRING__SPEED_MATRIX_ARIA_LABEL_}>
 			<caption class="matrix-caption text-dim">
-				{STRING__SPEED_MATRIX_CAPTION_}
-				<span class="text-green"
-					>{STRING__SPEED_MATRIX_GREEN_GT_1_}</span
-				>
-				<span class="text-red">{STRING__SPEED_MATRIX_RED_LT_1_}</span>
-				<span class="text-yellow">*</span>
-				{STRING__SPEED_MATRIX_SIGNIFICANT_}
+				<ul>
+					<li>{STRING__SPEED_MATRIX_CAPTION_}</li>
+					<li class="text-green">
+						{STRING__SPEED_MATRIX_GREEN_GT_1_}
+					</li>
+					<li class="text-red">{STRING__SPEED_MATRIX_RED_LT_1_}</li>
+					<li class="text-yellow">
+						{STRING__SPEED_MATRIX_SIGNIFICANT_[0]}*{STRING__SPEED_MATRIX_SIGNIFICANT_[1]}
+					</li>
+				</ul>
 			</caption>
 
 			<thead>
@@ -126,6 +129,19 @@
 			margin-bottom: 0;
 			margin-block-end: 0.75rem;
 		}
+	}
+
+	.matrix-caption li {
+		display: inline;
+	}
+
+	.matrix-caption li::after {
+		content: ' · ';
+		color: var(--c-text-dim);
+	}
+
+	.matrix-caption li:last-child::after {
+		content: '';
 	}
 
 	.table-scroll {

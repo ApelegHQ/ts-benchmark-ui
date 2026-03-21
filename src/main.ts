@@ -77,6 +77,20 @@ onLoad(() => {
 
 		if (fallback$) {
 			fallback$.style.setProperty('display', 'none', 'important');
+			const main$ = fallback$.querySelector('main');
+			if (main$ && main$.parentNode) {
+				const section$ = document.createElementNS(
+					'http://www.w3.org/1999/xhtml',
+					'div',
+				);
+				while (main$.childNodes.length !== 0) {
+					const node = main$.childNodes[0];
+					main$.removeChild(node);
+					section$.appendChild(node);
+				}
+
+				main$.parentNode.replaceChild(section$, main$);
+			}
 		}
 
 		self.onerror = null;

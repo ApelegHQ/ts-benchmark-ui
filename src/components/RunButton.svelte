@@ -52,7 +52,9 @@
 
 	{#if running && progress}
 		<div class="progress-info" role="status" aria-live="polite">
-			<progress max={progress.totalTrials} value={progress.trial - 1}
+			<progress
+				max={progress.totalTrials}
+				value={String(progress.trial - 1)}
 			></progress>
 			<div class="progress-text">
 				{STRING__RUN_BUTTON_TRIAL_[0]}{progress.trial}{STRING__RUN_BUTTON_TRIAL_[1]}{progress.totalTrials}{STRING__RUN_BUTTON_TRIAL_[2]}

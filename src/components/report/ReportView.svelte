@@ -53,17 +53,23 @@
 	<div class="report-header card">
 		<div class="report-header-main">
 			<h2 class="report-title">{report.name}</h2>
-			<p class="report-meta">
-				{formatNumber(
-					report.config.trials,
-				)}{STRING__REPORT_VIEW_TRIALS_SHORT_}
-				{formatNumber(
-					report.config.iterationsPerTrial,
-				)}{STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_}
-				{formatNumber(
-					report.config.warmupIterations,
-				)}{STRING__REPORT_VIEW_WARMUP_SHORT_}
-			</p>
+			<ul class="report-meta">
+				<li>
+					{STRING__REPORT_VIEW_TRIALS_SHORT_[0]}{formatNumber(
+						report.config.trials,
+					)}{STRING__REPORT_VIEW_TRIALS_SHORT_[1]}
+				</li>
+				<li>
+					{STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_[0]}{formatNumber(
+						report.config.iterationsPerTrial,
+					)}{STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_[1]}
+				</li>
+				<li>
+					{STRING__REPORT_VIEW_WARMUP_SHORT_[0]}{formatNumber(
+						report.config.warmupIterations,
+					)}{STRING__REPORT_VIEW_WARMUP_SHORT_[1]}
+				</li>
+			</ul>
 		</div>
 		<div class="report-actions">
 			<DownloadReport {report} />
@@ -101,14 +107,19 @@
 	{/if}
 
 	<footer class="report-footer">
-		<p>
-			{STRING__REPORT_VIEW_SIGNIFICANCE_}
-			<span class="text-yellow text-bold">***</span> p{'<'}0.001 &nbsp;
-			<span class="text-yellow text-bold">**</span> p{'<'}0.01 &nbsp;
-			<span class="text-yellow text-bold">*</span> p{'<'}0.05 &nbsp;
-			<span class="text-muted">n.s.</span>
-			{STRING__REPORT_VIEW_NOT_SIGNIFICANT_}
-		</p>
+		<section>
+			<h3>{STRING__REPORT_VIEW_SIGNIFICANCE_}</h3>
+			<dl>
+				<dt class="text-yellow text-bold">***</dt>
+				<dd>p{'<'}{formatNumber(0.001)}</dd>
+				<dt class="text-yellow text-bold">**</dt>
+				<dd>p{'<'}{formatNumber(0.01)}</dd>
+				<dt class="text-yellow text-bold">*</dt>
+				<dd>p{'<'}0.05</dd>
+				<dt class="text-muted">n.s.</dt>
+				<dd>{STRING__REPORT_VIEW_NOT_SIGNIFICANT_}</dd>
+			</dl>
+		</section>
 		<p class="text-dim">
 			{STRING__REPORT_VIEW_PAIRED_T_TEST_ON_BASELINE_CORRECTED_PER_ITERATION_TIMES_}
 		</p>
@@ -202,6 +213,18 @@
 		font-family: var(--font-mono);
 	}
 
+	.report-meta li {
+		display: inline;
+	}
+
+	.report-meta li::after {
+		content: ' · ';
+	}
+
+	.report-meta li:last-child::after {
+		content: '';
+	}
+
 	.report-footer {
 		margin-top: 2rem;
 		padding-top: 1rem;
@@ -210,6 +233,25 @@
 		color: var(--c-text-dim);
 		text-align: center;
 		line-height: 1.8;
+	}
+
+	.report-footer h3 {
+		font: inherit;
+	}
+
+	.report-footer h3,
+	.report-footer dl,
+	.report-footer dt,
+	.report-footer dd {
+		display: inline;
+	}
+
+	.report-footer dd::after {
+		content: ' · ';
+	}
+
+	.report-footer dd:last-child::after {
+		content: '';
 	}
 
 	@media not (writing-mode: tb-lr) {

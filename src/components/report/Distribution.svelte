@@ -268,7 +268,7 @@
 		</svg>
 	</div>
 
-	<legend class="legend">
+	<figcaption class="legend">
 		<span class="legend-item">
 			<span class="legend-swatch whiskers">╷</span>
 			<span class="text-dim"
@@ -303,7 +303,7 @@
 			<span class="legend-dot samples"></span>
 			<span class="text-dim">{STRING__DISTRIBUTION_SAMPLES_}</span>
 		</span>
-	</legend>
+	</figcaption>
 </figure>
 
 <style>

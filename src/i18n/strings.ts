@@ -211,15 +211,18 @@ export const STRING__LANGUAGE_SELECTOR_TITLE_ = 'Languages';
 export const STRING__MADE_WITH_LOVE_BY_ = ['Made with \u2764\ufe0f by ', ''];
 
 export const STRING__REPORT_VIEW_BENCHMARK_RESULTS_ = 'Benchmark Results';
-export const STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_ = ' iter/trial ·';
+export const STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_ = [
+	'',
+	' iter/trial',
+];
 export const STRING__REPORT_VIEW_NO_BENCHMARK_FUNCTIONS_FOUND_IN_THE_REPORT_ =
 	'No benchmark functions found in the report.';
 export const STRING__REPORT_VIEW_NOT_SIGNIFICANT_ = 'not significant';
 export const STRING__REPORT_VIEW_PAIRED_T_TEST_ON_BASELINE_CORRECTED_PER_ITERATION_TIMES_ =
 	'Paired t-test on baseline-corrected per-iteration times.';
 export const STRING__REPORT_VIEW_SIGNIFICANCE_ = 'Significance:';
-export const STRING__REPORT_VIEW_TRIALS_SHORT_ = ' trials ·';
-export const STRING__REPORT_VIEW_WARMUP_SHORT_ = ' warmup';
+export const STRING__REPORT_VIEW_TRIALS_SHORT_ = ['', ' trials'];
+export const STRING__REPORT_VIEW_WARMUP_SHORT_ = ['', ' warmup'];
 
 export const STRING__RUN_BUTTON_BASELINE_ = 'baseline';
 export const STRING__RUN_BUTTON_BENCHMARK_IS_RUNNING_ = 'Benchmark is running';
@@ -241,10 +244,10 @@ export const STRING__RUNNER_TIMED_OUT_WAITING_FOR_HANDSHAKE_MESSAGE_FROM_RUNNER_
 
 export const STRING__SPEED_MATRIX_ = 'Speed Matrix';
 export const STRING__SPEED_MATRIX_ARIA_LABEL_ = 'Speed comparison matrix';
-export const STRING__SPEED_MATRIX_CAPTION_ = 'Cell = column time ÷ row time ·';
-export const STRING__SPEED_MATRIX_GREEN_GT_1_ = 'green > 1 (row is faster) ·';
-export const STRING__SPEED_MATRIX_RED_LT_1_ = 'red < 1 (row is slower) ·';
-export const STRING__SPEED_MATRIX_SIGNIFICANT_ = 'significant';
+export const STRING__SPEED_MATRIX_CAPTION_ = 'Cell = column time ÷ row time';
+export const STRING__SPEED_MATRIX_GREEN_GT_1_ = 'green > 1 (row is faster)';
+export const STRING__SPEED_MATRIX_RED_LT_1_ = 'red < 1 (row is slower)';
+export const STRING__SPEED_MATRIX_SIGNIFICANT_ = ['', ' significant'];
 export const STRING__SPEED_MATRIX_RAW_RATIOS_ =
 	'Raw ratios shown \u2014 some baseline-adjusted measurements fall at or below the noise floor, making adjusted ratios unreliable.';
 

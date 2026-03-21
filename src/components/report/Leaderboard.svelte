@@ -115,7 +115,7 @@
 							<meter
 								min="0"
 								max="10000"
-								value={bw * 100}
+								value={String(bw * 100)}
 								class={`r${i}`}
 								aria-label={`${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[0]}${formatNumber(Math.round(bw))}${STRING__LEADERBOARD_RELATIVE_THROUGHPUT_[1]}`}
 							></meter>

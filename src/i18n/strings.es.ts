@@ -223,15 +223,18 @@ export const STRING__MADE_WITH_LOVE_BY_ = ['Hecho con ❤️ por ', ''];
 
 export const STRING__REPORT_VIEW_BENCHMARK_RESULTS_ =
 	'Resultados del benchmark';
-export const STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_ = ' iter/prueba ·';
+export const STRING__REPORT_VIEW_ITERATIONS_PER_TRIAL_SHORT_ = [
+	'',
+	' iter/prueba',
+];
 export const STRING__REPORT_VIEW_NO_BENCHMARK_FUNCTIONS_FOUND_IN_THE_REPORT_ =
 	'No se encontraron funciones de benchmark en el informe.';
 export const STRING__REPORT_VIEW_NOT_SIGNIFICANT_ = 'no significativo';
 export const STRING__REPORT_VIEW_PAIRED_T_TEST_ON_BASELINE_CORRECTED_PER_ITERATION_TIMES_ =
 	'Prueba t pareada sobre tiempos por iteración con corrección de línea base.';
 export const STRING__REPORT_VIEW_SIGNIFICANCE_ = 'Significancia:';
-export const STRING__REPORT_VIEW_TRIALS_SHORT_ = ' pruebas ·';
-export const STRING__REPORT_VIEW_WARMUP_SHORT_ = ' calentamiento';
+export const STRING__REPORT_VIEW_TRIALS_SHORT_ = ['', ' pruebas'];
+export const STRING__REPORT_VIEW_WARMUP_SHORT_ = ['', ' calentamiento'];
 
 export const STRING__RUN_BUTTON_BASELINE_ = 'línea base';
 export const STRING__RUN_BUTTON_BENCHMARK_IS_RUNNING_ =
@@ -256,12 +259,11 @@ export const STRING__SPEED_MATRIX_ = 'Matriz de velocidad';
 export const STRING__SPEED_MATRIX_ARIA_LABEL_ =
 	'Matriz de comparación de velocidad';
 export const STRING__SPEED_MATRIX_CAPTION_ =
-	'Celda = tiempo de columna ÷ tiempo de fila ·';
+	'Celda = tiempo de columna ÷ tiempo de fila';
 export const STRING__SPEED_MATRIX_GREEN_GT_1_ =
-	'verde &gt; 1 (la fila es más rápida) ·';
-export const STRING__SPEED_MATRIX_RED_LT_1_ =
-	'rojo &lt; 1 (la fila es más lenta) ·';
-export const STRING__SPEED_MATRIX_SIGNIFICANT_ = 'significativo';
+	'verde > 1 (la fila es más rápida)';
+export const STRING__SPEED_MATRIX_RED_LT_1_ = 'rojo < 1 (la fila es más lenta)';
+export const STRING__SPEED_MATRIX_SIGNIFICANT_ = ['', ' significativo'];
 export const STRING__SPEED_MATRIX_RAW_RATIOS_ =
 	'Se muestran las proporciones en bruto — algunas mediciones con ajustes de línea base quedan en o por debajo del nivel de ruido, lo que hace que las proporciones ajustadas sean poco fiables.';
 
