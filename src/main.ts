@@ -57,41 +57,29 @@ const onLoad = (handler: { (): void }) => {
 
 onLoad(() => {
 	const rootId = 'app';
-	const fallbackId = 'fallback';
 
 	const target$ = document.getElementById(rootId);
 	if (!target$) {
 		throw new Error('Root element not found');
 	}
 
+	const els$$ = [] as Node[];
 	const children$$ = target$.children;
 	for (let i = children$$.length - 1; i >= 0; i--) {
-		target$.removeChild(children$$[i]);
+		const child$ = children$$[i];
+		if (!child$.classList.contains('no-js')) {
+			els$$.unshift(child$);
+		}
+		target$.removeChild(child$);
 	}
 
-	const fallback$ = document.getElementById(fallbackId);
 	try {
 		mount(App, {
 			['target']: target$,
+			['props']: {
+				['info']: els$$,
+			},
 		});
-
-		if (fallback$) {
-			fallback$.style.setProperty('display', 'none', 'important');
-			const main$ = fallback$.querySelector('main');
-			if (main$ && main$.parentNode) {
-				const section$ = document.createElementNS(
-					'http://www.w3.org/1999/xhtml',
-					'div',
-				);
-				while (main$.childNodes.length !== 0) {
-					const node = main$.childNodes[0];
-					main$.removeChild(node);
-					section$.appendChild(node);
-				}
-
-				main$.parentNode.replaceChild(section$, main$);
-			}
-		}
 
 		self.onerror = null;
 	} catch (e) {

@@ -38,6 +38,9 @@
 	let progress: IRunProgress | null = null;
 	let error: unknown | typeof empty = empty;
 	let shareMessage = '';
+	let infoContainer: HTMLElement | undefined;
+
+	export let info: Node[] | null | undefined;
 
 	let runSuite:
 		| ((
@@ -65,6 +68,12 @@
 			if (!errorDialogEl.open) errorDialogEl.showModal();
 		} else {
 			if (errorDialogEl.open) errorDialogEl.close();
+		}
+	}
+
+	$: if (infoContainer && info && info.length) {
+		for (let i = 0; i < info.length; i++) {
+			infoContainer.appendChild(info[i]);
 		}
 	}
 
@@ -156,7 +165,7 @@
 			<LanguageSelector />
 		</div>
 
-		<h1>
+		<h1 property="schema:name">
 			<AppLogo />
 			{STRING__APP_TITLE_}
 		</h1>
@@ -197,6 +206,10 @@
 
 		{#if report}
 			<ReportView {report} />
+		{/if}
+
+		{#if info && info.length}
+			<div class="info" bind:this={infoContainer}></div>
 		{/if}
 	</main>
 
@@ -355,6 +368,7 @@
 			inline-size: 2.5rem;
 			block-size: 2.5rem;
 			border-block-start-color: var(--c-accent);
+			margin: 0;
 			margin-block-end: 0.5rem;
 		}
 	}
@@ -376,6 +390,7 @@
 
 	@media not (writing-mode: tb-lr) {
 		.error-icon {
+			margin: 0;
 			margin-block-end: 0.25rem;
 		}
 	}
@@ -384,4 +399,16 @@
 		font-size: 0.8125rem;
 		font-style: italic;
 	}
+
+	.info {
+		margin-top: 1rem;
+	}
+
+	@media not (writing-mode: tb-lr) {
+		.info {
+			margin: 0;
+			margin-block-start: 1rem;
+		}
+	}
+
 </style>

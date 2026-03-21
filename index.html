@@ -38,15 +38,38 @@
 		></script>
 	</head>
 	<body>
-		<div id="fallback">
-			<header>
+		<div id="app">
+			<header class="no-js">
 				<h1 property="schema:name">Benchmark Studio</h1>
 				<p>
 					Interactive JavaScript performance benchmarking in your
 					browser
 				</p>
 			</header>
+
+			<noscript class="no-js">
+				<section aria-label="JavaScript required">
+					<h2>JavaScript Required</h2>
+					<p>
+						Benchmark Studio is an interactive client-side
+						application. Please enable JavaScript to use the
+						benchmarking tool.
+					</p>
+				</section>
+			</noscript>
+
+			<footer class="no-js">
+				<p>
+					©&#8239;2026&#160;
+					<span property="schema:author" typeof="schema:Organization">
+						<a property="schema:url" href="https://apeleg.com/"
+							><span property="schema:name"
+								>Apeleg Limited</span
+							></a
+						> </span
+					>.
+				</p>
+			</footer>
 		</div>
-		<div id="app"></div>
 	</body>
 </html>
