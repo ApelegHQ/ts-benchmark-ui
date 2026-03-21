@@ -1,5 +1,6 @@
 interface ImportMeta {
 	readonly version: string;
+	readonly swCacheKey: string;
 	readonly runnerUrl: string;
 	readonly importsWorkerPath: string;
 	readonly serviceWorkerPath: string;

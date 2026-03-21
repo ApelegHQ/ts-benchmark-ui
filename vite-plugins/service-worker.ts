@@ -17,12 +17,17 @@
 
 import plugin from '@apeleghq/esbuild-plugin-closure-compiler';
 import { build } from 'esbuild';
+import { createHmac } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { type Plugin } from 'vite';
 import gitCommitHash_ from './git-commit-hash';
 
 export default function _(): Plugin {
 	let done = false;
+
+	const hmac = createHmac('sha384', process.env.SW_CACHE_KEY || '');
+	hmac.update(gitCommitHash_ || '');
+	const cacheName = hmac.digest('base64url').slice(-16);
 
 	return {
 		name: 'vite:service-worker',
@@ -36,6 +41,7 @@ export default function _(): Plugin {
 				bundle: true,
 				define: {
 					'import.meta.version': JSON.stringify(gitCommitHash_),
+					'import.meta.swCacheKey': JSON.stringify(cacheName),
 				},
 				entryPoints: [
 					fileURLToPath(

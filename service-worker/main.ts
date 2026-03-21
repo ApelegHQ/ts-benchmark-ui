@@ -31,7 +31,7 @@ const versionedKey = (
 		}
 	}
 	combinedArray[combinedArray.length - 2] = '@';
-	combinedArray[combinedArray.length - 1] = import.meta.version;
+	combinedArray[combinedArray.length - 1] = import.meta.swCacheKey;
 
 	return combinedArray.join('');
 };
@@ -55,7 +55,7 @@ const main = () => {
 
 	listen('install', (event) => {
 		event.waitUntil(
-			caches.open(versionedKey`runtime`).then(self.skipWaiting()),
+			caches.open(versionedKey`runtime`).then(() => self.skipWaiting()),
 		);
 	});
 
