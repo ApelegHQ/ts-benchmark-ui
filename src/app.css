@@ -135,7 +135,7 @@ body {
 #app {
 	max-width: 1100px;
 	margin: 0 auto;
-	padding: 2rem 1.5rem 4rem;
+	padding: 1rem 0.75rem 3rem;
 }
 
 @media not (writing-mode: tb-lr) {
@@ -144,8 +144,8 @@ body {
 		max-inline-size: 1100px;
 		margin-block: 0;
 		margin-inline: auto;
-		padding-block: 2rem 4rem;
-		padding-inline: 1.5rem;
+		padding-block: 1rem 3rem;
+		padding-inline: 0.75rem;
 	}
 }
 
@@ -273,15 +273,8 @@ label {
 	background: var(--c-surface);
 	border: 1px solid var(--c-border);
 	border-radius: var(--radius);
-	padding: 1.25rem;
+	padding: 1rem;
 	box-shadow: var(--shadow);
-}
-
-@media not (writing-mode: tb-lr) {
-	.card {
-		padding-block: 1.25rem;
-		padding-inline: 1.25rem;
-	}
 }
 
 /* ── Section separator ─────────────────────────────── */
@@ -327,7 +320,7 @@ label {
 table.data-table {
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 0.8125rem;
+	font-size: 0.75rem;
 	font-family: var(--font-mono);
 }
 
@@ -346,16 +339,16 @@ table.data-table th {
 	color: var(--c-text-muted);
 	text-transform: uppercase;
 	letter-spacing: 0.06em;
-	padding: 0.5rem 0.75rem;
+	padding: 0.4rem 0.5rem;
 	border-bottom: 1px solid var(--c-border);
 	white-space: nowrap;
 }
 
 @media not (writing-mode: tb-lr) {
 	table.data-table th {
-		border-bottom-width: 0;
-		padding-block: 0.5rem;
-		padding-inline: 0.75rem;
+		border-bottom: 0;
+		padding-block: 0.4rem;
+		padding-inline: 0.5rem;
 		border-block-end: 1px solid var(--c-border);
 	}
 }
@@ -365,16 +358,16 @@ table.data-table th.num {
 }
 
 table.data-table td {
-	padding: 0.5rem 0.75rem;
+	padding: 0.4rem 0.5rem;
 	border-bottom: 1px solid var(--c-border);
 	white-space: nowrap;
 }
 
 @media not (writing-mode: tb-lr) {
 	table.data-table td {
-		border-bottom-width: 0;
-		padding-block: 0.5rem;
-		padding-inline: 0.75rem;
+		border-bottom: 0;
+		padding-block: 0.4rem;
+		padding-inline: 0.5rem;
 		border-block-end: 1px solid var(--c-border);
 	}
 }
@@ -423,41 +416,36 @@ table.data-table tr:last-child td {
 
 /* ── Responsive ────────────────────────────────────── */
 
-@media (max-width: 640px) {
+@media (min-width: 640px) {
 	#app {
-		padding: 1rem 0.75rem 3rem;
+		padding: 2rem 1.5rem 4rem;
 	}
 
 	.card {
-		padding: 1rem;
+		padding: 1.25rem;
 	}
 
 	table.data-table {
-		font-size: 0.75rem;
+		font-size: 0.8125rem;
 	}
 
 	table.data-table th,
 	table.data-table td {
-		padding: 0.4rem 0.5rem;
+		padding: 0.5rem 0.75rem;
 	}
 }
 
-@media (max-width: 640px) {
+@media (min-width: 640px) {
 	@media not (writing-mode: tb-lr) {
 		#app {
-			padding-block: 1rem 3rem;
-			padding-inline: 0.75rem;
-		}
-
-		.card {
-			padding-block: 1rem;
-			padding-inline: 1rem;
+			padding-block: 2rem 4rem;
+			padding-inline: 1.5rem;
 		}
 
 		table.data-table th,
 		table.data-table td {
-			padding-block: 0.4rem;
-			padding-inline: 0.5rem;
+			padding-block: 0.5rem;
+			padding-inline: 0.75rem;
 		}
 	}
 }

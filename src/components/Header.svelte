@@ -271,18 +271,22 @@
 
 	.config-grid {
 		display: grid;
-		grid-template-columns: 1fr repeat(3, 8rem);
+		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
 		align-items: end;
 	}
 
-	@media (max-width: 640px) {
+	.field-name {
+		grid-column: 1 / -1;
+	}
+
+	@media (min-width: 640px) {
 		.config-grid {
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: 1fr repeat(3, 8rem);
 		}
 
 		.field-name {
-			grid-column: 1 / -1;
+			grid-column: auto;
 		}
 	}
 
