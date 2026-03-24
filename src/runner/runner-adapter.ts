@@ -51,7 +51,20 @@ export async function runBenchmarks_(
 							params[v] = module;
 						});
 						entry[1][2]?.forEach((v) => {
-							params[v[1]] = params[v[0]];
+							if (
+								Object.prototype.hasOwnProperty.call(
+									module,
+									v[0],
+								)
+							) {
+								params[v[1]] = (
+									module as Record<string, unknown>
+								)[v[0]];
+							} else {
+								throw new SyntaxError(
+									`The requested module ${JSON.stringify(entry[0])} does not provide an export named ${JSON.stringify(v[0])}`,
+								);
+							}
 						});
 					},
 				);

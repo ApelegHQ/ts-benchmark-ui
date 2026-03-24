@@ -410,5 +410,4 @@
 			margin-block-start: 1rem;
 		}
 	}
-
 </style>
