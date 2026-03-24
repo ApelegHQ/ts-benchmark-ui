@@ -115,7 +115,7 @@
 				<dt class="text-yellow text-bold">**</dt>
 				<dd>p{'<'}{formatNumber(0.01)}</dd>
 				<dt class="text-yellow text-bold">*</dt>
-				<dd>p{'<'}0.05</dd>
+				<dd>p{'<'}{formatNumber(0.05)}</dd>
 				<dt class="text-muted">n.s.</dt>
 				<dd>{STRING__REPORT_VIEW_NOT_SIGNIFICANT_}</dd>
 			</dl>
