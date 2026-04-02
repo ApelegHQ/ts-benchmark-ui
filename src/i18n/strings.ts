@@ -77,9 +77,12 @@ export const STRING__COMPARISONS_95_PERCENT_CI_SEPARATOR_ = ', ';
 export const STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_ = ']';
 export const STRING__COMPARISONS_DELTA_PREFIX_ = 'Δ = ';
 export const STRING__COMPARISONS_DF_PREFIX_ = 'df = ';
-export const STRING__COMPARISONS_FASTER_ = ['', ' is ', ' faster '];
-export const STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_ =
-	'No significant difference';
+export const STRING__COMPARISONS_FASTER_ = ['✓', ' ', ' is ', ' faster ', ''];
+export const STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_ = [
+	'≈',
+	' No significant difference ',
+	'',
+];
 export const STRING__COMPARISONS_PAIRED_T_TEST_ =
 	'Pairwise Comparisons (paired t-test)';
 export const STRING__COMPARISONS_SE_DELTA_PREFIX_ = 'SE(Δ) = ';
@@ -186,7 +189,7 @@ export const STRING__HEADER_WARMUP_ITERATIONS_ = 'Warmup Iterations';
 export const STRING__HEADER_PLACEHOLDER_IMPORTS_ =
 	"// e.g. import semver from 'npm:semver';";
 export const STRING__HEADER_PLACEHOLDER_SETUP_ =
-	"// e.g. this.data = Array.from({'{ length: 1000 }'}, () => Math.random());";
+	"// e.g. this.data = Array.from({ length: 1000 }, () => Math.random());";
 export const STRING__HEADER_PLACEHOLDER_TEARDOWN_ = '// e.g. delete this.data;';
 
 export const STRING__LEADERBOARD_ARIA_LABEL_ = 'Benchmark leaderboard';

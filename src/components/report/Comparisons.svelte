@@ -87,25 +87,27 @@
 				<div class="comp-body">
 					{#if c.significant}
 						<p>
-							<span class="text-green">✓</span>
-							{STRING__COMPARISONS_FASTER_[0]}<strong
+							<span class="text-green"
+								>{STRING__COMPARISONS_FASTER_[0]}</span
+							>{STRING__COMPARISONS_FASTER_[1]}<strong
 								class="text-green">{fasterName}</strong
 							>
-							{STRING__COMPARISONS_FASTER_[1]}<strong
+							{STRING__COMPARISONS_FASTER_[2]}<strong
 								class="text-green"
 								>{formatMultiplier(ratio)}</strong
-							>{STRING__COMPARISONS_FASTER_[2]}<span
+							>{STRING__COMPARISONS_FASTER_[3]}<span
 								class="text-dim"
 								>({formatPValue(c.pValue)})</span
-							>
+							>{STRING__COMPARISONS_FASTER_[4]}
 						</p>
 					{:else}
 						<p>
-							<span class="text-yellow">≈</span>
-							{STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_}
-							<span class="text-dim"
+							<span class="text-yellow"
+								>{STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_[0]}</span
+							>{STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_[1]}<span
+								class="text-dim"
 								>({formatPValue(c.pValue)})</span
-							>
+							>{STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_[2]}
 						</p>
 					{/if}
 

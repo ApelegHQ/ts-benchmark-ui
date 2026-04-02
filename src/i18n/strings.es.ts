@@ -79,9 +79,18 @@ export const STRING__COMPARISONS_95_PERCENT_CI_SEPARATOR_ = ', ';
 export const STRING__COMPARISONS_95_PERCENT_CI_SUFFIX_ = ']';
 export const STRING__COMPARISONS_DELTA_PREFIX_ = 'Δ = ';
 export const STRING__COMPARISONS_DF_PREFIX_ = 'df = ';
-export const STRING__COMPARISONS_FASTER_ = ['', ' es ', ' más rápido '];
-export const STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_ =
-	'Sin diferencia significativa';
+export const STRING__COMPARISONS_FASTER_ = [
+	'✓',
+	' ',
+	' es ',
+	' más rápido ',
+	'',
+];
+export const STRING__COMPARISONS_NO_SIGNIFICANT_DIFFERENCE_ = [
+	'≈',
+	' Sin diferencia significativa ',
+	'',
+];
 export const STRING__COMPARISONS_PAIRED_T_TEST_ =
 	'Comparaciones por pares (prueba t pareada)';
 export const STRING__COMPARISONS_SE_DELTA_PREFIX_ = 'SE(Δ) = ';
@@ -196,7 +205,7 @@ export const STRING__HEADER_WARMUP_ITERATIONS_ = 'Iteraciones de calentamiento';
 export const STRING__HEADER_PLACEHOLDER_IMPORTS_ =
 	"// p. ej. import semver from 'npm:semver';";
 export const STRING__HEADER_PLACEHOLDER_SETUP_ =
-	"// p. ej. this.data = Array.from({'{ length: 1000 }'}, () => Math.random());";
+	"// p. ej. this.data = Array.from({ length: 1000 }, () => Math.random());";
 export const STRING__HEADER_PLACEHOLDER_TEARDOWN_ =
 	'// p. ej. delete this.data;';
 
